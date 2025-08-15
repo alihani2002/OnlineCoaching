@@ -8,10 +8,6 @@
     <ProjectReference Include="..\OnlineCoaching.Domain\OnlineCoaching.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Auth\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

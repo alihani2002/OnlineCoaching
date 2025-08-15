@@ -1,4 +1,7 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services
     .AddApplicationServices()
@@ -11,21 +14,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-
-app.UseHttpsRedirection();
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
+// Apply migrations & seed data
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 
 using var scope = scopeFactory.CreateScope();
@@ -36,15 +25,30 @@ var dbConext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 await DefaultRoles.SeedAsync(roleManger);
 await DefaultUsers.SeedAdminUserAsync(userManger);
-app.MapStaticAssets();
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseMigrationsEndPoint();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages()
    .WithStaticAssets();
-
 app.Run();

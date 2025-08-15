@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Web
+﻿using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
+
+namespace OnlineCoaching.Web
 {
     public static class DependencyInjection
     {
@@ -35,6 +37,7 @@
 
             });
 
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
@@ -48,9 +51,9 @@
             //services.AddTransient<IEmailSender, EmailSender>();
             //services.AddTransient<IEmailBodyBuilder, EmailBodyBuilder>();
 
-            //services.AddControllersWithViews();
+            services.AddControllersWithViews();
 
-            //services.AddExpressiveAnnotations();
+            services.AddExpressiveAnnotations();
 
             //services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
             //services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
@@ -60,7 +63,7 @@
             //services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
             //services.AddHangfireServer();
 
-           
+
 
             return services;
         }

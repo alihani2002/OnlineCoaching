@@ -1,4 +1,4 @@
-﻿namespace ActiveGym.Web.Seeds
+﻿namespace OnlineCoaching.Web.Seeds
 {
     public static class DefaultRoles
     {

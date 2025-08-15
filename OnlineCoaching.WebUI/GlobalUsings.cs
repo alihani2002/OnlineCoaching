@@ -4,7 +4,7 @@ global using OnlineCoaching.Application.Common.Interfaces;
 global using OnlineCoaching.Domain.Entities;
 global using OnlineCoaching.Infrastructure.Persistence;
 
-global using ActiveGym.Web.Seeds;
+global using OnlineCoaching.Web.Seeds;
 global using OnlineCoaching.Application;
 global using OnlineCoaching.Infrastructure;
 global using OnlineCoaching.Web;

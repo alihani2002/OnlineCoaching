@@ -5,12 +5,16 @@
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
+
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             var cascadeFKs = builder.Model.GetEntityTypes()
@@ -20,7 +24,7 @@
             foreach (var fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
 
-
         }
+
     }
 }
