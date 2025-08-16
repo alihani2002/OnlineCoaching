@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,7 +18,6 @@
 
     <!-- CSS here -->
     <link rel="stylesheet" href="~/assets/css/style.css" />
-
     <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="~/assets/css/slicknav.css" />
@@ -44,6 +49,24 @@
 
     <!-- Header -->
     <partial name="_Header" />
+
+    @if (!(currentController == "Home" && currentAction == "Index"))
+    {
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-70">
+                                <h2>@ViewData["Title"]</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
     <!-- Body -->
     <div class="container-fluid p-0">
         <main>

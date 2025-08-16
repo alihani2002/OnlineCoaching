@@ -1,4 +1,8 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using OnlineCoaching.Infrastructure.Persistence
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @{
 	var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
@@ -10,6 +14,7 @@
 @* 
 @if (User.Identity?.IsAuthenticated ?? false)
 { *@
+
 <header>
     <div class="header-area header-transparent">
         <div class="main-header header-sticky">
@@ -35,10 +40,27 @@
                             </ul>
                         </nav>
                     </div>
-                    <!-- Header-btn -->
-                    <div class="header-btns d-none d-lg-block f-right">
+
+                    <!-- Header-btns (Contact + Auth Links) -->
+                    <div class="header-btns d-none d-lg-flex align-items-center gap-3 f-right">
                         <a asp-controller="Contact" asp-action="Index" class="btn">Contact me</a>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <form asp-area="Identity" asp-page="/Account/Logout"
+                                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                                  method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-dark">Logout</button>
+                            </form>
+                            <span class="p-3 text-white me-2">Hello, @UserManager.GetUserName(User)</span>
+                        }
+                        else
+                        {
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline">Login</a>
+                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn">Register</a>
+                        }
                     </div>
+
                     <!-- Mobile Menu -->
                     <div class="col-12">
                         <div class="mobile_menu d-block d-lg-none"></div>
@@ -48,6 +70,7 @@
         </div>
     </div>
 </header>
+
 @* }
 else
 {
