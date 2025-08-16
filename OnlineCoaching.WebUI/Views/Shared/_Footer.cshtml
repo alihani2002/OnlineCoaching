@@ -1,5 +1,16 @@
 ﻿@* <link rel="stylesheet" href="~/css/footer.css" />
  *@
+
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+    .logo-text {
+        font-family: 'Anton', sans-serif;
+        font-size: 28px;
+        color: #fff;
+        text-decoration: none;
+    }
+</style>
+
 <footer>
     <div class="footer-area black-bg">
         <div class="container">
@@ -8,9 +19,9 @@
                     <div class="col-xl-12">
                         <div class="single-footer-caption mb-50 text-center">
                             <div class="footer-logo">
-                                <a asp-controller="Home" asp-action="Index">
-                                    <img src="~/assets/img/logo/logo2_footer.png" alt="Footer Logo" />
-                                </a>
+                                    <a asp-controller="Home" asp-action="Index" class="logo-text">
+                                        Badr Reda
+                                    </a>
                             </div>
                             <div class="footer-social mt-30">
                                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -21,8 +32,8 @@
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom text-center">
-                <p>
+            <div class="footer-bottom text-white text-center">
+                <p class="text-white">
                     Copyright AlDevs &copy;<script>document.write(new Date().getFullYear());</script>
                     All rights reserved |
                     Alyhani

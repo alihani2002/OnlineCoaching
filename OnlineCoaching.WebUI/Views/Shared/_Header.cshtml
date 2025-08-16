@@ -10,7 +10,15 @@
 <!-- Link to external CSS -->
 <link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="~/css/header.css" />
-
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+    .logo-text {
+        font-family: 'Anton', sans-serif;
+        font-size: 28px;
+        color: #fff;
+        text-decoration: none;
+    }
+</style>
 @* 
 @if (User.Identity?.IsAuthenticated ?? false)
 { *@
@@ -22,8 +30,8 @@
                 <div class="menu-wrapper d-flex align-items-center justify-content-between">
                     <!-- Logo -->
                     <div class="logo">
-                        <a asp-controller="Home" asp-action="Index">
-                            <img src="~/assets/img/logo/logo.png" alt="Logo" />
+                        <a asp-controller="Home" asp-action="Index" class="logo-text">
+                            Badr Reda
                         </a>
                     </div>
                     <!-- Main-menu -->

@@ -12,7 +12,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - OnlineCoaching.WebUI</title>
     <meta name="description" content="" />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 
+    <style>
+        .preloader-img .logo-text {
+            color: #ff1313;
+            display: block;
+            text-align: center;
+            font-size: 20px;
+        }
+    </style>
     <link rel="manifest" href="~/site.webmanifest" />
     <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/favicon.ico" />
 
@@ -34,13 +43,12 @@
 </head>
 <body>
 
-    <!-- ? Preloader Start -->
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
                 <div class="preloader-circle"></div>
                 <div class="preloader-img pere-text">
-                    <img src="~/assets/img/logo/loder.png" alt="Loading..." />
+                    <span class="logo-text">Badr Reda</span>
                 </div>
             </div>
         </div>
