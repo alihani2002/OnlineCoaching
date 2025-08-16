@@ -1,0 +1,84 @@
+﻿
+@{
+	var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+}
+
+<!-- Link to external CSS -->
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/css/header.css" />
+
+@* 
+@if (User.Identity?.IsAuthenticated ?? false)
+{ *@
+<header>
+    <div class="header-area header-transparent">
+        <div class="main-header header-sticky">
+            <div class="container-fluid">
+                <div class="menu-wrapper d-flex align-items-center justify-content-between">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a asp-controller="Home" asp-action="Index">
+                            <img src="~/assets/img/logo/logo.png" alt="Logo" />
+                        </a>
+                    </div>
+                    <!-- Main-menu -->
+                    <div class="main-menu f-right d-none d-lg-block">
+                        <nav>
+                            <ul id="navigation">
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                                <li><a asp-controller="Pricing" asp-action="Index">Pricing</a></li>
+                                <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
+                                <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                                <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- Header-btn -->
+                    <div class="header-btns d-none d-lg-block f-right">
+                        <a asp-controller="Contact" asp-action="Index" class="btn">Contact me</a>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+@* }
+else
+{
+	<header class="header-section">
+		<div class="container-fluid">
+			<nav class="navbar navbar-expand-lg navbar-dark">
+				<div class="container-fluid">
+
+					<!-- Logo -->
+					<a class="navbar-brand" asp-action="Index" asp-controller="Home">
+						<img src="~/assets/img/NewLogo.png" alt="Logo" style="height: 60px;">
+					</a>
+
+					<!-- Toggler Button -->
+					<button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+						<img src="~/assets/img/hero/list.png" alt="Menu" />
+					</button>
+
+					<!-- Navbar Menu -->
+					<div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+						<ul class="navbar-nav">
+							<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index" active-when="Home">الصفحة الرئيسية</a></li>
+							<li class="nav-item"><a class="nav-link" asp-controller="Reviews" asp-action="Index">أراء العملاء</a></li>
+							<li class="nav-item"><a class="nav-link" asp-controller="Comments" asp-action="Index">التعليقات</a></li>
+							<li class="nav-item"><a class="nav-link" asp-area="Identity" asp-page="/Account/Login">تسجيل الدخول</a></li>
+						</ul>
+					</div>
+
+				</div>
+			</nav>
+		</div>
+	</header>
+}
+ *@
