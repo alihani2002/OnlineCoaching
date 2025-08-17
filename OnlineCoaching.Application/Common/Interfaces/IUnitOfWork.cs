@@ -2,6 +2,42 @@
 {
     public interface IUnitOfWork
     {
+        // Identity
+        IBaseRepository<Client> Clients { get; }
+
+        // Coaching
+        IBaseRepository<CoachingPackage> CoachingPackages { get; }
+        IBaseRepository<CoachingPackageRequest> CoachingPackageRequests { get; }
+
+        // Books
+        IBaseRepository<Book> Books { get; }
+        IBaseRepository<BookRequest> BookRequests { get; }
+
+        // Courses
+        IBaseRepository<Course> Courses { get; }
+        IBaseRepository<CourseRequest> CourseRequests { get; }
+        IBaseRepository<CourseVideo> CourseVideos { get; }
+
+        // Q&A
+        IBaseRepository<Question> Questions { get; }
+        IBaseRepository<Option> Options { get; }
+        IBaseRepository<ClientAnswer> ClientAnswers { get; }
+
+        // Exercises
+        IBaseRepository<Exercise> Exercises { get; }
+        IBaseRepository<AssignExercise> AssignExercises { get; }
+        IBaseRepository<Muscle> Muscles { get; }
+
+        // Foods
+        IBaseRepository<Food> Foods { get; }
+        IBaseRepository<AssignFood> AssignFoods { get; }
+
+        // Progress & Feedback
+        IBaseRepository<Transformation> Transformations { get; }
+        IBaseRepository<CoachFeedback> CoachFeedbacks { get; }
+
+        //Notification
+        IBaseRepository<Notification> Notifications { get; }
 
         int Complete();
 

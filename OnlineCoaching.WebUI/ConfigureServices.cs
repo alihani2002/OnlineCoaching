@@ -1,4 +1,7 @@
-﻿using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OnlineCoaching.Web.Core.Mapping;
+using System.Reflection;
+using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
 namespace OnlineCoaching.Web
 {
@@ -55,7 +58,11 @@ namespace OnlineCoaching.Web
 
             services.AddExpressiveAnnotations();
 
-            //services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+            
             //services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
             //services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 

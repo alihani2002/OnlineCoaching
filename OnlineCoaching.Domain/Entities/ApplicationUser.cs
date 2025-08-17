@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
 namespace OnlineCoaching.Domain.Entities
 {
-    [Index(nameof(Email), IsUnique = true)]
-    [Index(nameof(UserName), IsUnique = true)]
+    [Microsoft.EntityFrameworkCore.Index(nameof(Email), IsUnique = true)]
+    [Microsoft.EntityFrameworkCore.Index(nameof(UserName), IsUnique = true)]
     public class ApplicationUser : IdentityUser
     {
         [MaxLength(100)]
@@ -17,8 +14,7 @@ namespace OnlineCoaching.Domain.Entities
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public string? LastUpdatedById { get; set; }
         public DateTime? LastUpdatedOn { get; set; }
-        //public Client? Client { get; set; }
-        //public Coach? Coach { get; set; }
+        public Client? ClientProfile { get; set; }
         public string Role { get; set; } = null!;
     }
 }
