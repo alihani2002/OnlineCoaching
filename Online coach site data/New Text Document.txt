@@ -1,0 +1,395 @@
+using OnlineCoaching.Domain.Common;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace OnlineCoaching.Domain.Entities
+{
+    // 🟢 Client
+    public class Client : BaseEntity
+    {
+        [Key]
+        public int ClientId { get; set; }
+
+        [Required, MaxLength(100)]
+        public string FullName { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        [MaxLength(20)]
+        public string PhoneNumber { get; set; }
+
+        [MaxLength(200)]
+        public string Address { get; set; }
+
+        // FK -> ApplicationUser
+        [ForeignKey("User")]
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
+
+        // Navigation
+        public virtual ICollection<CoachingSubscription> CoachingSubscriptions { get; set; }
+        public virtual ICollection<BookPurchase> BookPurchases { get; set; }
+        public virtual ICollection<CourseEnrollment> CourseEnrollments { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Transformation> Transformations { get; set; }
+        public virtual ICollection<CoachFeedback> CoachFeedbacks { get; set; }
+    }
+
+    // 🟢 Coaching Packages
+    public class CoachingPackage : BaseEntity
+    {
+        [Key]
+        public int PackageId { get; set; }
+
+        [Required, MaxLength(150)]
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public int DurationInMonths { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    // 🟢 Subscription
+    public class CoachingSubscription : BaseEntity
+    {
+        [Key]
+        public int SubscriptionId { get; set; }
+
+        public int PackageId { get; set; }
+        public CoachingPackage Package { get; set; }
+                                                                                                    <-------------------------------------------------------
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public bool IsApproved { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+
+    // 🟢  Questions 
+public class Question
+{
+    public int Id { get; set; }
+    public string Text { get; set; }
+    public QuestionType Type { get; set; } // Enum: SingleChoice, MultipleChoice, OpenText
+
+    public ICollection<Option> Options { get; set; }
+    public ICollection<ClientAnswer> ClientAnswers { get; set; }
+}
+
+public class Option
+{
+    public int Id { get; set; }
+    public string Text { get; set; }
+
+    public int QuestionId { get; set; }
+    public Question Question { get; set; }
+
+    public ICollection<ClientAnswer> ClientAnswers { get; set; }
+}
+
+public class ClientAnswer
+{
+    public int Id { get; set; }
+
+    public int ClientId { get; set; }
+    public Client Client { get; set; }
+
+    public int QuestionId { get; set; }
+    public Question Question { get; set; }
+
+    // ✅ هنا بتخزن لو الإجابة نص
+    public string? AnswerText { get; set; }
+
+    // ✅ هنا بتخزن لو الإجابة Option
+    public int? OptionId { get; set; }
+    public Option? Option { get; set; }
+}
+
+public enum QuestionType
+{
+    SingleChoice,
+    MultipleChoice,
+    OpenText
+}
+    // 🟢 Workout & Nutrition
+    public class WorkoutPlan : BaseEntity
+    {
+        [Key]
+        public int WorkoutPlanId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class NutritionPlan : BaseEntity
+    {
+        [Key]
+        public int NutritionPlanId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class ProgramAssignment : BaseEntity
+    {
+        [Key]
+        public int AssignmentId { get; set; }
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public int WorkoutPlanId { get; set; }
+        public WorkoutPlan WorkoutPlan { get; set; }
+
+        public int NutritionPlanId { get; set; }
+        public NutritionPlan NutritionPlan { get; set; }
+    }
+
+    // 🟢 Books
+    public class Book : BaseEntity
+    {
+        [Key]
+        public int BookId { get; set; }
+
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string FileUrl { get; set; }
+
+        public bool HasDemo { get; set; }
+        public string DemoUrl { get; set; }
+    }
+
+    public class BookPurchase : BaseEntity
+    {
+        [Key]
+        public int PurchaseId { get; set; }
+
+        public int BookId { get; set; }
+        public Book Book { get; set; }
+                                                                                                    <-------------------------------------------------------
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public bool IsApproved { get; set; }
+    }
+
+    // 🟢 Courses
+    public class Course : BaseEntity
+    {
+        [Key]
+        public int CourseId { get; set; }
+
+        public string Title { get; set; }
+        public string Description { get; set; }
+
+        public bool HasDemo { get; set; }
+    }
+
+    public class CourseVideo : BaseEntity
+    {
+        [Key]
+        public int VideoId { get; set; }
+
+        public string Title { get; set; }
+        public string VideoUrl { get; set; }
+
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+    }
+
+    public class CourseEnrollment : BaseEntity
+    {
+        [Key]
+        public int EnrollmentId { get; set; }
+                                                                                                    <-------------------------------------------------------
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public bool IsApproved { get; set; }
+        public bool IsCompleted { get; set; }
+    }
+
+    // 🟢 Messaging & Notifications
+    public class Message : BaseEntity
+    {
+        [Key]
+        public int MessageId { get; set; }
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public string Content { get; set; }
+        public bool IsRead { get; set; }
+    }
+
+    public class Notification : BaseEntity
+    {
+        [Key]
+        public int NotificationId { get; set; }
+
+        public string Content { get; set; }
+        public bool IsRead { get; set; }
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+    }
+---------------------------------------------------------------------------
+    // 🟢 Transformation (Before/After Photos)
+    public class Transformation : BaseEntity
+    {
+        [Key]
+        public int TransformationId { get; set; }
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public string BeforeImageUrl { get; set; }
+        public string AfterImageUrl { get; set; }
+        public string Notes { get; set; }
+    }
+
+    // 🟢 Coach Feedback
+    public class CoachFeedback : BaseEntity
+    {
+        [Key]
+        public int FeedbackId { get; set; }
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
+
+        public string FeedbackText { get; set; }
+        public int Rating { get; set; } // 1 to 5 stars
+    }
+}
+
+
+// 🟢 Foods
+public class Food : BaseEntity
+{
+    [Key]
+    public int FoodId { get; set; }
+
+    [Required, MaxLength(100)]
+    public string Name { get; set; }
+
+    public int Calories { get; set; }
+    public decimal Protein { get; set; }
+    public decimal Carbs { get; set; }
+    public decimal Fats { get; set; }
+
+    public string? Description { get; set; }
+
+    public ICollection<AssignFood> AssignedFoods { get; set; }
+}
+
+// 🟢 Assign Foods to Client
+public class AssignFood : BaseEntity
+{
+    [Key]
+    public int AssignFoodId { get; set; }
+
+    public int ClientId { get; set; }
+    public Client Client { get; set; }
+
+    public int FoodId { get; set; }
+    public Food Food { get; set; }
+
+    public DateTime AssignedOn { get; set; } = DateTime.Now;
+    public string? Notes { get; set; }
+}
+
+// 🟢 Muscle
+public class Muscle : BaseEntity
+{
+    [Key]
+    public int MuscleId { get; set; }
+
+    [Required, MaxLength(100)]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    public ICollection<Exercise> Exercises { get; set; }
+}
+
+
+// 🟢 Exercise
+public class Exercise : BaseEntity
+{
+    [Key]
+    public int ExerciseId { get; set; }
+
+    [Required, MaxLength(150)]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+    public string? VideoUrl { get; set; }
+
+    public int MuscleId { get; set; }
+    public Muscle Muscle { get; set; }
+
+    public ICollection<AssignExercise> AssignedExercises { get; set; }
+}
+
+
+// 🟢 Assign Exercises to Client
+public class AssignExercise : BaseEntity
+{
+    [Key]
+    public int AssignExerciseId { get; set; }
+
+    public int ClientId { get; set; }
+    public Client Client { get; set; }
+
+    public int ExerciseId { get; set; }
+    public Exercise Exercise { get; set; }
+
+    public DateTime AssignedOn { get; set; } = DateTime.Now;
+
+    // extra details like reps & sets
+    public int Sets { get; set; }
+    public int Reps { get; set; }
+    public string? Notes { get; set; }
+}
+
+
+
+// 🟢 طلب باقة تدريبية
+public class CoachingPackageRequest
+{
+    public int Id { get; set; }
+    public int ClientId { get; set; }
+    public int CoachingPackageId { get; set; }
+    public ClientStatus Status { get; set; } = ClientStatus.Pending;
+
+    public Client Client { get; set; }
+    public CoachingPackage CoachingPackage { get; set; }
+}
+
+// 🟢 طلب كتاب
+public class BookRequest
+{
+    public int Id { get; set; }
+    public int ClientId { get; set; }
+    public int BookId { get; set; }
+    public ClientStatus Status { get; set; } = ClientStatus.Pending;
+
+    public Client Client { get; set; }
+    public Book Book { get; set; }
+}
+
+// 🟢 طلب كورس
+public class CourseRequest
+{
+    public int Id { get; set; }
+    public int ClientId { get; set; }
+    public int CourseId { get; set; }
+    public ClientStatus Status { get; set; } = ClientStatus.Pending;
+
+    public Client Client { get; set; }
+    public Course Course { get; set; }
+}
+
