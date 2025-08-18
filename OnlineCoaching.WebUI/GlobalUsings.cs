@@ -10,3 +10,4 @@ global using OnlineCoaching.Infrastructure;
 global using OnlineCoaching.Web;
 
 global using OnlineCoaching.Domain.Consts;
+global using OnlineCoaching.Web.Extensions;

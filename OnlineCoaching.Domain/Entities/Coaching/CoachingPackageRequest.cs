@@ -7,6 +7,7 @@
         public ClientStatus Status { get; set; } = ClientStatus.Pending;
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public bool IsAnswerQuestion { get; set; } = false;
 
         public int PackageId { get; set; }
         public CoachingPackage? Package { get; set; }

@@ -5,3 +5,5 @@ global using OnlineCoaching.Domain.Consts;
 global using OnlineCoaching.Application.Common.Interfaces.Repositories;
 global using OnlineCoaching.Domain.Entities;
 global using Microsoft.EntityFrameworkCore;
+global using OnlineCoaching.Application.Common.Interfaces;
+

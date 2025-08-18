@@ -2,6 +2,8 @@
 {
     public interface IUnitOfWork
     {
+        IBaseRepository<ApplicationUser> Users { get; }
+
         // Identity
         IBaseRepository<Client> Clients { get; }
 

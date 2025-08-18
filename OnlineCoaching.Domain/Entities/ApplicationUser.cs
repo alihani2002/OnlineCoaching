@@ -8,6 +8,7 @@ namespace OnlineCoaching.Domain.Entities
         [MaxLength(100)]
         public string? FullName { get; set; }
         public override string? Email { get => base.Email; set => base.Email = value; }
+        public bool IsCompelteProfile { get; set; } = false;
         public int? Age { get; set; }
         public bool IsDeleted { get; set; }
         public string? CreatedById { get; set; }

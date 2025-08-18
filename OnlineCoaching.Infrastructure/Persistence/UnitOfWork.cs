@@ -12,6 +12,8 @@ namespace OnlineCoaching.Infrastructure.Persistence
             _context = context;
 
         }
+        public IBaseRepository<ApplicationUser> Users => new BaseRepository<ApplicationUser>(_context);
+
         public IBaseRepository<Client> Clients => new BaseRepository<Client>(_context);
         public IBaseRepository<CoachingPackage> CoachingPackages => new BaseRepository<CoachingPackage>(_context);
         public IBaseRepository<CoachingPackageRequest> CoachingPackageRequests => new BaseRepository<CoachingPackageRequest>(_context);

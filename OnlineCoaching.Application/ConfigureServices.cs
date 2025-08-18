@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OnlineCoaching.Application.Services;
 
 namespace OnlineCoaching.Application
 {
@@ -6,7 +7,7 @@ namespace OnlineCoaching.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-
+            services.AddScoped<IClientService, ClientService>();
             return services;
 
         }

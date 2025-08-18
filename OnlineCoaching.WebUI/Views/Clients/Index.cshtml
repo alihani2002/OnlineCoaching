@@ -1,0 +1,88 @@
+﻿@model Client
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+@if (ViewBag.ShowProfilePopup == true)
+{
+    <style>
+        header, .footer-area, .slider-area2 {
+            display: none !important;
+        }
+    </style>
+    <!-- Background overlay -->
+    <div class="position-fixed top-0 start-0 w-100 h-100 " style="z-index:1040;background-color:azure"></div>
+
+    <!-- Modal -->
+    <div id="profilePopup" class="modal fade show d-block" tabindex="-1" style="z-index:1050;margin-top:10%;background-color:azure">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form asp-action="CompleteProfile" method="post">
+                    <input type="hidden" name="UserId" value="@User.FindFirst("sub")?.Value" />
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Complete Your Profile</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="FullName" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Birth Date</label>
+                            <input type="date" name="BirthDate" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" name="PhoneNumber" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" name="Address" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model != null)
+{
+    <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height:80vh;">
+        <div class="card shadow-lg p-4 bg-white rounded" style="max-width:700px; width:100%;">
+            <h3 class="mb-4 text-center">Your Profile</h3>
+            <table class="table table-bordered mb-0">
+                <tr>
+                    <th>Full Name</th>
+                    <td>@Model.FullName</td>
+                </tr>
+                <tr>
+                    <th>Birth Date</th>
+                    <td>@Model.BirthDate.ToString("yyyy-MM-dd")</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>@Model.PhoneNumber</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>@Model.Address</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height:80vh;">
+        <div class="card shadow-lg p-4 bg-white rounded text-center" style="max-width:500px; width:100%;">
+            <p class="mb-0">No profile data available.</p>
+        </div>
+    </div>
+}
