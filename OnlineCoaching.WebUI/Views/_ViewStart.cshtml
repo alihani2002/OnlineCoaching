@@ -1,3 +1,12 @@
 ﻿@{
-    Layout = "_Layout";
+
+    if (User.IsInRole(AppRoles.Admin))
+    {
+        Layout = "_LayoutDashboard";
+    }
+    else 
+    {
+        Layout = "_Layout";
+    }
 }
+

@@ -1,0 +1,35 @@
+.logo-text {
+    font-family: 'Anton', sans-serif;
+    font-size: 28px;
+    color: #000; /* Dark text */
+    text-decoration: none;
+}
+
+.dashboard-footer {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 20px 0;
+}
+
+    .dashboard-footer .footer-social a {
+        color: #000; /* Dark icons */
+        margin: 0 10px;
+        font-size: 18px;
+        transition: color 0.3s;
+    }
+
+        .dashboard-footer .footer-social a:hover {
+            color: #0d6efd; /* Bootstrap primary blue */
+        }
+
+    .dashboard-footer p {
+        color: #000; /* Dark text */
+        margin: 0;
+    }
+
+body, .nav-link, .dropdown-item {
+    font-family: 'Oswald', sans-serif;
+}
+
+#back-top {
+    display: none !important;
+}
