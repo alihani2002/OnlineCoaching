@@ -102,6 +102,7 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Action("Index", "Clients");
 
+         
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)

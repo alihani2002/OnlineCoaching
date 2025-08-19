@@ -1,0 +1,48 @@
+﻿@model ApplicationUser
+@{
+    ViewData["Title"] = "Register Admin";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 bg-white rounded" style="max-width:600px; margin:auto;">
+        <h2 class="text-center mb-4">Register Admin</h2>
+
+        <form asp-action="AdminRegister" method="post">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" required />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control" required />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" type="email" class="form-control" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Password</label>
+                <input name="PasswordHash" type="password" class="form-control" required />
+            </div>
+
+            <input type="hidden" asp-for="Role" value="Admin" />
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg">Register</button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

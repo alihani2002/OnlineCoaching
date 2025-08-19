@@ -29,6 +29,29 @@ namespace OnlineCoaching.Application.Services
 
         public async Task<IEnumerable<IdentityRole>> GetRolesAsync() => await _roleManager.Roles.ToListAsync();
 
+        public async Task<ApplicationUser> RegisterAdminUser(ApplicationUser dto, string createdById)
+        {
+            bool IsAdmin =dto.Role ==AppRoles.Admin;
+            ApplicationUser user = new()
+            {
+                Email = dto.Email,
+                UserName = dto.UserName,
+                FullName = dto.FullName,
+                Role = dto.Role,
+                EmailConfirmed = true,
+                CreatedOn = DateTime.Now,
+                CreatedById = createdById,
+                IsCompelteProfile = true 
+            };
+            var result = await _userManager.CreateAsync(user, dto.PasswordHash!);
+            if (!result.Succeeded)
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+            await _userManager.AddToRoleAsync(user, dto.Role);
+            _unitOfWork.Complete();
+            return user;
+
+        }
+
         //public async Task<ApplicationUser> AddUserAsync(CreateUserDto dto, string createdById)
         //{
         //    bool isClient = dto.Role == AppRoles.Client;

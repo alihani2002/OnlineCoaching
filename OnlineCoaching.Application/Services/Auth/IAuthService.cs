@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OnlineCoaching.Domain.Dtos.User;
-using OnlineCoaching.Domain.Entities;
 
 namespace OnlineCoaching.Application.Services
 {
@@ -8,6 +7,8 @@ namespace OnlineCoaching.Application.Services
     {
         Task<IEnumerable<ApplicationUser>> GetUsersAsync();
         Task<ApplicationUser?> GetUsersByIdAsync(string id);
+
+        Task<ApplicationUser> RegisterAdminUser(ApplicationUser dto, string createdById);
         Task<IList<string>> GetUsersRolesAsync(ApplicationUser user);
         Task<IEnumerable<IdentityRole>> GetRolesAsync();
         //Task<ApplicationUser> AddUserAsync(CreateUserDto dto, string createdById);

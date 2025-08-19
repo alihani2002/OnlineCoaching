@@ -8,6 +8,8 @@ namespace OnlineCoaching.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IAuthService, AuthService>();
+
             return services;
 
         }
