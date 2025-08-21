@@ -9,6 +9,7 @@ namespace OnlineCoaching.Application
         {
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IQuestionServices, QuestionServices>();
 
             return services;
 

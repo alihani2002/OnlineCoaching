@@ -1,0 +1,40 @@
+﻿@model Question
+
+@{
+    ViewData["Title"] = "Question Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 bg-dark text-white rounded-3">
+        <h2 class="text-center mb-4">Question Details</h2>
+
+        <dl class="row">
+            <dt class="col-sm-3 fw-bold">Question Text:</dt>
+            <dd class="col-sm-9">@Model.Text</dd>
+
+            <dt class="col-sm-3 fw-bold">Type:</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+
+            <dt class="col-sm-3 fw-bold">Allow Multiple Answers:</dt>
+            <dd class="col-sm-9">@Model.AllowMultipleAnswers</dd>
+        </dl>
+
+        @if (Model.Options != null && Model.Options.Any())
+        {
+            <h5 class="mt-4">Options</h5>
+            <ul class="list-group">
+                @foreach (var option in Model.Options)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @option.Text
+                    </li>
+                }
+            </ul>
+        }
+
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>

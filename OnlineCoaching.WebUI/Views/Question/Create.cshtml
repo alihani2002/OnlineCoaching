@@ -1,0 +1,220 @@
+﻿@using OnlineCoaching.Domain.Enums.QuestionType
+@model Question
+
+@{
+    ViewData["Title"] = "Create Question";
+}
+
+<div class="container px-4 py-5" style="max-width: 800px;">
+    <div class="card border-0 shadow-lg rounded-4 bg-dark text-white">
+        <div class="card-header bg-dark text-white rounded-top-4 px-4 py-4">
+            <h3 class="fw-bold mb-0">Create New Question</h3>
+        </div>
+
+        <div class="card-body px-4 py-4">
+            <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                <!-- Question Number -->
+                <div class="form-group mb-4">
+                    <label class="form-label fw-bold text-white">Question Number (optional):</label>
+                    <input asp-for="NumberOfQuestion" type="number" min="1"
+                           class="form-control form-control-lg bg-dark text-white border-secondary"
+                           placeholder="Enter question number or leave blank" />
+                </div>
+
+                <!-- Question Text -->
+                <div class="form-group mb-4">
+                    <label class="form-label fw-bold text-white">Question Text:</label>
+                    <input asp-for="Text" class="form-control form-control-lg bg-dark text-white border-secondary"
+                           placeholder="Enter your question here" required />
+                </div>
+
+                <!-- Question Type -->
+                <div class="form-group mb-4">
+                    <label class="form-label fw-bold text-white">Question Type:</label>
+                    <select asp-for="Type" asp-items="Html.GetEnumSelectList<QuestionType>()"
+                            class="form-select form-select-lg bg-dark text-white border-secondary" id="questionType">
+                    </select>
+                </div>
+
+                <!-- Options + Actions -->
+                <div id="optionsAndActions">
+                    <div id="optionsSection" class="mb-3">
+                        <h5 class="fw-bold text-white">Options:</h5>
+                        <div class="row g-3" id="optionsContainer"></div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg px-4">Save</button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg px-4">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const questionTypeDropdown = document.getElementById("questionType");
+        const optionsAndActions = document.getElementById("optionsAndActions");
+        const optionsContainer = document.getElementById("optionsContainer");
+        const allowMultipleCheckbox = document.getElementById("AllowMultipleAnswers");
+
+        let optionCount = 0;
+
+        // Create option input block
+        function createOptionInput(index, isRemovable = false) {
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("col-md-12", "option-block");
+            wrapper.dataset.index = index;
+
+            const group = document.createElement("div");
+            group.classList.add("input-group", "mb-3");
+
+            const label = document.createElement("span");
+            label.classList.add("input-group-text", "bg-secondary", "text-white", "option-letter");
+            label.textContent = String.fromCharCode(97 + index) + ")";
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.name = `Options[${index}].Text`;
+            input.placeholder = `Enter option ${index + 1}`;
+            input.required = true;
+            input.classList.add("form-control", "form-control-lg", "bg-dark", "text-white", "border-secondary");
+
+            const removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.classList.add("btn", "btn-sm", "btn-danger", "ms-2", "remove-option");
+            removeBtn.textContent = "✖";
+            removeBtn.addEventListener("click", () => {
+                if (optionsContainer.querySelectorAll(".option-block").length > 2) {
+                    wrapper.remove();
+                    reindexOptions();
+                } else {
+                    alert("At least 2 options are required.");
+                }
+            });
+
+            group.appendChild(label);
+            group.appendChild(input);
+            if (isRemovable) group.appendChild(removeBtn);
+
+            wrapper.appendChild(group);
+            return wrapper;
+        }
+
+        // Initial render (2 options)
+        function renderInitialOptions() {
+            optionCount = 0;
+            optionsContainer.innerHTML = "";
+
+            for (let i = 0; i < 2; i++) {
+                optionsContainer.appendChild(createOptionInput(optionCount++, false));
+            }
+            appendAddButton();
+            reindexOptions();
+        }
+
+        // Add option button
+        function appendAddButton() {
+            const btnRow = document.createElement("div");
+            btnRow.classList.add("col-md-12", "text-end");
+            btnRow.id = "addOptionButtonRow";
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.classList.add("btn", "btn-outline-light", "btn-sm", "mt-2");
+            btn.textContent = "➕ Add Option";
+            btn.addEventListener("click", () => {
+                document.getElementById("addOptionButtonRow")?.remove();
+                optionsContainer.appendChild(createOptionInput(optionCount++, true));
+                appendAddButton();
+                reindexOptions();
+            });
+
+            btnRow.appendChild(btn);
+            optionsContainer.appendChild(btnRow);
+        }
+
+        // Re-index option labels/names
+        function reindexOptions() {
+            const blocks = optionsContainer.querySelectorAll(".option-block");
+            blocks.forEach((block, i) => {
+                block.dataset.index = i;
+                block.querySelector(".option-letter").textContent = String.fromCharCode(97 + i) + ")";
+                block.querySelector('input').setAttribute("name", `Options[${i}].Text`);
+            });
+            optionCount = blocks.length;
+
+            if (!document.getElementById("addOptionButtonRow")) {
+                appendAddButton();
+            }
+        }
+
+        // Toggle options by type
+               function toggleOptionsByType() {
+            const val = questionTypeDropdown.value;
+
+            const multipleAnswerToggle = document.getElementById("multipleAnswerToggle");
+            const optionsAndActions = document.getElementById("optionsAndActions");
+
+            if (val === "OpenText") {
+                // Hide everything for OpenText
+                optionsContainer.innerHTML = "";   // clear options when hidden
+                optionsAndActions.style.display = "none";
+                multipleAnswerToggle.style.display = "none";
+
+                allowMultipleCheckbox.checked = false;
+                allowMultipleCheckbox.disabled = true;
+            }
+            
+            else {
+                // Show both sections
+                optionsAndActions.style.display = "block";
+                multipleAnswerToggle.style.display = "block";
+
+                allowMultipleCheckbox.disabled = false;
+
+                if (val === "MultipleChoice") {
+                    allowMultipleCheckbox.checked = true;
+                } else if (val === "SingleChoice") {
+                    allowMultipleCheckbox.checked = false;
+                }
+                
+                // Ensure at least 2 options
+                if (optionsContainer.querySelectorAll(".option-block").length < 2) {
+                    renderInitialOptions();
+                }
+
+                const optionInputs = optionsContainer.querySelectorAll("input");
+                optionInputs.forEach(inp => inp.disabled = false);
+            }
+        }
+
+        // Init
+        document.addEventListener("DOMContentLoaded", () => {
+            renderInitialOptions();
+            toggleOptionsByType();
+        });
+
+        questionTypeDropdown.addEventListener("change", toggleOptionsByType);
+
+        // Validate before submit
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const val = questionTypeDropdown.value;
+            const optionBlocks = optionsContainer.querySelectorAll(".option-block");
+            let filled = 0;
+            optionBlocks.forEach(block => {
+                const v = block.querySelector("input").value.trim();
+                if (v !== "") filled++;
+            });
+            if (val !== "OpenText") {
+                if (optionBlocks.length < 2 || filled < 2) {
+                    e.preventDefault();
+                    alert("Please enter at least two valid answer options.");
+                }
+            }
+        });
+    </script>
+}

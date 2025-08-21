@@ -1,0 +1,119 @@
+﻿@using OnlineCoaching.Domain.Enums.QuestionType
+@model Question
+
+@{
+    var options = Model.Options?.ToList() ?? new List<Option>();
+    ViewData["Title"] = "Edit Question";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 bg-dark text-white rounded-3">
+        <h2 class="text-center mb-4">Edit Question</h2>
+
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Question Number -->
+            <div class="mb-3">
+                <label class="form-label fw-bold text-white">Question Number (optional):</label>
+                <input asp-for="NumberOfQuestion" type="number" min="1"
+                       class="form-control form-control-lg bg-dark text-white border-secondary" />
+            </div>
+
+            <!-- Question Text -->
+            <div class="mb-3">
+                <label asp-for="Text" class="form-label fw-bold"></label>
+                <textarea asp-for="Text" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+
+            <!-- Question Type -->
+            <div class="mb-3">
+                <label asp-for="Type" class="form-label fw-bold"></label>
+                <select asp-for="Type" class="form-select" id="questionType">
+                    <option value="SingleChoice" selected="@((Model.Type == QuestionType.SingleChoice))">Single Choice</option>
+                    <option value="MultipleChoice" selected="@((Model.Type == QuestionType.MultipleChoice))">Multiple Choice</option>
+                    <option value="OpenText" selected="@((Model.Type == QuestionType.OpenText))">Open Text</option>
+                </select>
+            </div>
+
+            <!-- Allow Multiple -->
+            <div class="form-check form-switch mb-3">
+                <input asp-for="AllowMultipleAnswers" class="form-check-input" type="checkbox" id="AllowMultipleAnswers" />
+                <label asp-for="AllowMultipleAnswers" class="form-check-label fw-bold"></label>
+            </div>
+
+            <!-- Options + Actions -->
+            <div id="optionsAndActions">
+                <div id="optionsSection" class="mb-3">
+                    <h5 class="fw-bold text-white">Options:</h5>
+                    <div class="row g-3" id="optionsContainer">
+                        @if (options.Any())
+                        {
+                            for (int i = 0; i < options.Count; i++)
+                            {
+                                <div class="col-md-6 option-block">
+                                    <div class="input-group">
+                                        <input type="text" name="Options[@i].Text" value="@options[i].Text"
+                                               class="form-control bg-dark text-white border-secondary" required />
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <button type="button" class="btn btn-sm btn-success mt-2" onclick="addOption()">+ Add Option</button>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button type="submit" class="btn btn-primary btn-lg px-4">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const questionTypeDropdown = document.getElementById("questionType");
+        const optionsAndActions = document.getElementById("optionsAndActions");
+        const allowMultipleCheckbox = document.getElementById("AllowMultipleAnswers");
+
+        function toggleOptionsByType() {
+            const val = questionTypeDropdown.value;
+
+            if (val === "OpenText") {
+                optionsAndActions.style.display = "none";   // hide options
+                allowMultipleCheckbox.checked = false;
+                allowMultipleCheckbox.disabled = true;
+            } else {
+                optionsAndActions.style.display = "block";  // show options
+                allowMultipleCheckbox.disabled = false;
+
+                if (val === "MultipleChoice") {
+                    allowMultipleCheckbox.checked = true;
+                } else if (val === "SingleChoice") {
+                    allowMultipleCheckbox.checked = false;
+                }
+            }
+        }
+
+        // Add Option dynamically
+        function addOption() {
+            const container = document.getElementById("optionsContainer");
+            const optionIndex = container.querySelectorAll(".option-block").length;
+            const optionHtml = `
+                <div class="col-md-6 option-block">
+                    <div class="input-group">
+                        <input type="text" name="Options[${optionIndex}].Text" class="form-control bg-dark text-white border-secondary" placeholder="Option text" required />
+                        <button type="button" class="btn btn-danger" onclick="this.closest('.option-block').remove()">X</button>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML("beforeend", optionHtml);
+        }
+
+        document.addEventListener("DOMContentLoaded", toggleOptionsByType);
+        questionTypeDropdown.addEventListener("change", toggleOptionsByType);
+    </script>
+}
