@@ -2,9 +2,9 @@
 {
     public interface IBaseRepository<T> where T : class
     {
+        Task<T?> GetByIdAsync(int id);
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
         Task<T> AddAsync (T entity);
-        Task<T?> AddAsync(int id);
         Task<bool> IsExistsAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includes);
 

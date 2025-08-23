@@ -205,4 +205,6 @@ internal class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public int Max(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> field) =>
         _context.Set<T>().Any(predicate) ? _context.Set<T>().Where(predicate).Max(field) : 0;
+
+   
 }
