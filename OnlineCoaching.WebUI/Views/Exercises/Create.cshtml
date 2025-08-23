@@ -1,0 +1,84 @@
+﻿@using OnlineCoaching.Domain.Dtos
+@model CreateExerciseDto
+
+@{
+    ViewData["Title"] = "Create Exercise";
+}
+
+<h2>Create Exercise</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Rest" class="control-label"></label>
+        <input asp-for="Rest" class="form-control" />
+        <span asp-validation-for="Rest" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Day" class="control-label"></label>
+        <input asp-for="Day" class="form-control" />
+        <span asp-validation-for="Day" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="VideoUrl" class="control-label"></label>
+        <input asp-for="VideoUrl" class="form-control" />
+        <span asp-validation-for="VideoUrl" class="text-danger"></span>
+    </div>
+
+    <!-- Dropdown for Muscles -->
+    <div class="form-group">
+        <label asp-for="MuscleId" class="control-label"></label>
+        <select asp-for="MuscleId" class="form-control" asp-items="ViewBag.Muscles">
+            <option value="">-- Select Muscle --</option>
+        </select>
+        <span asp-validation-for="MuscleId" class="text-danger"></span>
+    </div>
+
+    <!-- Dynamic list of LinkUrls -->
+    <div class="form-group">
+        <label>Additional Links</label>
+        <div id="links-container">
+            <input type="text" name="LinkUrls[0]" class="form-control mb-2" placeholder="Enter link" />
+        </div>
+        <button type="button" id="add-link" class="btn btn-sm btn-secondary">Add another link</button>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        let linkIndex = 1;
+        document.getElementById("add-link").addEventListener("click", function () {
+            let container = document.getElementById("links-container");
+            let input = document.createElement("input");
+            input.type = "text";
+            input.name = `LinkUrls[${linkIndex}]`;
+            input.className = "form-control mb-2";
+            input.placeholder = "Enter link";
+            container.appendChild(input);
+            linkIndex++;
+        });
+    </script>
+
+}

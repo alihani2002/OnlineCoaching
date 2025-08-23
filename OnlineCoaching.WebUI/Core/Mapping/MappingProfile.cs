@@ -7,18 +7,7 @@ namespace OnlineCoaching.Web.Core.Mapping
     {
         public MappingProfile()
         {
-            //#region User
-            //CreateMap<ApplicationUser, UserViewModel>()
-            //    .ReverseMap();
-
-            //CreateMap<UserFormViewModel, CreateUserDto>()
-            //    .ReverseMap();
-
-            //CreateMap<UserFormViewModel, ApplicationUser>()
-            //    .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email!.ToUpper()))
-            //    .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.UserName.ToUpper()))
-            //    .ReverseMap();
-            //#endregion
+         
 
             #region Food 
 
@@ -36,6 +25,23 @@ namespace OnlineCoaching.Web.Core.Mapping
 
             // Create DTO → Entity
             CreateMap<CreateMuscleDto, Muscle>();
+            #endregion
+
+            #region Exercise 
+            // Entity -> DTO
+            CreateMap<Exercise, ExerciseDto>()
+                .ForMember(dest => dest.MuscleName, opt => opt.MapFrom(src => src.Muscle != null ? src.Muscle.Name : string.Empty))
+                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
+
+            // DTO -> Entity
+            CreateMap<ExerciseDto, Exercise>()
+                .ForMember(dest => dest.Muscle, opt => opt.Ignore()) // Prevent overwriting navigation property
+                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
+
+            // Create DTO -> Entity
+            CreateMap<CreateExerciseDto, Exercise>()
+                .ForMember(dest => dest.Muscle, opt => opt.Ignore()) // ignore navigation
+                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
             #endregion
 
         }

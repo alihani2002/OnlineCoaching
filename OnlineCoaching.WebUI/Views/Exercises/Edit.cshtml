@@ -1,0 +1,84 @@
+﻿@model OnlineCoaching.Domain.Dtos.ExerciseDto
+
+@{
+    ViewData["Title"] = "Edit Exercise";
+}
+
+<h2>Edit Exercise</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Rest"></label>
+        <input asp-for="Rest" class="form-control" />
+        <span asp-validation-for="Rest" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Day"></label>
+        <input asp-for="Day" class="form-control" />
+        <span asp-validation-for="Day" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="VideoUrl"></label>
+        <input asp-for="VideoUrl" class="form-control" />
+        <span asp-validation-for="VideoUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MuscleId">Muscle</label>
+        <select asp-for="MuscleId" asp-items="ViewBag.Muscles" class="form-control"></select>
+        <span asp-validation-for="MuscleId" class="text-danger"></span>
+    </div>
+
+    <h4>Links</h4>
+    <div id="links-container">
+        @for (int i = 0; i < Model.LinkUrls.Count; i++)
+        {
+            <div class="form-group d-flex mb-2">
+                <input type="text" name="LinkUrls[@i]" value="@Model.LinkUrls[i]" class="form-control" />
+                <button type="button" class="btn btn-danger btn-sm ml-2" onclick="removeLink(this)">Remove</button>
+            </div>
+        }
+    </div>
+    <button type="button" class="btn btn-secondary mb-3" onclick="addLink()">Add Link</button>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function addLink() {
+            var index = document.querySelectorAll('#links-container input').length;
+            var container = document.getElementById('links-container');
+
+            var div = document.createElement('div');
+            div.classList.add('form-group', 'd-flex', 'mb-2');
+            div.innerHTML = `
+                <input type="text" name="LinkUrls[${index}]" class="form-control" />
+                <button type="button" class="btn btn-danger btn-sm ml-2" onclick="removeLink(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeLink(button) {
+            button.parentElement.remove();
+        }
+    </script>
+}

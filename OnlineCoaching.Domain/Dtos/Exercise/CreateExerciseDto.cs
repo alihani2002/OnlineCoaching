@@ -1,6 +1,6 @@
-﻿namespace OnlineCoaching.Domain.Entities
+﻿namespace OnlineCoaching.Domain.Dtos
 {
-    public class Exercise : BaseEntity
+    public class CreateExerciseDto
     {
         [Required, MaxLength(150)]
         public string? Name { get; set; }
@@ -8,12 +8,7 @@
         public string Day { get; set; } = null!;
         public string? Description { get; set; }
         public string? VideoUrl { get; set; }
-
         public int MuscleId { get; set; }
-        public Muscle? Muscle { get; set; }
-
-        public ICollection<AssignExercise>? AssignedExercises { get; set; }
-        public List<string> LinkUrls { get; set; } = [];
-
+        public List<string> LinkUrls { get; set; } = new();
     }
 }
