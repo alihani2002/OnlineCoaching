@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.CoachingPackageDto>
+
+@{
+    ViewData["Title"] = "Coaching Packages";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add New Package</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Duration (Months)</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var package in Model)
+        {
+            <tr>
+                <td>@package.Title</td>
+                <td>@package.Description</td>
+                <td>@package.DurationInMonths</td>
+                <td>@package.Price.ToString("C")</td>
+                <td>
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@package.Id">Details</a>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@package.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@package.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

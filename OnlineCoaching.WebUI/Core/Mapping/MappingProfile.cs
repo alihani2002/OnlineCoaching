@@ -44,6 +44,28 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
             #endregion
 
+            #region coachingPackage
+            // Entity -> DTO
+            CreateMap<CoachingPackage, CoachingPackageDto>();
+
+            // DTO -> Entity
+            CreateMap<CreateCoachingPackageDto, CoachingPackage>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedById, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedById, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore());
+
+            CreateMap<CoachingPackageDto, CoachingPackage>()
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedById, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedById, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore());
+            #endregion
+
+
         }
     }
 }

@@ -1,0 +1,26 @@
+﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageDto
+
+@{
+    ViewData["Title"] = "Delete Package";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete this package?
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text"><strong>Description:</strong> @Model.Description</p>
+        <p class="card-text"><strong>Duration:</strong> @Model.DurationInMonths months</p>
+        <p class="card-text"><strong>Price:</strong> @Model.Price.ToString("C")</p>
+    </div>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
