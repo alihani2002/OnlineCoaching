@@ -78,6 +78,14 @@
         </div>
     </div>
 }
+else if (User.IsInRole(AppRoles.Admin))
+{
+    <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height:80vh;">
+        <div class="card shadow-lg p-4 bg-white rounded text-center" style="max-width:500px; width:100%;">
+            <h3 class="mb-0">Welcome in Admin Dashboard.</h3>
+        </div>
+    </div>
+}
 else
 {
     <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height:80vh;">

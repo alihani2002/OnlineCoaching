@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OnlineCoaching.Domain.Dtos;
 
 namespace OnlineCoaching.Web.Core.Mapping
 {
@@ -19,6 +20,13 @@ namespace OnlineCoaching.Web.Core.Mapping
             //    .ReverseMap();
             //#endregion
 
+
+            CreateMap<Food , FoodDto>().ReverseMap();
+            CreateMap<CreateFoodDto , Food>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore()) 
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore()).ReverseMap(); 
      
 
         }

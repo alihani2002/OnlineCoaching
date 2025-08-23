@@ -1,0 +1,38 @@
+﻿@model OnlineCoaching.Domain.Dtos.FoodDto
+
+@{
+    ViewData["Title"] = "Food Details";
+}
+
+<div class="card shadow p-4">
+    <dl class="row">
+        <dt class="col-sm-3 text-dark">ID</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3 text-dark">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3 text-dark">Calories</dt>
+        <dd class="col-sm-9">@Model.Calories kcal</dd>
+
+        <dt class="col-sm-3 text-dark">Protein</dt>
+        <dd class="col-sm-9">@Model.Protein g</dd>
+
+        <dt class="col-sm-3 text-dark">Carbs</dt>
+        <dd class="col-sm-9">@Model.Carbs g</dd>
+
+        <dt class="col-sm-3 text-dark">Fats</dt>
+        <dd class="col-sm-9">@Model.Fats g</dd>
+
+        
+
+        <dt class="col-sm-3 text-dark">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+</div>

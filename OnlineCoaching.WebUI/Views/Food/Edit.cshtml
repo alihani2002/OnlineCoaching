@@ -1,0 +1,42 @@
+﻿@using OnlineCoaching.Domain.Dtos
+@model FoodDto
+
+@{
+    ViewData["Title"] = "Edit Food";
+}
+
+<form asp-action="Edit" method="post">
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Calories" class="form-label"></label>
+        <input asp-for="Calories" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Protein" class="form-label"></label>
+        <input asp-for="Protein" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Carbs" class="form-label"></label>
+        <input asp-for="Carbs" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Fats" class="form-label"></label>
+        <input asp-for="Fats" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

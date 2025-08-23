@@ -1,0 +1,87 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.FoodDto>
+
+@{
+    ViewData["Title"] = "Table Foods";
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<!-- Search box -->
+<div class="mb-3">
+    <input type="text" id="tableSearch" class="form-control" placeholder="Search foods...">
+</div>
+
+<table class="table align-middle mb-0 bg-white text-dark" id="dataTable">
+    <thead class="bg-light text-dark">
+        <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th>Protein</th>
+            <th>Carbs</th>
+            <th>Fats</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-dark">
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img src="~/assets/img/logo/noimage.jpg"
+                             alt="food image"
+                             class="rounded-circle"
+                             style="width: 45px; height: 45px;" />
+                        <div class="ms-3">
+                            <p class="fw-bold mb-1 text-dark">@item.Name</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="badge bg-primary rounded-pill">@item.Calories</span>
+                </td>
+                <td>
+                    <span class="badge bg-success rounded-pill">@item.Protein g</span>
+                </td>
+                <td>
+                    <span class="badge bg-warning text-dark rounded-pill">@item.Carbs g</span>
+                </td>
+                <td>
+                    <span class="badge bg-info text-dark rounded-pill">@item.Fats g</span>
+                </td>
+                <td>
+                    <!-- Dropdown Actions -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@item.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@item.Id">
+                            <li>
+                                <a class="dropdown-item text-dark" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Search Script -->
+<script>
+    document.getElementById("tableSearch").addEventListener("keyup", function () {
+        var value = this.value.toLowerCase();
+        var rows = document.querySelectorAll("#dataTable tbody tr");
+        rows.forEach(function (row) {
+            row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
+    });
+</script>

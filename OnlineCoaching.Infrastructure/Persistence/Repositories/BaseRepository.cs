@@ -14,9 +14,30 @@ internal class BaseRepository<T> : IBaseRepository<T> where T : class
         _context = context;
     }
 
+    public async Task<T> AddAsync(T entity)
+    {
+        await _context.AddAsync(entity);
+        return entity;
+    }
+
+    public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
+    {
+        await _context.AddRangeAsync(entities);
+        return entities;
+    }
+    public async Task<bool> IsExistsAsync(Expression<Func<T, bool>> predicate) =>
+    await _context.Set<T>().AnyAsync(predicate);
+
+    public async Task<int> CountAsync() => await _context.Set<T>().CountAsync();
+
+    public async Task<int> CountAsync(Expression<Func<T, bool>> predicate) =>
+        await _context.Set<T>().CountAsync(predicate);
+
+    public async Task<T?> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
+
     public async Task<List<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includes)
     {
-        IQueryable<T> query = _context.Set<T>();
+        IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
         foreach (var include in includes)
         {
@@ -163,7 +184,7 @@ internal class BaseRepository<T> : IBaseRepository<T> where T : class
         return entities;
     }
 
-    public void Update(T entity) => _context.Update(entity);
+    public void Update(T entity) => _context.Entry(entity).State = EntityState.Modified;
 
     //.NET 6
     public void Remove(T entity) => _context.Remove(entity);

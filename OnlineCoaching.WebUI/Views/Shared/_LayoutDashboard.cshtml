@@ -49,6 +49,7 @@
                         </a>
                         <hr>
                         <ul class="nav nav-pills flex-column mb-auto">
+                            <li><a asp-controller="Food" asp-action="Index" class="nav-link link-dark">➕ Add Food</a></li>
                             <li><a asp-controller="Question" asp-action="Index" class="nav-link link-dark">➕ Add Question</a></li>
                             <li><a asp-controller="User" asp-action="Index" class="nav-link link-dark">➕ Add Admin</a></li>
                         </ul>
@@ -77,9 +78,13 @@
 
             <!-- Main Content -->
             <div class="col-md-10" id="mainContent">
-                <header class="py-2 border-bottom mb-3">
-                    <h4 class="px-3">@ViewData["Title"]</h4>
+
+                <header class="py-2 border-bottom mb-3 mt-5 bg-light">
+                    <div class="container-fluid d-flex justify-content-center">
+                        <h1 class="m-0">@ViewData["Title"]</h1>
+                    </div>
                 </header>
+
                 <main class="pb-3 px-3">
                     @RenderBody()
                 </main>
