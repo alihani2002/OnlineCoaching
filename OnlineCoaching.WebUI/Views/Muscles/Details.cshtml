@@ -1,0 +1,15 @@
+﻿@model OnlineCoaching.Domain.Dtos.MuscleDto
+
+@{
+    ViewData["Title"] = "Muscle Details";
+}
+
+<h2>Muscle Details</h2>
+
+<div class="card p-3">
+    <h4>@Model.Name</h4>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Created On:</strong> @Model.CreatedOn.ToString("yyyy-MM-dd")</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>

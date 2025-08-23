@@ -1,0 +1,37 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.MuscleDto>
+
+@{
+    ViewData["Title"] = "Muscles";
+}
+
+<h2>Muscles</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ Add Muscle</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Created On</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var muscle in Model)
+        {
+            <tr>
+                <td>@muscle.Name</td>
+                <td>@muscle.Description</td>
+                <td>@muscle.CreatedOn.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@muscle.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@muscle.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@muscle.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

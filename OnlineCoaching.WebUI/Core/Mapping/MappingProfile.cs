@@ -20,14 +20,23 @@ namespace OnlineCoaching.Web.Core.Mapping
             //    .ReverseMap();
             //#endregion
 
+            #region Food 
 
             CreateMap<Food , FoodDto>().ReverseMap();
             CreateMap<CreateFoodDto , Food>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore()) 
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
-                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore()).ReverseMap(); 
-     
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore()).ReverseMap();
+            #endregion
+
+            #region Muscles
+            // Entity → DTO
+            CreateMap<Muscle, MuscleDto>().ReverseMap();
+
+            // Create DTO → Entity
+            CreateMap<CreateMuscleDto, Muscle>();
+            #endregion
 
         }
     }

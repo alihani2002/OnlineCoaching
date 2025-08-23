@@ -7,6 +7,7 @@ namespace OnlineCoaching.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<IMuscleServices, MuscleServices>();
             services.AddScoped<IFoodServices, FoodServices>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IAuthService, AuthService>();
