@@ -1,3 +1,7 @@
+using Hangfire;
+using Hangfire.SqlServer;
+using OnlineCoaching.Application.Services;
+using OnlineCoaching.WebUI.HangfireJobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +11,25 @@ builder.Services
     .AddInfrastructureServices(builder.Configuration)
     .AddWebServices(builder);
 
+// =====================
+// Configure Hangfire
+// =====================
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true
+        }));
+
+builder.Services.AddHangfireServer();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -44,8 +67,13 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Hangfire Dashboard (optional)
+// =====================
+app.UseHangfireDashboard("/hangfire");
 
-    app.MapControllerRoute(
+RecurringJobs.RegisterJobs();
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 

@@ -307,7 +307,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.ToTable("AssignExercises");
+                    b.ToTable("AssignExercises", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.AssignFood", b =>
@@ -354,7 +354,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("FoodId");
 
-                    b.ToTable("AssignFoods");
+                    b.ToTable("AssignFoods", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Book", b =>
@@ -403,7 +403,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.BookRequest", b =>
@@ -456,7 +456,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("BookRequests");
+                    b.ToTable("BookRequests", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Client", b =>
@@ -507,7 +507,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.ClientAnswer", b =>
@@ -553,7 +553,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("ClientAnswers");
+                    b.ToTable("ClientAnswers", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.ClientAnswerOption", b =>
@@ -591,7 +591,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("ClientAnswerOption");
+                    b.ToTable("ClientAnswerOption", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.CoachFeedback", b =>
@@ -630,7 +630,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("CoachFeedbacks");
+                    b.ToTable("CoachFeedbacks", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.CoachingPackage", b =>
@@ -672,7 +672,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoachingPackages");
+                    b.ToTable("CoachingPackages", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.CoachingPackageRequest", b =>
@@ -728,7 +728,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("CoachingPackageRequests");
+                    b.ToTable("CoachingPackageRequests", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Course", b =>
@@ -774,7 +774,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.CourseRequest", b =>
@@ -824,7 +824,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseRequests");
+                    b.ToTable("CourseRequests", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.CourseVideo", b =>
@@ -863,7 +863,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseVideos");
+                    b.ToTable("CourseVideos", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Exercise", b =>
@@ -919,7 +919,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("MuscleId");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Food", b =>
@@ -967,7 +967,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Foods");
+                    b.ToTable("Foods", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Muscle", b =>
@@ -1003,7 +1003,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Muscles");
+                    b.ToTable("Muscles", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Notification", b =>
@@ -1050,7 +1050,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Option", b =>
@@ -1086,7 +1086,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Options");
+                    b.ToTable("Options", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Question", b =>
@@ -1126,7 +1126,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Transformation", b =>
@@ -1174,7 +1174,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Transformations");
+                    b.ToTable("Transformations", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
