@@ -1,0 +1,20 @@
+﻿@using OnlineCoaching.WebUI.Models.RequestPackage
+@model ConfirmRequestViewModel
+
+<h2>Confirm Coaching Package</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4>@Model.PackageTitle</h4>
+        <p>Duration: @Model.DurationInMonths months</p>
+        <p>Price: @Model.PackagePrice $</p>
+    </div>
+</div>
+
+<form asp-action="ConfirmRequest" method="post">
+    <input type="hidden" asp-for="PackageId" />
+    <input type="hidden" asp-for="ClientId" />
+
+    <button type="submit" class="btn btn-success">Confirm Request</button>
+    <a asp-action="Index" asp-controller="CoachingPackages" class="btn btn-secondary">Cancel</a>
+</form>

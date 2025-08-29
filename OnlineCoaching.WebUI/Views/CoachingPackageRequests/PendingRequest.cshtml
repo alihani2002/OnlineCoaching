@@ -1,0 +1,24 @@
+﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto
+
+@{
+    ViewData["Title"] = "Your Request Status";
+}
+
+<section class="request-status section-padding40 fix">
+    <div class="container text-center">
+        <h2>Your Coaching Package Request</h2>
+        <p><strong>Package ID:</strong> @Model.PackageId</p>
+        <p><strong>Status:</strong> @Model.Status</p>
+        <p><strong>Start Date:</strong> @Model.StartDate?.ToString("dd MMM yyyy")</p>
+        <p><strong>End Date:</strong> @Model.EndDate?.ToString("dd MMM yyyy")</p>
+
+        @if (Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending)
+        {
+            <p class="text-warning">⏳ Your request is pending. Please wait for coach approval.</p>
+        }
+        else if (Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active)
+        {
+            <p class="text-success">✅ Your package is active! Enjoy your coaching sessions.</p>
+        }
+    </div>
+</section>

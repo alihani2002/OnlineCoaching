@@ -1,0 +1,65 @@
+﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto
+
+@{
+    ViewData["Title"] = "Request Coaching Packages";
+}
+
+<section class="section-padding40 fix" style="background-color: #f9f9f9; min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-lg rounded-3 border-0" style="background: #ffffff;">
+                    <div class="card-body text-center p-5">
+
+                        <h2 class="mb-4 text-dark">Your Coaching Package Request</h2>
+
+                        <p class="fs-5">
+                            <strong class="text-dark">Status:</strong>
+                            <span class="badge
+                                @(Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending ? "bg-warning text-dark" :
+                                                                    Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active ? "bg-success" : "bg-secondary")">
+                                @Model.Status
+                            </span>
+                        </p>
+
+                        @if (Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending)
+                        {
+                            <p class="text-warning fs-6">⏳ Your request is pending. Please wait for coach approval.</p>
+                        }
+                        else if (Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active)
+                        {
+                            <p class="text-success fs-6">✅ Your package is active! Enjoy your coaching sessions.</p>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No active requests found.</p>
+                        }
+
+                        <hr class="my-4" />
+
+                        <div class="text-start">
+                            <p><strong>Package Title:</strong> @Model.Titles</p>
+                            <p><strong>Price:</strong> $@Model.Price</p>
+                            <p><strong>Requested On:</strong> @Model.CreatedOn.ToString("dd MMM yyyy")</p>
+                            @if (Model.StartDate.HasValue)
+                            {
+                                <p><strong>Start Date:</strong> @Model.StartDate.Value.ToString("dd MMM yyyy")</p>
+                            }
+                            @if (Model.EndDate.HasValue)
+                            {
+                                <p><strong>End Date:</strong> @Model.EndDate.Value.ToString("dd MMM yyyy")</p>
+                            }
+                        </div>
+                   @*      <a href="@Url.Action("Index", "CoachingPackages")" class="btn btn-outline-primary mt-3">
+                            To select new Package
+                        </a>
+                        <a href="@Url.Action("MyRequests", "CoachingPackageRequests")" class="btn btn-outline-primary mt-3">
+                            View All My Requests
+                        </a>
+ *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

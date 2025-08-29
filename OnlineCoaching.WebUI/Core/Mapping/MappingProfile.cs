@@ -65,6 +65,13 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore());
             #endregion
 
+            // CoachingPackage
+            CreateMap<CoachingPackage, CoachingPackageDto>().ReverseMap();
+
+            // CoachingPackageRequest
+            CreateMap<CoachingPackageRequest, CoachingPackageRequestDto>().ReverseMap();
+
+
 
         }
     }

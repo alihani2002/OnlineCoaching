@@ -2,6 +2,7 @@
 {
     public interface IClientService 
     {
+        Client? GetClientById(int userId);
         Task<Client?> GetClientAsync(string userId);
         IEnumerable<Client?> GetAllClients();
         Task CompleteClientData(Client client , string userId);

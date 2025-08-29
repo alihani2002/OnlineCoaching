@@ -1,0 +1,64 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto>
+
+@{
+    ViewData["Title"] = "My Coaching Requests";
+}
+
+<section class="section-padding40 fix" style="background-color: #f9f9f9; min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card shadow-lg rounded-3 border-0">
+                    <div class="card-body p-5">
+
+                        <h2 class="mb-4 text-center text-dark">📋 My Coaching Requests</h2>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Status</th>
+                                            <th>Price</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Requested On</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var request in Model)
+                                        {
+                                            <tr>
+                                                <td>@request.Titles</td>
+                                                <td>
+                                                    <span class="badge
+                                                                @(request.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending ? "bg-danger" :
+                                                                                                                    request.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active ? "bg-success" : "bg-secondary")">
+                                                @request.Status
+                                            </span>
+                                        </td>
+                                        <td><strong>$@request.Price</strong></td>
+                                        <td>@request.StartDate?.ToString("dd MMM yyyy")</td>
+                                        <td>@request.EndDate?.ToString("dd MMM yyyy")</td>
+                                        <td>@request.CreatedOn.ToString("dd MMM yyyy")</td>
+                                    </tr>
+                                                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info text-center">
+                                You don’t have any package requests yet.
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

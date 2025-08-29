@@ -17,6 +17,11 @@ namespace OnlineCoaching.Application.Services
                 .Include(x => x.User!)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
         }
+        public Client? GetClientById(int userId)
+        {
+            return _unitOfWork.Clients.GetById(userId);
+        }
+
 
         public IEnumerable< Client?> GetAllClients() =>
              _unitOfWork.Clients.GetAll();

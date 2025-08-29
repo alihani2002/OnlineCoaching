@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
-using OnlineCoaching.Domain.Entities;
-using OnlineCoaching.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
     public class CoachingPackagesController : Controller
     {
+        private readonly IClientService _clientService;
         private readonly ICoachingPackageServices _packageService;
+        private readonly ICoachingPackageRequestService _requestServices;
 
-        public CoachingPackagesController(ICoachingPackageServices packageService)
+        public CoachingPackagesController(ICoachingPackageServices packageServic , ICoachingPackageRequestService requestService ,IClientService clientService )
         {
-            _packageService = packageService;
+            _packageService = packageServic;
+            _requestServices = requestService;
+            _clientService = clientService;
         }
+
 
         // GET: CoachingPackage
         public IActionResult Index()
@@ -28,6 +25,41 @@ namespace OnlineCoaching.WebUI.Controllers
             var packages = _packageService.GetCoachingPackages();
             return View(packages);
         }
+
+        // CoachingPackagesController
+        public async Task<IActionResult> GetCoachingPackage()
+        {
+            var packages = _packageService.GetCoachingPackages();
+
+            var sessionId = User.GetUserId();
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                return View("GetCoachingPackage", packages); // ✅ show packages to guest
+            }
+
+            var client = await _clientService.GetClientAsync(sessionId);
+
+            var existingRequest = _requestServices.GetActiveOrPendingRequest(client!.Id);
+            if (existingRequest != null)
+            {
+                // ✅ Redirect to PendingRequest action with ID
+                return View("PendingRequest", existingRequest);
+            }
+
+            return View("GetCoachingPackage", packages);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PendingRequest(int id)
+        {
+            var request = await _requestServices.GetRequestByIdAsync(id);
+            if (request == null) return NotFound();
+
+            return View(request);  // ✅ view gets CoachingPackageRequestDto
+        }
+
+
+
 
         // GET: CoachingPackage/Details/5
         public async Task<IActionResult> Details(int id)

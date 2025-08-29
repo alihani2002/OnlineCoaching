@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.CoachingPackageDto>
-
 @{
     ViewData["Title"] = "Coaching Packages";
 }
@@ -36,28 +35,9 @@
                                             <p>@package.Description</p>
                                         </div>
                                     </div>
-
-                                    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client))
-                                    {
-                                        <!-- Logged in: go to ConfirmRequest -->
-                                        <a href="@Url.Action("ConfirmRequest", "CoachingPackageRequests", new { packageId = package.Id })"
-                                           class="border-btn border-btn2">Join Now</a>
-                                    }
-                                    else if (!User.Identity!.IsAuthenticated || !User.IsInRole(AppRoles.Admin))
-                                    {
-                                        <!-- Not logged in: go to Login page -->
-                                        <a href="~/Identity/Account/Login"
-                                           class="border-btn border-btn2">Join Now</a>
-                                    }
-                                    <!-- Admin-only Links -->
-                                    @if (User.IsInRole(AppRoles.Admin))
-                                    {
-                                        <div class="mt-3">
-                                            <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@package.Id">Details</a>
-                                            <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@package.Id">Edit</a>
-                                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@package.Id">Delete</a>
-                                        </div>
-                                    }
+                                    <!-- Add more static or dynamic features here if needed -->
+                                    <a href="@Url.Action("ConfirmRequest", "CoachingPackageRequests", new { packageId = package.Id })"
+                                       class="border-btn border-btn2">Join Now</a>
 
                                 </div>
                             </div>

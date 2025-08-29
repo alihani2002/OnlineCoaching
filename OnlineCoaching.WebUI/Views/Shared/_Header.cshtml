@@ -23,6 +23,8 @@
 @if (User.Identity?.IsAuthenticated ?? false)
 { *@
 
+@if (User.IsInRole(AppRoles.Client))
+{
 <header>
     <div class="header-area header-transparent">
         <div class="main-header header-sticky">
@@ -40,12 +42,10 @@
                             <ul id="navigation">
                                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                                 <li><a asp-controller="Clients" asp-action="Index">Profile</a></li>
-                                <li><a asp-controller="User" asp-action="Index">Register admin</a></li>
-                                <li><a asp-controller="Home" asp-action="About">About</a></li>
-                                <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                                <li><a asp-controller="CoachingPackages" asp-action="GetCoachingPackage">CoachPackages</a></li>
+@*                                 <li><a asp-controller="CoachingPackageRequests" asp-action="MyRequests">MyRequests</a></li>
+ *@                                <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
                                 <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
-                                <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
-                                <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -79,7 +79,62 @@
         </div>
     </div>
 </header>
+}
+else
+{
+    <header>
+        <div class="header-area header-transparent">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="menu-wrapper d-flex align-items-center justify-content-between">
+                        <!-- Logo -->
+                        <div class="logo">
+                            <a asp-controller="Home" asp-action="Index" class="logo-text">
+                                Badr Reda For OnlineCoach
+                            </a>
+                        </div>
+                        <!-- Main-menu -->
+                        <div class="main-menu f-right d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li><a asp-controller="CoachingPackages" asp-action="Index">CoachPackages</a></li>
+                                    <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                                    <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
+                                </ul>
+                            </nav>
+                        </div>
 
+                        <!-- Header-btns (Contact + Auth Links) -->
+                        <div class="header-btns d-none d-lg-flex align-items-center gap-3 f-right">
+                            <a asp-controller="Contact" asp-action="Index" class="btn">Contact me</a>
+
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <form asp-area="Identity" asp-page="/Account/Logout"
+                                      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                                      method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-dark">Logout</button>
+                                </form>
+                                <span class="p-3 text-white me-2">Hello, @UserManager.GetUserName(User)</span>
+                            }
+                            else
+                            {
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline">Login</a>
+                                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn">Register</a>
+                            }
+                        </div>
+
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+}
 @* }
 else
 {
