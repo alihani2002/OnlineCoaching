@@ -7,6 +7,8 @@ namespace OnlineCoaching.Application.Services
         IEnumerable<CoachingPackageRequestDto> GetUserRequests(int clientId);
         CoachingPackageRequestDto? GetActiveOrPendingRequest(int clientId);
         Task<CoachingPackageRequest> CreateRequestAsync(int packageId, int clientId);
+
+        Task<CoachingPackageRequestDto?> ManageRequestStatusAsync(int requestId, ClientStatus newStatus);
         //Task<CreateCoachingPackageRequestDto> AddRequestAsync(CreateCoachingPackageRequestDto dto);
         //Task<CreateCoachingPackageRequestDto> CreateRequestAsync(int packageId, string clientId);
         IEnumerable<CoachingPackageRequestDto> GetRequests();

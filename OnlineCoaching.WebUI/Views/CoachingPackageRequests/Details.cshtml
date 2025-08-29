@@ -1,0 +1,15 @@
+﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+<div class="card p-3 bg-white text-black">
+    <h3>@Model.Titles</h3>
+    <p><strong>Client:</strong> @Model.ClientName</p>
+    <p><strong>Status:</strong> @Model.Status</p>
+    <p><strong>Price:</strong> $@Model.Price</p>
+    <p><strong>Start:</strong> @Model.StartDate?.ToShortDateString()</p>
+    <p><strong>End:</strong> @Model.EndDate?.ToShortDateString()</p>
+</div>
+
+<a asp-action="Index" class="btn btn-dark mt-3">Back</a>

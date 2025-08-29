@@ -69,7 +69,9 @@ namespace OnlineCoaching.Web.Core.Mapping
             CreateMap<CoachingPackage, CoachingPackageDto>().ReverseMap();
 
             // CoachingPackageRequest
-            CreateMap<CoachingPackageRequest, CoachingPackageRequestDto>().ReverseMap();
+            CreateMap<CoachingPackageRequest, CoachingPackageRequestDto>()
+            .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client!.FullName))
+            .ReverseMap();
 
 
 

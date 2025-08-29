@@ -1,0 +1,88 @@
+﻿@using OnlineCoaching.Domain.Dtos
+@model IEnumerable<CoachingPackageRequestDto>
+@{
+    ViewData["Title"] = "Requests";
+}
+
+<h2 class="mb-3">All Requests</h2>
+
+<table class="table table-bordered table-striped bg-white text-black">
+    <thead class="table-dark">
+        <tr>
+            <th>Package</th>
+            <th>Client</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Titles</td>
+                <td>@r.ClientName</td>
+                <td>@r.Status</td>
+                <td>@r.Price</td>
+                <td>@r.StartDate?.ToShortDateString()</td>
+                <td>@r.EndDate?.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@r.Id" class="btn btn-sm btn-info">Details</a>
+                    <button class="btn btn-sm btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#statusModal"
+                            data-id="@r.Id"
+                            data-status="@r.Status">
+                        Change Status
+                    </button>
+                    <a asp-action="Delete" asp-route-id="@r.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="ChangeStatus">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statusModalLabel">Change Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="RequestId" name="id" />
+                    <div class="mb-3">
+                        <label class="form-label">Select Status</label>
+                        <select class="form-select" name="status" id="StatusSelect">
+                            <option value="Pending">Pending</option>
+                            <option value="Active">Approved</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var statusModal = document.getElementById('statusModal')
+        statusModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var id = button.getAttribute('data-id')
+            var status = button.getAttribute('data-status')
+
+            document.getElementById("RequestId").value = id;
+            document.getElementById("StatusSelect").value = status;
+        })
+    </script>
+}

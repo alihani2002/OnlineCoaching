@@ -1,0 +1,16 @@
+﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto
+@{
+    ViewData["Title"] = "Delete Request";
+}
+
+<h2>Delete Request</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete request for <strong>@Model.Titles</strong>?
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

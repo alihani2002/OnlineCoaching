@@ -1,0 +1,20 @@
+﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto
+@{
+    ViewData["Title"] = "Edit Request Status";
+}
+
+<h2>Edit Status</h2>
+
+<form asp-action="EditStatus" method="post" class="card p-3 bg-white">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label>Status</label>
+        <select name="status" class="form-select">
+            <option value="Pending" selected="@Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending">Pending</option>
+            <option value="Active" selected="@Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active">Active</option>
+            <option value="Suspended" selected="@Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Suspended">Suspended</option>
+        </select>
+    </div>
+    <button class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

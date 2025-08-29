@@ -15,61 +15,40 @@ namespace OnlineCoaching.Application.Services
 
         public IEnumerable<CoachingPackageRequestDto> GetRequests()
         {
-            var requests = _unitOfWork.CoachingPackageRequests.GetAll()
+            var requests = _unitOfWork.CoachingPackageRequests.GetQueryable().Include(u=>u.Client)
                 .Where(r => !r.IsDeleted)
                 .ToList();
 
             return _mapper.Map<IEnumerable<CoachingPackageRequestDto>>(requests);
         }
+
+
+
         public IEnumerable<CoachingPackageRequestDto> GetUserRequests(int clientId)
         {
-            var requests = _unitOfWork.CoachingPackageRequests.GetAll()
+            var requests = _unitOfWork.CoachingPackageRequests.GetQueryable()
+                .Include(u=>u.Client)
                 .Where(r => !r.IsDeleted && r.ClientId == clientId)
                 .ToList();
+            if (requests == null) return null!;
+
             return _mapper.Map<IEnumerable<CoachingPackageRequestDto>>(requests);
         }
 
+      
+
         public async Task<CoachingPackageRequestDto?> GetRequestByIdAsync(int id)
         {
-            var request = await _unitOfWork.CoachingPackageRequests.GetByIdAsync(id);
+            var request = await _unitOfWork.CoachingPackageRequests.GetQueryable()
+            .Include(r => r.Client)
+            .FirstOrDefaultAsync(r => r.Id == id && !r.IsDeleted);
             if (request == null || request.IsDeleted) return null;
 
             return _mapper.Map<CoachingPackageRequestDto>(request);
         }
 
-        //public async Task<CreateCoachingPackageRequestDto> AddRequestAsync(CreateCoachingPackageRequestDto dto)
-        //{
-        //    var request = _mapper.Map<CreateCoachingPackageRequestDto>(dto);
-        //    request.Status = ClientStatus.Pending;
-        //    request.CreatedOn = DateTime.UtcNow;
 
-        //    var added = await _unitOfWork.CoachingPackageRequests.AddAsync(request);
-        //    _unitOfWork.Complete();
-
-        //    return _mapper.Map<CreateCoachingPackageRequestDto>(added);
-        //}
-        //public async Task<CreateCoachingPackageRequestDto> CreateRequestAsync(int packageId, string clientId)
-        //{
-        //    var package = await _unitOfWork.CoachingPackages.GetByIdAsync(packageId);
-        //    if (package == null)
-        //        throw new Exception("Package not found");
-
-        //    var request = new CreateCoachingPackageRequestDto
-        //    {
-        //        PackageId = packageId,
-        //        ClientId = clientId,
-        //        Status = ClientStatus.Pending,
-        //        StartDate = DateTime.Now,
-        //        EndDate = DateTime.Now.AddMonths(package.DurationInMonths),
-        //        IsAnswerQuestion = false
-        //    };
-
-        //    await _unitOfWork.CoachingPackageRequests.AddAsync(request);
-        //    _unitOfWork.Complete();
-
-        //    return request;
-        //}
-
+       
         public async Task<CoachingPackageRequest> CreateRequestAsync(int packageId, int clientId)
         {
             var package = await _unitOfWork.CoachingPackages.GetByIdAsync(packageId);
@@ -107,12 +86,49 @@ namespace OnlineCoaching.Application.Services
             return _mapper.Map<CoachingPackageRequest>(added);
         }
 
+
+        public async Task<CoachingPackageRequestDto?> ManageRequestStatusAsync(int requestId, ClientStatus newStatus)
+        {
+            var request = await _unitOfWork.CoachingPackageRequests.GetByIdAsync(requestId);
+            if (request == null || request.IsDeleted) return null;
+
+            request.Status = newStatus;
+
+            if (newStatus == ClientStatus.Active)
+            {
+                // get package duration
+                var package = await _unitOfWork.CoachingPackages.GetByIdAsync(request.PackageId);
+                if (package != null)
+                {
+                    request.StartDate = DateTime.UtcNow;
+                    request.EndDate = DateTime.UtcNow.AddMonths(package.DurationInMonths);
+                }
+            }
+            else if (newStatus == ClientStatus.Suspended)
+            {
+                request.EndDate = DateTime.UtcNow; // optional: end immediately
+            }
+
+            request.LastUpdatedOn = DateTime.UtcNow;
+
+            _unitOfWork.CoachingPackageRequests.Update(request);
+            _unitOfWork.Complete();
+
+            return _mapper.Map<CoachingPackageRequestDto>(request);
+        }
+
+
         public async Task<CoachingPackageRequestDto?> UpdateStatusAsync(int id, ClientStatus newStatus)
         {
             var existing = await _unitOfWork.CoachingPackageRequests.GetByIdAsync(id);
             if (existing == null || existing.IsDeleted) return null;
 
             existing.Status = newStatus;
+            if (existing.Status == ClientStatus.Active)
+            {
+                existing.StartDate = DateTime.UtcNow;
+                //existing.EndDate = DateTime.UtcNow.AddMonths(package.DurationInMonths);
+            }
             existing.LastUpdatedOn = DateTime.UtcNow;
 
             _unitOfWork.CoachingPackageRequests.Update(existing);
@@ -120,6 +136,8 @@ namespace OnlineCoaching.Application.Services
 
             return _mapper.Map<CoachingPackageRequestDto>(existing);
         }
+
+
 
         public async Task<bool> DeleteRequestAsync(int id)
         {
@@ -133,10 +151,11 @@ namespace OnlineCoaching.Application.Services
             return true;
         }
 
+
         public CoachingPackageRequestDto? GetActiveOrPendingRequest(int clientId)
         {
             var request = _unitOfWork.CoachingPackageRequests
-                .GetAll()
+                .GetQueryable().Include(x => x.Client )
                 .FirstOrDefault(r =>
                     r.ClientId == clientId &&
                     (r.Status == ClientStatus.Pending || r.Status == ClientStatus.Active) &&
@@ -144,6 +163,8 @@ namespace OnlineCoaching.Application.Services
 
             return _mapper.Map<CoachingPackageRequestDto?>(request);
         }
+
+
 
         public void CheckExpiredSubscriptions()
         {
