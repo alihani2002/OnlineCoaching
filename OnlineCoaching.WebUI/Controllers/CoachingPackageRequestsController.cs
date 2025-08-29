@@ -185,7 +185,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
             await _requestService.CreateRequestAsync(model.PackageId, model.ClientId);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("GetCoachingPackage", "CoachingPackages");
         }
     }
 }
