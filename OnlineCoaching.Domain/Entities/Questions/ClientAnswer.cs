@@ -8,12 +8,10 @@
         public int QuestionId { get; set; }
         public Question? Question { get; set; }
 
-        public int? OptionId { get; set; }
-        public Option? Option { get; set; }
-
-        public ICollection<ClientAnswerOption> SelectedOptions { get; set; } = [];
+        // Instead of OptionId
+        public ICollection<ClientAnswerOption> SelectedOptions { get; set; } = new List<ClientAnswerOption>();
 
         public string? AnswerText { get; set; }
-       
+
     }
 }

@@ -1,4 +1,6 @@
-﻿@model Client
+﻿@using OnlineCoaching.Domain.Enums.QuestionType
+@using OnlineCoaching.WebUI.Models.Clients
+@model ClientDashboardViewModel
 
 @{
     ViewData["Title"] = "Profile";
@@ -61,19 +63,19 @@
                 <table class="table table-dark table-striped table-bordered align-middle mb-0">
                     <tr>
                         <th class="text-danger">Full Name</th>
-                        <td>@Model.FullName</td>
+                        <td>@Model.Client.FullName</td>
                     </tr>
                     <tr>
                         <th class="text-danger">Birth Date</th>
-                        <td>@Model.BirthDate.ToString("yyyy-MM-dd")</td>
+                        <td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td>
                     </tr>
                     <tr>
                         <th class="text-danger">Phone Number</th>
-                        <td>@Model.PhoneNumber</td>
+                        <td>@Model.Client.PhoneNumber</td>
                     </tr>
                     <tr>
                         <th class="text-danger">Address</th>
-                        <td>@Model.Address</td>
+                        <td>@Model.Client.Address</td>
                     </tr>
                 </table>
             </div>
@@ -96,6 +98,47 @@ else
         <div class="container d-flex justify-content-center align-items-center">
             <div class="card shadow-lg p-4 bg-dark text-light rounded text-center border-0" style="max-width:500px; width:100%;">
                 <p class="mb-0">No profile data available.</p>
+            </div>
+        </div>
+    </section>
+}
+@if (Model!.Questions.Any())
+{
+    <section class="section-padding40 fix" style="background-color:#222; min-height:80vh;">
+        <div class="container">
+            <div class="card shadow-lg mt-5 border-0 rounded-3 bg-dark text-light p-4">
+                <h3 class="mb-4 text-center text-warning fw-bold">📝 Your Answers</h3>
+
+                @foreach (var question in Model.Questions)
+                {
+                    var answer = Model.Answers.FirstOrDefault(a => a.QuestionId == question.Id);
+
+                    <div class="mb-3">
+                        <p class="fw-bold text-light">@question.NumberOfQuestion. @question.Text</p>
+
+                        @if (question.Type == QuestionType.OpenText)
+                        {
+                            <p class="text-info">@answer?.AnswerText ?? "No answer provided"</p>
+                        }
+                        else
+                        {
+                            if (answer?.SelectedOptions != null && answer.SelectedOptions.Any())
+                            {
+                                <ul>
+                                    @foreach (var opt in answer.SelectedOptions)
+                                    {
+                                        <li class="text-info">@opt.Option!.Text</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No option selected</p>
+                            }
+                        }
+                    </div>
+                    <hr />
+                }
             </div>
         </div>
     </section>

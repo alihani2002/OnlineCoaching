@@ -1,4 +1,5 @@
 ﻿using OnlineCoaching.Domain.Enums.QuestionType;
+using System.Collections;
 
 namespace OnlineCoaching.Application.Services
 {
@@ -37,7 +38,7 @@ namespace OnlineCoaching.Application.Services
             // If it's an OpenText (or OpenEnded) question -> skip options
             if (question.Type == QuestionType.OpenText)
             {
-                question.Options = null; // ✅ No options created
+                question.Options = null!; // ✅ No options created
             }
             else
             {
@@ -130,7 +131,7 @@ namespace OnlineCoaching.Application.Services
         {
             var question = _unitOfWork.Questions.GetQueryable()
                 .Include(q => q.Options!)
-                .ThenInclude(c => c.ClientAnswers)
+                .ThenInclude(c => c.SelectedOptions)
                 .FirstOrDefault(q => q.Id == id);
 
             if (question != null)
@@ -144,5 +145,21 @@ namespace OnlineCoaching.Application.Services
                 _unitOfWork.Complete();
             }
         }
+
+        public async Task<bool> QuestionExists(int id) =>
+            await _unitOfWork.Questions.GetQueryable().AnyAsync(e => e.Id == id);
+
+        public async Task<bool> OptionExists(int id) =>
+            await _unitOfWork.Options.GetQueryable().AnyAsync(e => e.Id == id);
+
+        public IEnumerable<ClientAnswer> GetClientAnswer(int ClientId)
+        {
+            return _unitOfWork.ClientAnswers.GetQueryable()
+                .Include(c => c.SelectedOptions)
+                .ThenInclude(o => o.Option)
+                .Where(a => a.ClientId == ClientId).ToList();
+        }
     }
+
+
 }

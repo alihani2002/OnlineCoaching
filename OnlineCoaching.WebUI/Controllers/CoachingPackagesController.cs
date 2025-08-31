@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
 using System.ComponentModel.DataAnnotations;
@@ -40,21 +41,26 @@ namespace OnlineCoaching.WebUI.Controllers
             var client = await _clientService.GetClientAsync(sessionId);
 
             var existingRequest = _requestServices.GetActiveOrPendingRequest(client!.Id);
-            if (existingRequest != null)
+            if (existingRequest!.IsAnswerQuestion == false && existingRequest.Status == Domain.Enums.ClientStatus.Active)
             {
-                // ✅ Redirect to PendingRequest action with ID
-                return View("PendingRequest", existingRequest);
+                return RedirectToAction("CompleteQuestion", "Clients", existingRequest.Id);
             }
+
+            else if (existingRequest != null)
+            {
+                return View("ClientRequest", existingRequest);
+            }
+
+           
 
             return View("GetCoachingPackage", packages);
         }
 
         [HttpGet]
-        public async Task<IActionResult> PendingRequest(int id)
+        public async Task<IActionResult> ClientRequest(int id)
         {
             var request = await _requestServices.GetRequestByIdAsync(id);
             if (request == null) return NotFound();
-
             return View(request);  // ✅ view gets CoachingPackageRequestDto
         }
 

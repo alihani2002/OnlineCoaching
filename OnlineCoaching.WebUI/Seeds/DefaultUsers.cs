@@ -11,6 +11,7 @@
                 FullName = "Admin",
                 EmailConfirmed = true,
                 Role = AppRoles.Admin,
+                IsCompelteProfile = true
             };
 
             var user = await userManager.FindByEmailAsync(admin.Email);

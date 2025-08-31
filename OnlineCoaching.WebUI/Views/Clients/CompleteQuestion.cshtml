@@ -1,0 +1,144 @@
+﻿@using OnlineCoaching.Domain.Enums.QuestionType
+@model IEnumerable<OnlineCoaching.Domain.Entities.Question>
+
+@{
+    ViewData["Title"] = "Complete Your Questions";
+}
+
+
+<section class="breadcrumb-section" style="background-image: url('/assets/img/breadcrumb-bg.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>Complete Questions</h2>
+                    <div class="bt-option">
+                        <a asp-action="Index" asp-controller="Home">Home</a>
+                        <span>Questions Page</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="card shadow-lg">
+        <div class="card-header text-white text-center">
+            <h3 class="mb-0">Answer the Questions</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="CompleteQuestion" method="post">
+                <div id="questionList">
+                    @{
+                        var sortedQuestions = Model.OrderBy(q => q.NumberOfQuestion).ToList();
+                    }
+
+                    @for (int i = 0; i < sortedQuestions.Count; i++)
+                    {
+                        var question = sortedQuestions[i];
+                        var isArabic = System.Text.RegularExpressions.Regex.IsMatch(question.Text, @"\p{IsArabic}");
+
+                        <div class="mb-5 question-item">
+                            <div class="card shadow-lg border-0" style="transition: 0.3s; border-radius: 15px;">
+                                <div class="card-body p-4" dir="@(isArabic ? "rtl" : "ltr")">
+                                    <h5 class="card-title fw-bold mb-3">
+                                        Question @(question.NumberOfQuestion): @question.Text
+                                    </h5>
+
+                                    <input type="hidden" name="answers[@i].QuestionId" value="@question.Id" />
+
+                                    @if (question.Type == QuestionType.SingleChoice)
+                                    {
+                                        foreach (var option in question.Options!)
+                                        {
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       name="answers[@i].SelectedOptions[0].OptionId"
+                                                       value="@option.Id"
+                                                       id="option-@option.Id-@i" />
+                                                <label class="form-check-label" for="option-@option.Id-@i">
+                                                    @option.Text
+                                                </label>
+                                            </div>
+                                        }
+                                    }
+                                    else if (question.Type == QuestionType.MultipleChoice)
+                                    {
+                                        foreach (var option in question.Options!)
+                                        {
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       name="answers[@i].SelectedOptions"
+                                                       value="@option.Id"
+                                                       id="option-@option.Id-@i" />
+                                                <label class="form-check-label" for="option-@option.Id-@i">
+                                                    @option.Text
+                                                </label>
+                                            </div>
+                                        }
+                                    }
+                                    else if (question.Type == QuestionType.OpenText)
+                                    {
+                                        <input type="text"
+                                               name="answers[@i].AnswerText"
+                                               class="form-control mt-2"
+                                               placeholder="Enter your answer here..."
+                                               dir="@(isArabic ? "rtl" : "ltr")" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function scrollToNext(currentIndex) {
+                const next = $('.question-item').eq(currentIndex + 1);
+                if (next.length) {
+                    $('html, body').animate({
+                        scrollTop: next.offset().top - 166
+                    }, 600);
+                }
+            }
+
+            $('.question-item').each(function (index) {
+                const $item = $(this);
+
+                // Radios
+                $item.find('input[type="radio"]').on('change', function () {
+                    const groupName = $(this).attr('name');
+                    $('input[name="' + groupName + '"]').each(function () {
+                        $(this).closest('.form-check').removeClass('option-selected');
+                    });
+                    $(this).closest('.form-check').addClass('option-selected');
+                    scrollToNext(index);
+                });
+
+                // Checkboxes
+                $item.find('input[type="checkbox"]').on('change', function () {
+                    $(this).closest('.form-check').toggleClass('option-selected', this.checked);
+                });
+
+                // Text input
+                $item.find('input[type="text"]').on('input', function () {
+                    if ($(this).val().trim().length > 2) {
+                        scrollToNext(index);
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -25,8 +25,10 @@
 
         public virtual ICollection<Transformation>? Transformations { get; set; }
         public virtual ICollection<CoachFeedback>? CoachFeedbacks { get; set; }
-       
-      
+
+        public virtual ICollection<ClientAnswer> Answers { get; set; } = [];
+
+
     }
 
 }

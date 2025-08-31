@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineCoaching.Application.Services;
+using OnlineCoaching.WebUI.Models.Clients;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
@@ -8,29 +9,108 @@ namespace OnlineCoaching.WebUI.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IClientService _clientService;
+        private readonly IQuestionServices _questionServices;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ClientsController(ApplicationDbContext context , IClientService clientService, UserManager<ApplicationUser> userManager)
+        private readonly ICoachingPackageRequestService _requestService;
+
+        public ClientsController(ApplicationDbContext context , IClientService clientService, UserManager<ApplicationUser> userManager, IQuestionServices questionServices, ICoachingPackageRequestService requestService)
         {
             _context = context;
             _clientService = clientService;
             _userManager = userManager;
+            _questionServices = questionServices;
+            _requestService = requestService;
         }
 
         public async Task<IActionResult> Index()
         {
             var userId = User.GetUserId();
-            var client = await _clientService.GetClientAsync(userId); // await here
+            var client = await _clientService.GetClientAsync(userId);
+
+            if (client == null)
+                return NotFound("Client not found.");
 
             var user = await _userManager.GetUserAsync(User);
-
             if (user != null && !user.IsCompelteProfile)
             {
                 ViewBag.ShowProfilePopup = true;
             }
 
-            return View(client); 
+            var questions = _questionServices.GetQuestions();
+            var answers = _questionServices.GetClientAnswer(client.Id);
+                //await _context.ClientAnswers
+                //.Include(a => a.SelectedOptions)
+                //.ThenInclude(o => o.Option)
+                //.Where(a => a.ClientId == client.Id)
+                //.ToListAsync();
+
+            var vm = new ClientDashboardViewModel
+            {
+                Client = client,
+                Questions = questions,
+                Answers = answers
+            };
+
+            return View(vm);
         }
 
+
+        // GET: Clients/CompleteQuestion
+        public IActionResult CompleteQuestion()
+        {
+            var questions = _questionServices.GetQuestions();
+            return View(questions);
+        }
+
+        // POST: Clients/CompleteQuestion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CompleteQuestion(List<ClientAnswer> answers)
+        {
+            var userId = User.GetUserId();
+            var client = await _clientService.GetClientAsync(userId);
+            var existingRequest = _requestService.GetActiveOrPendingRequest(client!.Id);
+           
+
+            if (client == null)
+            {
+                return NotFound("Client not found.");
+            }
+
+            foreach (var answer in answers)
+            {
+                answer.ClientId = client.Id;
+
+                // If it's text-based answer
+                if (!string.IsNullOrWhiteSpace(answer.AnswerText))
+                {
+                    _context.ClientAnswers.Add(answer);
+                }
+                else if (answer.SelectedOptions != null && answer.SelectedOptions.Any())
+                {
+                    // If multiple-choice or single-choice
+                    foreach (var selectedOption in answer.SelectedOptions)
+                    {
+                        selectedOption.ClientAnswer = answer;
+                    }
+                    _context.ClientAnswers.Add(answer);
+                }
+            }
+            if (existingRequest != null)
+            {               
+                var coachingPackageRequestEntity = _context.CoachingPackageRequests
+                    .FirstOrDefault(cpr => cpr.Id == existingRequest.Id);
+
+                if (coachingPackageRequestEntity != null)
+                {
+                    coachingPackageRequestEntity.IsAnswerQuestion = true;
+                    _context.CoachingPackageRequests.Update(coachingPackageRequestEntity);
+                }
+            }
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         public async Task<IActionResult> CompleteProfile(Client client)

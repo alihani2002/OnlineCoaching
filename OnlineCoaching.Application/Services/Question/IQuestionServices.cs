@@ -18,5 +18,6 @@
 
         public void DeleteQuestion(int id);
 
+        IEnumerable<ClientAnswer> GetClientAnswer(int ClientId);
     }
 }

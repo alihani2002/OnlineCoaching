@@ -69,8 +69,5 @@ namespace OnlineCoaching.Application.Services
             _unitOfWork.Complete();
         }
 
-
-
-       
     }
 }
