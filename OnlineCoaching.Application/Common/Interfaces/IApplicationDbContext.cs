@@ -22,7 +22,8 @@ namespace OnlineCoaching.Application.Common.Interfaces
         public DbSet<Option> Options { get; set; }
         public DbSet<ClientAnswer> ClientAnswers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-
+        public DbSet<Meal> Meals { get; set; }
+        public DbSet<ExerciseSheetLog> ExerciseSheetLogs { get; set; }
 
         int SaveChanges();
     }
