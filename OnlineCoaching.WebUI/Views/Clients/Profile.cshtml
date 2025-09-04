@@ -1,0 +1,324 @@
+﻿@using OnlineCoaching.Domain.Enums.QuestionType
+@using OnlineCoaching.WebUI.Models.Clients
+@model ClientDashboardViewModel
+
+@{
+    ViewData["Title"] =  @Model.Client.FullName + " Profile"  ;
+}
+
+<style>
+    body {
+        background-color: #0b0b0b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
+
+    .custom-card {
+        background-color: #1a1a1a;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid #444;
+    }
+
+    h3, h4, h5 {
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0; /* margin between tables */
+    }
+
+        .table-custom th,
+        .table-custom td {
+            border: 1px solid #ffffff;
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+            color: #ffffff;
+        }
+
+        .table-custom th {
+            background-color: #222;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+
+        .table-custom tr:hover {
+            background-color: #333;
+        }
+    /* Exercise card style */
+    .exercise-card {
+        border: 1px solid #fff;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 5.0rem;
+        display: flex;
+        justify-content: space-between; /* 🔥 logo goes to the right */
+        align-items: center;
+        background-color: #121212;
+    }
+
+        .exercise-card img {
+            width: 40px;
+            height: 40px;
+        }
+
+    .exercise-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .exercise-details span {
+            margin-bottom: 4px;
+        }
+    .meal-block {
+        margin-bottom: 2rem;
+        margin-top : 2rem;/* 🔥 margin between meals */
+    }
+
+    h5 {
+        margin: 1rem 0 1rem 0; /* top & bottom spacing */
+    }
+
+    .btn-custom {
+        padding: 10px 20px;
+        font-weight: bold;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+        .btn-warning:hover,
+        .btn-success:hover {
+            opacity: 0.85;
+        }
+
+    @@media (max-width: 576px) {
+        .custom-card {
+            padding: 1rem;
+        }
+
+        .table-custom th,
+        .table-custom td {
+            padding: 8px;
+        }
+
+        h4, h5 {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="container py-5">
+    <!-- Profile Card -->
+    @if (Model != null)
+    {
+<!-- Header -->
+    
+        <div class="custom-card">
+            <h3 class="text-center text-danger mb-4">👤 Your Profile</h3>
+            <table class="table-custom">
+                <tr>
+                    <th>Full Name</th>
+                    <td>@Model.Client.FullName</td>
+                </tr>
+                <tr>
+                    <th>Birth Date</th>
+                    <td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>@Model.Client.PhoneNumber</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>@Model.Client.Address</td>
+                </tr>
+            </table>
+
+            @if (User.IsInRole("Admin") || User.IsInRole("Coach"))
+            {
+                <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-3">
+                    <a asp-controller="Clients" asp-action="Assign" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-warning">
+                        ➕ Assign Foods / Exercises
+                    </a>
+                    <a asp-controller="Clients" asp-action="AssignedList" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-success">
+                        📋 View Assigned Items
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else if (User.IsInRole(AppRoles.Admin))
+    {
+        <div class="custom-card text-center">
+            <h3 class="text-danger">⚡ Welcome to Admin Dashboard</h3>
+        </div>
+    }
+    else
+    {
+        <div class="custom-card text-center">
+            <p>No profile data available.</p>
+        </div>
+    }
+</div>
+
+<!-- Questions Section -->
+@if (Model!.Questions.Any())
+{
+    <div class="container">
+        <div class="custom-card">
+            <h3 class="text-center text-warning mb-4">📝 Your Answers</h3>
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Your Answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var question in Model.Questions)
+                    {
+                        var answer = Model.Answers.FirstOrDefault(a => a.QuestionId == question.Id);
+                        <tr>
+                            <td>@question.NumberOfQuestion. @question.Text</td>
+                            <td>
+                                @if (question.Type == QuestionType.OpenText)
+                                {
+                                    @(answer?.AnswerText ?? "No answer provided")
+                                }
+                                else if (answer?.SelectedOptions != null && answer.SelectedOptions.Any())
+                                {
+                                    <ul>
+                                        @foreach (var opt in answer.SelectedOptions)
+                                        {
+                                            <li>@opt.Option!.Text</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No option selected</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<!-- Containers for Dynamic Exercises and Foods -->
+<div class="container">
+    <div id="exercise-container"></div>
+    <div id="food-container"></div>
+</div>
+
+<!-- Scripts for Dynamic Grouping -->
+<script>
+    const dayNames = {
+        1: "First Day",
+        2: "Second Day",
+        3: "Third Day",
+        4: "Fourth Day",
+        5: "Fifth Day",
+        6: "Sixth Day",
+        7: "Seventh Day"
+    };
+
+    // Serialize server-side data to JS
+    const assignedExercises = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedExercises))
+    const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods))
+
+    function groupBy(array, keyFunc) {
+        return array.reduce((result, item) => {
+            const key = keyFunc(item);
+            if (!result[key]) result[key] = [];
+            result[key].push(item);
+            return result;
+        }, {});
+    }
+
+     // --- Exercises as cards ---
+    const exercisesByDay = groupBy(assignedExercises, e => e.DayOfWeek);
+    const exerciseContainer = document.getElementById('exercise-container');
+    exerciseContainer.innerHTML = '';
+    for (const [day, exercises] of Object.entries(exercisesByDay)) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'custom-card mb-4';
+        dayDiv.innerHTML = `<h4 class="text-warning mb-3">🏋 ${dayNames[day] ?? day} - Exercises</h4>`;
+
+        exercises.forEach(e => {
+            const card = `
+                <div class="exercise-card">
+                    <div class="exercise-details">
+                        <span><strong>${e.NameOfExercise ?? ''}</strong></span>
+                        <span>Sets: ${e.Sets ?? ''}</span>
+                        <span>Reps: ${e.Reps ?? ''}</span>
+                        <span>Notes: ${e.Notes ?? ''}</span>
+                    </div>
+                    <img src="/assets/img/logo/youtube.png" alt="YouTube Logo"> <!-- ✅ logo on right -->
+                </div>
+            `;
+            dayDiv.innerHTML += card;
+        });
+
+        exerciseContainer.appendChild(dayDiv);
+    }
+
+    // --- Foods ---
+    const foodsByDay = groupBy(assignedFoods, f => f.DayOfWeek);
+    const foodContainer = document.getElementById('food-container');
+    foodContainer.innerHTML = '';
+    for (const [day, foods] of Object.entries(foodsByDay)) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'custom-card mb-4';
+        dayDiv.innerHTML = `<h4 class="text-warning mb-3">🥗 ${dayNames[day] ?? day} - Nutrition Plan</h4>`;
+
+        const foodsByMeal = groupBy(foods, f => f.MealNumber);
+        for (const [mealNumber, mealFoods] of Object.entries(foodsByMeal)) {
+            let mealHtml = `<div class="meal-block">
+                <h5>Meal ${mealNumber}</h5>
+                <table class="table-custom mb-3">
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Quantity</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            mealFoods.forEach(f => {
+                mealHtml += `<tr>
+                    <td>${f.FoodName ?? ''}</td>
+                    <td>${f.Quantity ?? ''}</td>
+                    <td>${f.Notes ?? ''}</td>
+                </tr>`;
+            });
+            mealHtml += `</tbody></table></div>`;
+            dayDiv.innerHTML += mealHtml;
+        }
+        foodContainer.appendChild(dayDiv);
+    }
+</script>

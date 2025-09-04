@@ -1,145 +1,65 @@
-﻿@using OnlineCoaching.Domain.Enums.QuestionType
-@using OnlineCoaching.WebUI.Models.Clients
-@model ClientDashboardViewModel
+﻿@model IEnumerable<Client>
 
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Clients";
 }
 
-@if (ViewBag.ShowProfilePopup == true)
-{
-    <style>
-        header, .footer-area, .slider-area2 {
-            display: none !important;
+<link rel="stylesheet" href="~/css/Client-Index.css" />
+
+<table id="clientsTable" class="display table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Birth Date</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>User</th>
+            <th>Created On</th>
+            <th>Last Updated</th>
+            <th>Is deleted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model)
+        {
+            <tr>
+                <td>@client.FullName</td>
+                <td>@client.BirthDate.ToString("yyyy-MM-dd")</td>
+                <td>@client.PhoneNumber</td>
+                <td>@client.Address</td>
+                <td>@client.User?.UserName</td>
+                <td>@client.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@client.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@client.IsDeleted</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@client.Id" class="btn btn-info btn-sm">Details</a>
+@*                     <a asp-action="Edit" asp-route-id="@client.Id" class="btn btn-warning btn-sm">Edit</a>
+ *@                          <form asp-action="ToggleDelete" asp-route-id="@client.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm @(client.IsDeleted ? "btn-success" : "btn-danger")">
+                            @(client.IsDeleted ? "Restore" : "Delete")
+                        </button>
+
+                     
+                    </form>
+                </td>
+            </tr>
         }
-    </style>
+    </tbody>
+</table>
 
-    <!-- Background overlay -->
-    <div class="position-fixed top-0 start-0 w-100 h-100" style="z-index:1040;background-color:rgba(0,0,0,0.8);"></div>
-
-    <!-- Modal -->
-    <div id="profilePopup" class="modal fade show d-block" tabindex="-1" style="z-index:1050;margin-top:10%;">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark mt-5 text-light border-0 shadow-lg">
-                <form asp-action="CompleteProfile" method="post">
-                    <input type="hidden" name="UserId" value="@User.FindFirst("sub")?.Value" />
-
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title text-danger fw-bold">💪 Complete Your Profile</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label class="form-label text-light">Full Name</label>
-                            <input type="text" name="FullName" class="form-control bg-dark text-light border-danger" required />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label text-light">Birth Date</label>
-                            <input type="date" name="BirthDate" class="form-control bg-dark text-light border-danger" required />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label text-light">Phone Number</label>
-                            <input type="text" name="PhoneNumber" class="form-control bg-dark text-light border-danger" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label text-light">Address</label>
-                            <input type="text" name="Address" class="form-control bg-dark text-light border-danger" />
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-danger px-4">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-}
-
-@if (Model != null)
-{
-    <section class="section-padding40 fix" style="background-color:#111; min-height:80vh;">
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="card shadow-lg mt-5 border-0 rounded-3 bg-dark text-light p-4" style="max-width:700px; width:100%;">
-                <h3 class="mb-4 text-center text-danger fw-bold">👤 Your Profile</h3>
-                <table class="table table-dark table-striped table-bordered align-middle mb-0">
-                    <tr>
-                        <th class="text-danger">Full Name</th>
-                        <td>@Model.Client.FullName</td>
-                    </tr>
-                    <tr>
-                        <th class="text-danger">Birth Date</th>
-                        <td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td>
-                    </tr>
-                    <tr>
-                        <th class="text-danger">Phone Number</th>
-                        <td>@Model.Client.PhoneNumber</td>
-                    </tr>
-                    <tr>
-                        <th class="text-danger">Address</th>
-                        <td>@Model.Client.Address</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </section>
-}
-else if (User.IsInRole(AppRoles.Admin))
-{
-    <section class="section-padding40 fix" style="background-color:#111; min-height:80vh;">
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="card shadow-lg p-4 bg-dark text-light rounded text-center border-0" style="max-width:500px; width:100%;">
-                <h3 class="mb-0 text-danger">⚡ Welcome to Admin Dashboard</h3>
-            </div>
-        </div>
-    </section>
-}
-else
-{
-    <section class="section-padding40 fix" style="background-color:#111; min-height:80vh;">
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="card shadow-lg p-4 bg-dark text-light rounded text-center border-0" style="max-width:500px; width:100%;">
-                <p class="mb-0">No profile data available.</p>
-            </div>
-        </div>
-    </section>
-}
-@if (Model!.Questions.Any())
-{
-    <section class="section-padding40 fix" style="background-color:#222; min-height:80vh;">
-        <div class="container">
-            <div class="card shadow-lg mt-5 border-0 rounded-3 bg-dark text-light p-4">
-                <h3 class="mb-4 text-center text-warning fw-bold">📝 Your Answers</h3>
-
-                @foreach (var question in Model.Questions)
-                {
-                    var answer = Model.Answers.FirstOrDefault(a => a.QuestionId == question.Id);
-
-                    <div class="mb-3">
-                        <p class="fw-bold text-light">@question.NumberOfQuestion. @question.Text</p>
-
-                        @if (question.Type == QuestionType.OpenText)
-                        {
-                            <p class="text-info">@answer?.AnswerText ?? "No answer provided"</p>
-                        }
-                        else
-                        {
-                            if (answer?.SelectedOptions != null && answer.SelectedOptions.Any())
-                            {
-                                <ul>
-                                    @foreach (var opt in answer.SelectedOptions)
-                                    {
-                                        <li class="text-info">@opt.Option!.Text</li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p class="text-muted">No option selected</p>
-                            }
-                        }
-                    </div>
-                    <hr />
-                }
-            </div>
-        </div>
-    </section>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#clientsTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50, 100],
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
 }

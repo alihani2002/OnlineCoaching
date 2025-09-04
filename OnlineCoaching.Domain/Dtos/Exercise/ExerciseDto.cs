@@ -3,7 +3,6 @@
     public class ExerciseDto : BaseEntity
     {
         public string? Name { get; set; }
-        public string Rest { get; set; } = null!;
         public string Day { get; set; } = null!;
         public string? Description { get; set; }
         public string? VideoUrl { get; set; }

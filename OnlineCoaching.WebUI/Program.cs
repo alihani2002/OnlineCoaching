@@ -47,6 +47,8 @@ var dbConext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 await DefaultRoles.SeedAsync(roleManger);
 await DefaultUsers.SeedAdminUserAsync(userManger);
+await DefaultUsers.SeedCoachUserAsync(userManger);
+
 
 
 if (app.Environment.IsDevelopment())

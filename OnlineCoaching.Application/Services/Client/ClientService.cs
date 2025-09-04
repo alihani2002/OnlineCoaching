@@ -1,15 +1,9 @@
-﻿
-using Microsoft.AspNetCore.Identity;
-
-namespace OnlineCoaching.Application.Services
+﻿namespace OnlineCoaching.Application.Services
 {
-    public class ClientService : IClientService
+    public class ClientService(IUnitOfWork unitOfWork) : IClientService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public ClientService(IUnitOfWork unitOfWork ) 
-        {
-            _unitOfWork = unitOfWork;
-        }
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
         public async Task<Client?> GetClientAsync(string userId)
         {
             return await _unitOfWork.Clients.
@@ -17,14 +11,18 @@ namespace OnlineCoaching.Application.Services
                 .Include(x => x.User!)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
         }
+
+
         public Client? GetClientById(int userId)
         {
             return _unitOfWork.Clients.GetById(userId);
         }
 
 
-        public IEnumerable< Client?> GetAllClients() =>
-             _unitOfWork.Clients.GetAll();
+        public IEnumerable<Client?> GetAllClients() =>
+             _unitOfWork.Clients.GetQueryable().Include(u=>u.User);
+
+
 
         public async Task CompleteClientData(Client client , string userId)
         {
@@ -68,6 +66,24 @@ namespace OnlineCoaching.Application.Services
           
             _unitOfWork.Complete();
         }
+
+
+
+        public async Task<bool> ToggleDeleteAsync(int clientId)
+        {
+            var client = await _unitOfWork.Clients.GetByIdAsync(clientId);
+
+            if (client == null)
+                return false;
+
+            client.IsDeleted = !client.IsDeleted;
+            client.LastUpdatedOn = DateTime.UtcNow;
+            _unitOfWork.Complete();
+
+            return true;
+        }
+
+
 
     }
 }

@@ -4,17 +4,11 @@ using OnlineCoaching.Domain.Enums;
 using OnlineCoaching.WebUI.Models.RequestPackage;
 namespace OnlineCoaching.WebUI.Controllers
 {
-    public class CoachingPackageRequestsController : Controller
+    public class CoachingPackageRequestsController(ICoachingPackageRequestService requestService, IClientService clientService, ICoachingPackageServices coachingPackage) : Controller
     {
-        private readonly ICoachingPackageServices _coachingPackageServices;
-        private readonly ICoachingPackageRequestService _requestService;
-        private readonly IClientService _clientService;
-        public CoachingPackageRequestsController(ICoachingPackageRequestService requestService, IClientService clientService , ICoachingPackageServices coachingPackage)
-        {
-            _requestService = requestService;
-            _clientService = clientService;
-            _coachingPackageServices = coachingPackage;
-        }
+        private readonly ICoachingPackageServices _coachingPackageServices = coachingPackage;
+        private readonly ICoachingPackageRequestService _requestService = requestService;
+        private readonly IClientService _clientService = clientService;
 
         public IActionResult Index()
         {
@@ -34,21 +28,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> MyRequests()
-        {
-            var sessionId = User.GetUserId();
-            if (string.IsNullOrEmpty(sessionId))
-            {
-                return RedirectToAction("Login", "Account"); 
-            }
-
-            var client = await _clientService.GetClientAsync(sessionId);
-            if (client == null) return NotFound("Client not found.");
-
-            var requests = _requestService.GetUserRequests(client.Id);
-            return View(requests); 
-        }
+      
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(int id, ClientStatus status)
         {
@@ -83,6 +63,8 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(request);
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditStatus(int id, ClientStatus status)
@@ -93,6 +75,8 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
         public async Task<IActionResult> Delete(int id)
         {
             var request = await _requestService.GetRequestByIdAsync(id);
@@ -100,6 +84,8 @@ namespace OnlineCoaching.WebUI.Controllers
 
             return View(request);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -111,37 +97,32 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> ConfirmRequest(int packageId)
-        {
-            var sessionId = User.GetUserId();
-            var client = await _clientService.GetClientAsync(sessionId); 
-            if (client == null) return NotFound();
 
-            var package = await _coachingPackageServices.GetCoachingPackageByIdAsync(packageId);
-            if (package == null) return NotFound();
-
-            var model = new ConfirmRequestViewModel
-            {
-                PackageId = package.Id,
-                PackageTitle = package.Title,
-                PackagePrice = package.Price,
-                DurationInMonths = package.DurationInMonths,
-                ClientId = client.Id , 
-                CreatedById = sessionId 
-            };
-
-            return View(model);
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmRequest(ConfirmRequestViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Invalid request" });
+            }
 
-            await _requestService.CreateRequestAsync(model.PackageId, model.ClientId);
+            // Fetch package details again
+            var package = await _coachingPackageServices.GetCoachingPackageByIdAsync(model.PackageId);
+            if (package == null) return NotFound();
 
-            return RedirectToAction("GetCoachingPackage", "CoachingPackages");
+            // Get current user (CreatedById)
+            var sessionId = User.GetUserId();
+            var client = await _clientService.GetClientAsync(sessionId);
+            if (client == null) return NotFound();
+
+            // Create request using actual data
+            await _requestService.CreateRequestAsync(package.Id, client.Id);
+
+            return Json(new { message = "Request created successfully" });
         }
+
+
     }
 }

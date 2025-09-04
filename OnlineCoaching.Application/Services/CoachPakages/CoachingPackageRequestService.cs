@@ -2,16 +2,11 @@
 
 namespace OnlineCoaching.Application.Services
 {
-    public class CoachingPackageRequestService : ICoachingPackageRequestService
+    public class CoachingPackageRequestService(IUnitOfWork unitOfWork, IMapper mapper) : ICoachingPackageRequestService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IMapper _mapper = mapper;
 
-        public CoachingPackageRequestService(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
 
         public IEnumerable<CoachingPackageRequestDto> GetRequests()
         {
@@ -24,15 +19,14 @@ namespace OnlineCoaching.Application.Services
 
 
 
-        public IEnumerable<CoachingPackageRequestDto> GetUserRequests(int clientId)
+        public async Task<CoachingPackageRequestDto?> GetUserRequest(int clientId)
         {
-            var requests = _unitOfWork.CoachingPackageRequests.GetQueryable()
-                .Include(u=>u.Client)
-                .Where(r => !r.IsDeleted && r.ClientId == clientId)
-                .ToList();
-            if (requests == null) return null!;
+            var request = await _unitOfWork.CoachingPackageRequests.GetQueryable()
+                .Include(u => u.Client)
+                .FirstOrDefaultAsync(r => !r.IsDeleted && r.ClientId == clientId);
+            if (request == null) return null;
 
-            return _mapper.Map<IEnumerable<CoachingPackageRequestDto>>(requests);
+            return _mapper.Map<CoachingPackageRequestDto>(request);
         }
 
       
@@ -73,8 +67,6 @@ namespace OnlineCoaching.Application.Services
                 Titles = package.Title,
                 Status = ClientStatus.Pending,
                 Price = package.Price,
-                //StartDate = DateTime.UtcNow,
-                //EndDate = DateTime.UtcNow.AddMonths(package.DurationInMonths),
                 IsAnswerQuestion = false,
                 CreatedOn = DateTime.UtcNow,
                 CreatedById = package.CreatedById,
@@ -96,7 +88,6 @@ namespace OnlineCoaching.Application.Services
 
             if (newStatus == ClientStatus.Active)
             {
-                // get package duration
                 var package = await _unitOfWork.CoachingPackages.GetByIdAsync(request.PackageId);
                 if (package != null)
                 {
@@ -106,7 +97,7 @@ namespace OnlineCoaching.Application.Services
             }
             else if (newStatus == ClientStatus.Suspended)
             {
-                request.EndDate = DateTime.UtcNow; // optional: end immediately
+                request.EndDate = DateTime.UtcNow; 
             }
 
             request.LastUpdatedOn = DateTime.UtcNow;
@@ -127,7 +118,6 @@ namespace OnlineCoaching.Application.Services
             if (existing.Status == ClientStatus.Active)
             {
                 existing.StartDate = DateTime.UtcNow;
-                //existing.EndDate = DateTime.UtcNow.AddMonths(package.DurationInMonths);
             }
             existing.LastUpdatedOn = DateTime.UtcNow;
 
@@ -168,7 +158,7 @@ namespace OnlineCoaching.Application.Services
 
         public void CheckExpiredSubscriptions()
         {
-            var today = DateTime.UtcNow;
+            var today = DateTime.Now;
 
             var requests = _unitOfWork.CoachingPackageRequests
                             .GetAll()

@@ -31,13 +31,10 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(exercise);
         }
 
-        // GET: Exercise/Create
         public IActionResult Create()
         {
-            // جيب العضلات من السيرفس
             var muscles = _muscleServices.GetMuscles();
 
-            // ابعتهم للـ ViewBag علشان يظهروا في الـ Dropdown
             ViewBag.Muscles = new SelectList(muscles, "Id", "Name");
 
             return View();
@@ -53,14 +50,12 @@ namespace OnlineCoaching.WebUI.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // رجع العضلات تاني للـ Dropdown
             var muscles = _muscleServices.GetMuscles();
             ViewBag.Muscles = new SelectList(muscles, "Id", "Name");
 
             return View(dto);
         }
 
-        // GET: Exercises/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var exercise = await _exerciseService.GetExerciseByIdAsync(id);
@@ -70,7 +65,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(exercise);
         }
 
-        // POST: Exercises/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ExerciseDto dto)
@@ -100,5 +94,6 @@ namespace OnlineCoaching.WebUI.Controllers
             await _exerciseService.DeleteExerciseAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

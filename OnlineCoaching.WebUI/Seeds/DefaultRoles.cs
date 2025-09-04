@@ -4,11 +4,14 @@
     {
         public static async Task SeedAsync(RoleManager<IdentityRole> roleManager)
         {
-            if (!roleManager.Roles.Any())
-            {
-                await roleManager.CreateAsync(new IdentityRole(AppRoles.Admin));
-                await roleManager.CreateAsync(new IdentityRole(AppRoles.Client));
+            var roles = new[] { AppRoles.Admin, AppRoles.Client, AppRoles.Coach };
 
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
             }
         }
     }

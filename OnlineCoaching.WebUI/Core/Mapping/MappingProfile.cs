@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OnlineCoaching.Domain.Dtos;
+using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
 
 namespace OnlineCoaching.Web.Core.Mapping
 {
@@ -68,12 +69,19 @@ namespace OnlineCoaching.Web.Core.Mapping
             // CoachingPackage
             CreateMap<CoachingPackage, CoachingPackageDto>().ReverseMap();
 
-            // CoachingPackageRequest
+            #region CoachingPackageRequest
             CreateMap<CoachingPackageRequest, CoachingPackageRequestDto>()
-            .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client!.FullName))
-            .ReverseMap();
+                .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.FullName : string.Empty))
+                .ForMember(dest => dest.PackageTitle, opt => opt.MapFrom(src => src.Titles))
+                .ReverseMap()
+                .ForMember(dest => dest.Client, opt => opt.Ignore()) // prevent overwriting navigation
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+            #endregion
 
-
+            CreateMap<AssignExercise, AssignExerciseDto>().ReverseMap();
+            CreateMap<AssignFood, AssignFoodDto>().ReverseMap();
 
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Application.Common.Interfaces
+﻿using OnlineCoaching.Domain.Entities.Foods;
+
+namespace OnlineCoaching.Application.Common.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -40,6 +42,9 @@
 
         //Notification
         IBaseRepository<Notification> Notifications { get; }
+        IBaseRepository<Meal> Meals { get; }
+
+        IBaseRepository<ExerciseSheetLog> ExerciseSheetLogs { get; }
 
         int Complete();
 

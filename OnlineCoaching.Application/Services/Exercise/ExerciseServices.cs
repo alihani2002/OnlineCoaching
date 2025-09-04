@@ -13,7 +13,7 @@
 
             public IEnumerable<ExerciseDto> GetExercises()
             {
-                var exercises = _unitOfWork.Exercises.GetAll()
+                var exercises = _unitOfWork.Exercises.GetQueryable().Include(e=>e.Muscle)
                                     .Where(e => !e.IsDeleted)
                                     .ToList();
                 return _mapper.Map<IEnumerable<ExerciseDto>>(exercises);

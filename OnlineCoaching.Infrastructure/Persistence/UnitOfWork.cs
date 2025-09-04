@@ -1,5 +1,6 @@
 ﻿using ActiveGym.Infrastructure.Persistence.Repositories;
 using OnlineCoaching.Application.Common.Interfaces.Repositories;
+using OnlineCoaching.Domain.Entities.Foods;
 
 namespace OnlineCoaching.Infrastructure.Persistence
 {
@@ -40,6 +41,9 @@ namespace OnlineCoaching.Infrastructure.Persistence
         public IBaseRepository<CoachFeedback> CoachFeedbacks => new BaseRepository<CoachFeedback>(_context);
         public IBaseRepository<Notification> Notifications => new BaseRepository<Notification>(_context);
 
+        public IBaseRepository<Meal> Meals => new BaseRepository<Meal>(_context);
+
+        public IBaseRepository<ExerciseSheetLog> ExerciseSheetLogs => new BaseRepository<ExerciseSheetLog>(_context);
 
         public int Complete()
         {

@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Domain.Entities
+﻿using OnlineCoaching.Domain.Entities.Foods;
+
+namespace OnlineCoaching.Domain.Entities
 {
     public class CoachingPackageRequest : BaseEntity
     {
@@ -13,6 +15,12 @@
         public CoachingPackage? Package { get; set; }
         public int ClientId { get; set; }
         public Client? Client { get; set; }
+
+
+        public ICollection<AssignExercise>? AssignExercises { get; set; }
+        public ICollection<AssignFood>? AssignFoods { get; set; }
+        public ICollection<Meal>? Meals { get; set; }
+
     }
 
 }

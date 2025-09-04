@@ -1,4 +1,6 @@
 ﻿
+using OnlineCoaching.Domain.Entities.Foods;
+
 namespace OnlineCoaching.Application.Common.Interfaces
 {
     public interface IApplicationDbContext

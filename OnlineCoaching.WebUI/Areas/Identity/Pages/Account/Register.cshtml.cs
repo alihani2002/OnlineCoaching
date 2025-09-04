@@ -104,7 +104,7 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Action("Index", "Clients");
+            returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -133,9 +133,29 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, AppRoles.Client);
                     }
 
+
+                    // Ensure role exists and assign it
+                    if (!await _userManager.IsInRoleAsync(user, AppRoles.Client))
+                    {
+                        await _userManager.AddToRoleAsync(user, AppRoles.Client);
+                    }
+
+                    //// Redirect based on role
+                    //if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    //{
+                    //    return LocalRedirect(Url.Action("Index", "CoachingPackageRequests"));
+                    //}
+                    //else if (await _userManager.IsInRoleAsync(user, "Client") || await _userManager.IsInRoleAsync(user, "Coach"))
+                    //{
+                    //    return LocalRedirect(Url.Action("Pr", "Home"));
+                    //}
+
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+                 
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -153,7 +173,7 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect(Url.Action("Index", "Home"));
                     }
                 }
 

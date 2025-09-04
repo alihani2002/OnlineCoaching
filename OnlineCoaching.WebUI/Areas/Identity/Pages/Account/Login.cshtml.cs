@@ -100,9 +100,9 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Action("Index", "Clients");
+            returnUrl ??= Url.Content("~/");
 
-         
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
@@ -119,6 +119,16 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return LocalRedirect(Url.Action("Index", "CoachingPackageRequests"));
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Client") || await _userManager.IsInRoleAsync(user, "Coach"))
+                    {
+                        return LocalRedirect(Url.Action("Index", "Home"));
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

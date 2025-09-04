@@ -20,7 +20,6 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
-        // GET: CoachingPackage
         public IActionResult Index()
         {
             var packages = _packageService.GetCoachingPackages();
@@ -40,18 +39,19 @@ namespace OnlineCoaching.WebUI.Controllers
 
             var client = await _clientService.GetClientAsync(sessionId);
 
+            ViewBag.Client = client!.Id; 
             var existingRequest = _requestServices.GetActiveOrPendingRequest(client!.Id);
-            if (existingRequest!.IsAnswerQuestion == false && existingRequest.Status == Domain.Enums.ClientStatus.Active)
+            if (existingRequest != null)
             {
-                return RedirectToAction("CompleteQuestion", "Clients", existingRequest.Id);
+                if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == Domain.Enums.ClientStatus.Active)
+                {
+                    return RedirectToAction("CompleteQuestion", "Clients", new { id = existingRequest.Id });
+                }
+                else
+                {
+                    return View("ClientRequest", existingRequest);
+                }
             }
-
-            else if (existingRequest != null)
-            {
-                return View("ClientRequest", existingRequest);
-            }
-
-           
 
             return View("GetCoachingPackage", packages);
         }
@@ -67,7 +67,6 @@ namespace OnlineCoaching.WebUI.Controllers
 
 
 
-        // GET: CoachingPackage/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
@@ -101,7 +100,6 @@ namespace OnlineCoaching.WebUI.Controllers
             }
         }
 
-        // GET: CoachingPackage/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
@@ -110,7 +108,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(package);
         }
 
-        // POST: CoachingPackage/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CoachingPackageDto dto)
@@ -127,7 +124,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: CoachingPackage/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
@@ -136,7 +132,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(package);
         }
 
-        // POST: CoachingPackage/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

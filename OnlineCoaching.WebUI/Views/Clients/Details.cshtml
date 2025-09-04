@@ -1,76 +1,51 @@
 ﻿@model OnlineCoaching.Domain.Entities.Client
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Client Details";
 }
 
-<div>
-    <h4>Client</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User!.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdatedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdatedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdatedOn)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header text-white" style="background-color:#ff1313;">
+            <h4 class="mb-0 text-white">Client Details</h4>
+        </div>
+        <div class="card-body bg-white">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Full Name</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.FullName) ? Model.FullName : "Empty")</dd>
+
+                <dt class="col-sm-3 fw-bold">Birth Date</dt>
+                <dd class="col-sm-9">@( Model.BirthDate.ToString("yyyy-MM-dd") )</dd>
+
+                <dt class="col-sm-3 fw-bold">Phone Number</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.PhoneNumber) ? Model.PhoneNumber : "Empty")</dd>
+
+                <dt class="col-sm-3 fw-bold">Address</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.Address) ? Model.Address : "Empty")</dd>
+
+                <dt class="col-sm-3 fw-bold">User Email</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.User?.Email) ? Model.User.Email : "Empty")</dd>
+
+                <dt class="col-sm-3 fw-bold">Is Deleted</dt>
+                <dd class="col-sm-9">@(Model.IsDeleted ? "Yes" : "No")</dd>
+
+                <dt class="col-sm-3 fw-bold">Created By</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.CreatedById) ? Model.CreatedById : "Empty")</dd>
+
+                <dt class="col-sm-3 fw-bold">Created On</dt>
+                <dd class="col-sm-9">@( Model.CreatedOn.ToString("yyyy-MM-dd HH:mm") )</dd>
+
+                <dt class="col-sm-3 fw-bold">Last Updated By</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.LastUpdatedById) ? Model.LastUpdatedById : "Empty")</dd>
+
+                <dt class="col-sm-3 fw-bold">Last Updated On</dt>
+                <dd class="col-sm-9">@((Model.LastUpdatedOn != null) ? Model.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm") : "Empty")</dd>
+            </dl>
+        </div>
+        <div class="card-footer text-end">
+@*             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Edit</a>
+ *@            <a asp-action="Profile" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">View Profile</a>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+        </div>
+    </div>
 </div>

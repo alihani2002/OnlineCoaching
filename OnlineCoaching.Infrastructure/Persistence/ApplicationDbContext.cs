@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Infrastructure.Persistence
+﻿using OnlineCoaching.Domain.Entities.Foods;
+
+namespace OnlineCoaching.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
@@ -27,7 +29,8 @@
         public DbSet<Option> Options { get; set; }
         public DbSet<ClientAnswer> ClientAnswers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-
+        public DbSet<Meal> Meals { get; set ; }
+        public DbSet<ExerciseSheetLog> ExerciseSheetLogs { get ; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
