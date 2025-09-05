@@ -1,0 +1,28 @@
+﻿@model OnlineCoaching.Domain.Entities.ExerciseSheetLog
+
+@{
+    ViewData["Title"] = "Log Details";
+}
+
+<h2>Exercise Log Details</h2>
+
+<div>
+    <h4>@Model.Exercise.Name - @Model.Client.FullName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">First Set</dt>
+        <dd class="col-sm-10">@Model.FirstSet</dd>
+        <dt class="col-sm-2">Second Set</dt>
+        <dd class="col-sm-10">@Model.SecondSet</dd>
+        <dt class="col-sm-2">Third Set</dt>
+        <dd class="col-sm-10">@Model.ThirdSet</dd>
+        <dt class="col-sm-2">Fourth Set</dt>
+        <dd class="col-sm-10">@Model.FourthSet</dd>
+        <dt class="col-sm-2">Fifth Set</dt>
+        <dd class="col-sm-10">@Model.FifthSet</dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

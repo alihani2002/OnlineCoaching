@@ -1,0 +1,46 @@
+﻿@model OnlineCoaching.Domain.Dtos.ExerciseSheet.CreateExerciseSheetDto
+
+@{
+    ViewData["Title"] = "Add Exercise Log";
+}
+
+<h2>Add Log</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="ClientId" />
+    <input type="hidden" asp-for="ExerciseId" />
+
+    <div class="form-group">
+        <label asp-for="FirstSet"></label>
+        <input asp-for="FirstSet" class="form-control" />
+        <span asp-validation-for="FirstSet" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SecondSet"></label>
+        <input asp-for="SecondSet" class="form-control" />
+        <span asp-validation-for="SecondSet" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ThirdSet"></label>
+        <input asp-for="ThirdSet" class="form-control" />
+        <span asp-validation-for="ThirdSet" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FourthSet"></label>
+        <input asp-for="FourthSet" class="form-control" />
+        <span asp-validation-for="FourthSet" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FifthSet"></label>
+        <input asp-for="FifthSet" class="form-control" />
+        <span asp-validation-for="FifthSet" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

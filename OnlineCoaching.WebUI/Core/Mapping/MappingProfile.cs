@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OnlineCoaching.Domain.Dtos;
 using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
+using OnlineCoaching.Domain.Dtos.ExerciseSheet;
 
 namespace OnlineCoaching.Web.Core.Mapping
 {
@@ -82,6 +83,17 @@ namespace OnlineCoaching.Web.Core.Mapping
 
             CreateMap<AssignExercise, AssignExerciseDto>().ReverseMap();
             CreateMap<AssignFood, AssignFoodDto>().ReverseMap();
+
+
+            CreateMap<ExerciseSheetLog, CreateExerciseSheetDto>()
+                .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.FullName : string.Empty))
+                .ForMember(dest => dest.ExerciseName, opt => opt.MapFrom(src => src.Exercise != null ? src.Exercise.Name : string.Empty))
+                .ReverseMap()
+                .ForMember(dest => dest.Client, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Exercise, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
 
         }
     }

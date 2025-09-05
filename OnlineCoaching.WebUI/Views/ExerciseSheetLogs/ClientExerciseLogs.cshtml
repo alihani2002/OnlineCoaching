@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ExerciseSheetLog>
+
+@{
+    ViewData["Title"] = "Client Exercise Logs";
+}
+
+<h2>Client Exercise Logs</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        No logs found for this exercise.
+        <a asp-action="Create" asp-route-clientId="@ViewBag.ClientId" asp-route-exerciseId="@ViewBag.ExerciseId" class="btn btn-primary">
+            ➕ Add New Log
+        </a>
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>First Set</th>
+                <th>Second Set</th>
+                <th>Third Set</th>
+                <th>Fourth Set</th>
+                <th>Fifth Set</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>@log.FirstSet</td>
+                    <td>@log.SecondSet</td>
+                    <td>@log.ThirdSet</td>
+                    <td>@log.FourthSet</td>
+                    <td>@log.FifthSet</td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@log.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Create" asp-route-clientId="@ViewBag.ClientId" asp-route-exerciseId="@ViewBag.ExerciseId" class="btn btn-primary">
+        ➕ Add New Log
+    </a>
+}

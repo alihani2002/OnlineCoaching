@@ -279,6 +279,10 @@
                         <span>Notes: ${e.Notes ?? ''}</span>
                     </div>
                     <img src="/assets/img/logo/youtube.png" alt="YouTube Logo"> <!-- ✅ logo on right -->
+                      <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" 
+               class="btn btn-sm btn-warning mt-2">➕ Log</a>
+               <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" 
+                   class="btn btn-sm btn-info">📊 View Logs</a>
                 </div>
             `;
             dayDiv.innerHTML += card;

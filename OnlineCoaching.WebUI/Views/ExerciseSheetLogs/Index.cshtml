@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ExerciseSheetLog>
+
+@{
+    ViewData["Title"] = "Exercise Logs";
+}
+
+<h2>Exercise Logs</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Exercise</th>
+            <th>1st Set</th>
+            <th>2nd Set</th>
+            <th>3rd Set</th>
+            <th>4th Set</th>
+            <th>5th Set</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.Client.FullName</td>
+                <td>@log.Exercise.Name</td>
+                <td>@log.FirstSet</td>
+                <td>@log.SecondSet</td>
+                <td>@log.ThirdSet</td>
+                <td>@log.FourthSet</td>
+                <td>@log.FifthSet</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@log.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@log.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@log.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

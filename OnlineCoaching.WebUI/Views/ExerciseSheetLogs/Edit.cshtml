@@ -1,0 +1,42 @@
+﻿@model OnlineCoaching.Domain.Entities.ExerciseSheetLog
+
+@{
+    ViewData["Title"] = "Edit Exercise Log";
+}
+
+<h2>Edit Log</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ClientId" />
+    <input type="hidden" asp-for="ExerciseId" />
+
+    <div class="form-group">
+        <label asp-for="FirstSet"></label>
+        <input asp-for="FirstSet" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SecondSet"></label>
+        <input asp-for="SecondSet" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ThirdSet"></label>
+        <input asp-for="ThirdSet" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FourthSet"></label>
+        <input asp-for="FourthSet" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FifthSet"></label>
+        <input asp-for="FifthSet" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

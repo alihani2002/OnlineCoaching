@@ -1,0 +1,33 @@
+﻿@model OnlineCoaching.Domain.Entities.ExerciseSheetLog
+
+@{
+    ViewData["Title"] = "Delete Exercise Log";
+}
+
+<h2>Delete Log</h2>
+
+<h4>Are you sure you want to delete this log?</h4>
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">Client</dt>
+    <dd class="col-sm-10">@Model.Client.FullName</dd>
+
+    <dt class="col-sm-2">Exercise</dt>
+    <dd class="col-sm-10">@Model.Exercise.Name</dd>
+
+    <dt class="col-sm-2">First Set</dt>
+    <dd class="col-sm-10">@Model.FirstSet</dd>
+
+    <dt class="col-sm-2">Second Set</dt>
+    <dd class="col-sm-10">@Model.SecondSet</dd>
+
+    <dt class="col-sm-2">Third Set</dt>
+    <dd class="col-sm-10">@Model.ThirdSet</dd>
+</dl>
+
+<form asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
