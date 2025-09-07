@@ -49,19 +49,22 @@
                                     }
                                     else if (question.Type == QuestionType.MultipleChoice)
                                     {
-                                        foreach (var option in question.Options!)
+                                        var optionsList = question.Options!.ToList();
+                                        for (int j = 0; j < optionsList.Count; j++)
                                         {
+                                            var option = optionsList[j];
                                             <div class="form-check mb-2">
                                                 <input class="form-check-input"
                                                        type="checkbox"
-                                                       name="answers[@i].SelectedOptions"
+                                                       name="answers[@i].SelectedOptions[@j].OptionId"
                                                        value="@option.Id"
-                                                       id="option-@option.Id-@i" />
-                                                <label class="form-check-label" for="option-@option.Id-@i">
+                                                       id="option-@option.Id-@i-@j" />
+                                                <label class="form-check-label" for="option-@option.Id-@i-@j">
                                                     @option.Text
                                                 </label>
                                             </div>
                                         }
+
                                     }
                                     else if (question.Type == QuestionType.OpenText)
                                     {
@@ -75,6 +78,7 @@
                             </div>
                         </div>
                     }
+
                 </div>
 
                 <div class="text-center mt-4">

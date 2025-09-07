@@ -152,13 +152,18 @@ namespace OnlineCoaching.Application.Services
         public async Task<bool> OptionExists(int id) =>
             await _unitOfWork.Options.GetQueryable().AnyAsync(e => e.Id == id);
 
-        public IEnumerable<ClientAnswer> GetClientAnswer(int ClientId)
+        public IEnumerable<ClientAnswer> GetClientAnswer(int clientId)
         {
             return _unitOfWork.ClientAnswers.GetQueryable()
-                .Include(c => c.SelectedOptions)
-                .ThenInclude(o => o.Option)
-                .Where(a => a.ClientId == ClientId).ToList();
+                .Include(ca => ca.Question) 
+                .Include(ca => ca.SelectedOptions)
+                    .ThenInclude(cao => cao.Option)
+                .ThenInclude(o => o!.Question) 
+                .Where(ca => ca.ClientId == clientId)
+                .ToList();
         }
+
+
     }
 
 

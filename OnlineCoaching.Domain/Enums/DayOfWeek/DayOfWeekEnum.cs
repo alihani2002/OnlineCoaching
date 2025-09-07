@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCoaching.Domain.Enums.DayOfWeek
+﻿namespace OnlineCoaching.Domain.Enums.DayOfWeek
 {
     public enum DayOfWeekEnum
     {
@@ -14,6 +8,9 @@ namespace OnlineCoaching.Domain.Enums.DayOfWeek
         FourthDay = 4,
         FifthDay = 5,
         SixthDay = 6,
-        SeventhDay = 7
+        SeventhDay = 7,
+        Weekly = 8 ,
+        FirstSecondThird = 9,
+        FourthFifthSixSeven = 10,
     }
 }

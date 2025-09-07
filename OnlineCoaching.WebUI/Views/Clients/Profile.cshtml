@@ -207,19 +207,28 @@
                                 {
                                     @(answer?.AnswerText ?? "No answer provided")
                                 }
-                                else if (answer?.SelectedOptions != null && answer.SelectedOptions.Any())
+                                else if (question.Type == QuestionType.SingleChoice)
                                 {
-                                    <ul>
-                                        @foreach (var opt in answer.SelectedOptions)
-                                        {
-                                            <li>@opt.Option!.Text</li>
-                                        }
-                                    </ul>
+                                    var selected = answer?.SelectedOptions.FirstOrDefault()?.Option?.Text;
+                                    @(selected ?? "No option selected")
                                 }
-                                else
+                                else if (question.Type == QuestionType.MultipleChoice)
                                 {
-                                    <span class="text-muted">No option selected</span>
+                                    if (answer?.SelectedOptions != null && answer.SelectedOptions.Any())
+                                    {
+                                        <ul>
+                                            @foreach (var opt in answer.SelectedOptions)
+                                            {
+                                                <li>@opt.Option!.Text</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No options selected</span>
+                                    }
                                 }
+
                             </td>
                         </tr>
                     }
@@ -244,12 +253,15 @@
         4: "Fourth Day",
         5: "Fifth Day",
         6: "Sixth Day",
-        7: "Seventh Day"
+        7: "Seventh Day" ,
+        8: "1,2,3,4,5,6 & 7" ,
+        9: "1,2,3" ,
+        10: "4,5,6,7"
     };
 
     // Serialize server-side data to JS
     const assignedExercises = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedExercises))
-    const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods))
+    const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods)) 
 
     function groupBy(array, keyFunc) {
         return array.reduce((result, item) => {
@@ -307,17 +319,23 @@
                 <table class="table-custom mb-3">
                     <thead>
                         <tr>
-                            <th>Food</th>
-                            <th>Quantity</th>
+                             <th>Food</th>
+                            <th>Quantity (g)</th>
+                            <th>Servings</th>
                             <th>Notes</th>
+                            <th>Day</th>
+                            <th>Meal</th>
                         </tr>
                     </thead>
                     <tbody>`;
             mealFoods.forEach(f => {
                 mealHtml += `<tr>
-                    <td>${f.FoodName ?? ''}</td>
-                    <td>${f.Quantity ?? ''}</td>
+                   <td>${f.FoodName ?? ''}</td>
+                    <td>${f.Quantity ?? ''} g</td>
+                    <td>${f.NumberOfServings ?? ''} serving(s)</td>
                     <td>${f.Notes ?? ''}</td>
+                    <td>${f.DayOfWeekName ?? ''}</td>
+                    <td>${f.MealNumberName ?? ''}</td>
                 </tr>`;
             });
             mealHtml += `</tbody></table></div>`;

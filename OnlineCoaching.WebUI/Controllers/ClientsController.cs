@@ -2,6 +2,7 @@
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Application.Services.AssignmentService;
 using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
+using OnlineCoaching.Domain.Entities;
 using OnlineCoaching.Domain.Entities.Foods;
 using OnlineCoaching.Domain.Enums;
 using OnlineCoaching.WebUI.Models.Clients;
@@ -117,6 +118,7 @@ namespace OnlineCoaching.WebUI.Controllers
                     FoodName = f.Food?.Name,
                     Quantity = f.Quantity,
                     Notes = f.Notes,
+                    NumberOfServings = f.NumberOfServings,
                     DayOfWeek = f.Meal?.DayOfWeek ?? f.DayOfWeek,
                     MealNumber = f.Meal?.MealNumber ?? f.MealNumber,
 
@@ -124,12 +126,8 @@ namespace OnlineCoaching.WebUI.Controllers
                     MealNumberName = (f.Meal?.MealNumber ?? f.MealNumber).ToString(),
                 }).ToList(),
               
-                // Group foods by day and meal number
 
             };
-
-
-
 
             return View(vm);
         }
@@ -150,7 +148,6 @@ namespace OnlineCoaching.WebUI.Controllers
             var client = await _clientService.GetClientAsync(userId);
             var existingRequest = _requestService.GetActiveOrPendingRequest(client!.Id);
 
-
             if (client == null)
             {
                 return NotFound("Client not found.");
@@ -158,23 +155,46 @@ namespace OnlineCoaching.WebUI.Controllers
 
             foreach (var answer in answers)
             {
+                // Skip empty answers completely
+                if (string.IsNullOrWhiteSpace(answer.AnswerText) &&
+                    (answer.SelectedOptions == null || !answer.SelectedOptions.Any()))
+                    continue;
+
                 answer.ClientId = client.Id;
 
-                // If it's text-based answer
                 if (!string.IsNullOrWhiteSpace(answer.AnswerText))
                 {
+                    // text answer
+                    answer.CreatedById = userId;
                     _context.ClientAnswers.Add(answer);
                 }
                 else if (answer.SelectedOptions != null && answer.SelectedOptions.Any())
                 {
-                    // If multiple-choice or single-choice
+                    // multiple-choice answers
+                    var newAnswer = new ClientAnswer
+                    {
+                        CreatedById = userId,
+                        ClientId = client.Id,
+                        QuestionId = answer.QuestionId ,
+                        CreatedOn = DateTime.Now,
+                    };
+
+                    _context.ClientAnswers.Add(newAnswer);
+
                     foreach (var selectedOption in answer.SelectedOptions)
                     {
-                        selectedOption.ClientAnswer = answer;
+                        var option = new ClientAnswerOption
+                        {
+                            CreatedById = userId,
+                            OptionId = selectedOption.OptionId,
+                            ClientAnswer = newAnswer , 
+                            CreatedOn = DateTime.Now,
+                        };
+                        _context.ClientAnswerOptions.Add(option);
                     }
-                    _context.ClientAnswers.Add(answer);
                 }
             }
+
             if (existingRequest != null)
             {
                 var coachingPackageRequestEntity = _context.CoachingPackageRequests
@@ -186,10 +206,12 @@ namespace OnlineCoaching.WebUI.Controllers
                     _context.CoachingPackageRequests.Update(coachingPackageRequestEntity);
                 }
             }
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Profile");
         }
+
 
         // Clients/CompleteProfileData
 

@@ -87,14 +87,14 @@
             removeBtn.type = "button";
             removeBtn.classList.add("btn", "btn-sm", "btn-danger", "ms-2", "remove-option");
             removeBtn.textContent = "✖";
-            removeBtn.addEventListener("click", () => {
-                if (optionsContainer.querySelectorAll(".option-block").length > 2) {
-                    wrapper.remove();
-                    reindexOptions();
-                } else {
-                    alert("At least 2 options are required.");
-                }
-            });
+            // removeBtn.addEventListener("click", () => {
+            //     if (optionsContainer.querySelectorAll(".option-block").length > 2) {
+            //         wrapper.remove();
+            //         reindexOptions();
+            //     } else {
+            //         alert("At least 2 options are required.");
+            //     }
+            // });
 
             group.appendChild(label);
             group.appendChild(input);
@@ -109,9 +109,9 @@
             optionCount = 0;
             optionsContainer.innerHTML = "";
 
-            for (let i = 0; i < 2; i++) {
-                optionsContainer.appendChild(createOptionInput(optionCount++, false));
-            }
+            // for (let i = 0; i < 2; i++) {
+            //     optionsContainer.appendChild(createOptionInput(optionCount++, false));
+            // }
             appendAddButton();
             reindexOptions();
         }
@@ -183,9 +183,9 @@
                 }
                 
                 // Ensure at least 2 options
-                if (optionsContainer.querySelectorAll(".option-block").length < 2) {
-                    renderInitialOptions();
-                }
+                // if (optionsContainer.querySelectorAll(".option-block").length < 2) {
+                //     renderInitialOptions();
+                // }
 
                 const optionInputs = optionsContainer.querySelectorAll("input");
                 optionInputs.forEach(inp => inp.disabled = false);

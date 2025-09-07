@@ -46,6 +46,8 @@ namespace OnlineCoaching.Application.Common.Interfaces
 
         IBaseRepository<ExerciseSheetLog> ExerciseSheetLogs { get; }
 
+        IBaseRepository<ClientAnswerOption> ClientAnswerOptions { get; }
+
         int Complete();
 
     }

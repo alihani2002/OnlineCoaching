@@ -11,14 +11,11 @@ namespace OnlineCoaching.WebUI.Models.Clients
         public IEnumerable<ClientAnswer> Answers { get; set; } = new List<ClientAnswer>();
 
 
-        // Add these
         public List<AssignExerciseDto> AssignedExercises { get; set; } = new();
         public List<AssignFoodDto> AssignedFoods { get; set; } = new();
 
-        // Exercises grouped by DayOfWeek
-        public Dictionary<DayOfWeekEnum, List<AssignExerciseDto>> ExercisesByDay { get; set; } = new();
 
-        // Foods grouped by Meal
+        public Dictionary<DayOfWeekEnum, List<AssignExerciseDto>> ExercisesByDay { get; set; } = new();
         public Dictionary<MealsNum, List<AssignFoodDto>> FoodsByMeal { get; set; } = new();
     }
 }

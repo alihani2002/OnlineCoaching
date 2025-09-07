@@ -7,8 +7,8 @@ namespace OnlineCoaching.Domain.Dtos.AssignmentCoaching
         public int FoodId { get; set; }
         public string? FoodName { get; set; }
 
-        public int Quantity { get; set; }
-        public int NumberOfServings { get; set; } = 0;
+        public int Quantity { get; set; } 
+        public int NumberOfServings { get; set; } 
         public string? Notes { get; set; }
 
         public DayOfWeekEnum DayOfWeek { get; set; }

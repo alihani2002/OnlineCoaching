@@ -23,17 +23,15 @@
              _unitOfWork.Clients.GetQueryable().Include(u=>u.User);
 
 
-
-        public async Task CompleteClientData(Client client , string userId)
+        public async Task CompleteClientData(Client client, string userId)
         {
             var existingClient = await _unitOfWork.Clients
                 .GetQueryable()
                 .Include(x => x.User!)
-                .FirstOrDefaultAsync(c => c.UserId == client.UserId);
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (existingClient == null)
             {
-                // Create new client if not found
                 existingClient = new Client
                 {
                     UserId = userId,
@@ -41,29 +39,28 @@
                     BirthDate = client.BirthDate,
                     PhoneNumber = client.PhoneNumber,
                     Address = client.Address,
-                    CreatedOn = DateTime.UtcNow ,
+                    CreatedOn = DateTime.UtcNow,
                 };
                 _unitOfWork.Clients.Add(existingClient);
-                var user = await _unitOfWork.Users
-               .GetQueryable()
-               .FirstOrDefaultAsync(u => u.Id == userId);
 
+                var user = await _unitOfWork.Users
+                    .GetQueryable()
+                    .FirstOrDefaultAsync(u => u.Id == userId);
                 if (user != null)
                 {
-                    user.IsCompelteProfile = true; 
+                    user.IsCompelteProfile = true;
                     user.LastUpdatedOn = DateTime.UtcNow;
                 }
             }
             else
             {
-                // Update existing client
                 existingClient.FullName = client.FullName;
                 existingClient.BirthDate = client.BirthDate;
                 existingClient.PhoneNumber = client.PhoneNumber;
                 existingClient.Address = client.Address;
                 existingClient.LastUpdatedOn = DateTime.UtcNow;
             }
-          
+
             _unitOfWork.Complete();
         }
 
@@ -82,8 +79,5 @@
 
             return true;
         }
-
-
-
     }
 }
