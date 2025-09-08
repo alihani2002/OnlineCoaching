@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using OnlineCoaching.Infrastructure.Persistence
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -13,9 +18,28 @@
                     <div class="row">
                         <div class="col-xl-9 col-lg-9 col-md-10">
                             <div class="hero__caption">
-                                <span data-animation="fadeInLeft" data-delay="0.1s">Hi This is  Badr Reda</span>
+                                <span data-animation="fadeInLeft" data-delay="0.1s">Hi This is Badr Reda</span>
                                 <h1 data-animation="fadeInLeft" data-delay="0.4s">Gym Trainer</h1>
-                                <a href="courses.html" class="border-btn hero-btn" data-animation="fadeInLeft" data-delay="0.8s">My Courses</a>
+
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <form asp-area="Identity" asp-page="/Account/Logout"
+                                          asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                                          method="post" class="d-inline">
+                                        <button type="submit" class="border-btn hero-btn"
+                                                data-animation="fadeInLeft" data-delay="0.8s">
+                                            Logout 
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a asp-area="Identity" asp-page="/Account/Login"
+                                       class="border-btn hero-btn"
+                                       data-animation="fadeInLeft" data-delay="0.8s">
+                                        Login
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>
