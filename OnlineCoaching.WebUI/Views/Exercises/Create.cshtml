@@ -7,13 +7,12 @@
 
 <h2>Create Exercise</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-
 
     <div class="form-group">
         <label asp-for="Description" class="control-label"></label>
@@ -36,6 +35,12 @@
         <span asp-validation-for="MuscleId" class="text-danger"></span>
     </div>
 
+    <!-- Upload Exercise Image -->
+    <div class="form-group">
+        <label for="ImageUrl">Exercise Image</label>
+        <input type="file" name="ImageUrl" class="form-control-file" />
+    </div>
+
     <!-- Dynamic list of LinkUrls -->
     <div class="form-group">
         <label>Additional Links</label>
@@ -52,9 +57,7 @@
 </form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script>
         let linkIndex = 1;
@@ -69,5 +72,4 @@
             linkIndex++;
         });
     </script>
-
 }

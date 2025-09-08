@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Enums;
 using OnlineCoaching.WebUI.Models.RequestPackage;
 namespace OnlineCoaching.WebUI.Controllers
 {
+
+    [Authorize]
     public class CoachingPackageRequestsController(ICoachingPackageRequestService requestService, IClientService clientService, ICoachingPackageServices coachingPackage) : Controller
     {
         private readonly ICoachingPackageServices _coachingPackageServices = coachingPackage;

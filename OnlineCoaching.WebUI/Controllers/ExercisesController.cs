@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineCoaching.Application;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
+using OnlineCoaching.WebUI.Helper;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize]
     public class ExercisesController : Controller
     {
         private readonly IExerciseServices _exerciseService;
         private readonly IMuscleServices _muscleServices;
+        private readonly ImageHelper _imageHelper;
 
-        public ExercisesController(IExerciseServices exerciseService , IMuscleServices muscleServices)
+        public ExercisesController(IExerciseServices exerciseService , IMuscleServices muscleServices , ImageHelper imageHelper)
         {   
             _exerciseService = exerciseService;
             _muscleServices = muscleServices;
+            _imageHelper = imageHelper;
         }
 
         public IActionResult Index()
@@ -42,10 +46,11 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateExerciseDto dto)
+        public async Task<IActionResult> Create(CreateExerciseDto dto ,IFormFile? ImageUrl)
         {
             if (ModelState.IsValid)
             {
+                dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Exercises");
                 await _exerciseService.AddExerciseAsync(dto);
                 return RedirectToAction(nameof(Index));
             }
@@ -67,10 +72,12 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ExerciseDto dto)
+        public async Task<IActionResult> Edit(ExerciseDto dto, IFormFile? ImageUrl)
         {
             if (ModelState.IsValid)
             {
+                dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Exercises");
+                dto.LastUpdatedOn = DateTime.Now;
                 await _exerciseService.UpdateExerciseAsync(dto);
                 return RedirectToAction(nameof(Index));
             }

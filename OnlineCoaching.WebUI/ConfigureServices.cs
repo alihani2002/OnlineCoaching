@@ -1,4 +1,5 @@
 ﻿using OnlineCoaching.Web.Core.Mapping;
+using OnlineCoaching.WebUI.Helper;
 using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
 namespace OnlineCoaching.Web
@@ -42,6 +43,12 @@ namespace OnlineCoaching.Web
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.SlidingExpiration = true;
                 options.LoginPath = "/Identity/Account/Login";
+            });
+
+            builder.Services.AddScoped<ImageHelper>(provider =>
+            {
+                var env = provider.GetRequiredService<IWebHostEnvironment>();
+                return new ImageHelper(env, "uploads"); 
             });
 
             // AutoMapper

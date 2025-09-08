@@ -8,9 +8,7 @@
         public string? AfterImageUrl { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
-
         public int ClientId { get; set; }
         public Client? Client { get; set; }
     }
-
 }

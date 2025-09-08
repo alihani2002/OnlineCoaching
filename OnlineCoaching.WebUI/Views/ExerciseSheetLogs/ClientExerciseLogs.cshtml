@@ -1,51 +1,118 @@
 ﻿@model IEnumerable<ExerciseSheetLog>
 
 @{
-    ViewData["Title"] = "Client Exercise Logs";
+    ViewData["Title"] = ViewBag.ExerciseName + " Logs ";
 }
 
-<h2>Client Exercise Logs</h2>
+<div class="container my-4">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info shadow-sm p-4 rounded">
+            No logs found for this exercise.
+            <a asp-action="Create" asp-route-clientId="@ViewBag.ClientId" asp-route-exerciseId="@ViewBag.ExerciseId"
+               class="btn btn-primary ms-2">
+                ➕ Add New Log
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a asp-action="Create" asp-route-clientId="@ViewBag.ClientId" asp-route-exerciseId="@ViewBag.ExerciseId"
+               class="btn btn-success shadow-sm">
+                ➕ Add New Log
+            </a>
+        </div>
 
-@if (Model == null || !Model.Any())
-{
-    <div class="alert alert-info">
-        No logs found for this exercise.
-        <a asp-action="Create" asp-route-clientId="@ViewBag.ClientId" asp-route-exerciseId="@ViewBag.ExerciseId" class="btn btn-primary">
-            ➕ Add New Log
-        </a>
-    </div>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>First Set</th>
-                <th>Second Set</th>
-                <th>Third Set</th>
-                <th>Fourth Set</th>
-                <th>Fifth Set</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var log in Model)
-            {
-                <tr>
-                    <td>@log.FirstSet</td>
-                    <td>@log.SecondSet</td>
-                    <td>@log.ThirdSet</td>
-                    <td>@log.FourthSet</td>
-                    <td>@log.FifthSet</td>
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@log.Id" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped shadow-sm excel-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Set 1</th>
+                        <th>Set 2</th>
+                        <th>Set 3</th>
+                        <th>Set 4</th>
+                        <th>Set 5</th>
+                        <th>Created on</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td>@($"{log.FirstSet} kg")</td>
+                            <td>@($"{log.SecondSet} kg")</td>
+                            <td>@($"{log.ThirdSet} kg")</td>
+                            <td>@($"{log.FourthSet} kg")</td>
+                            <td>@($"{log.FifthSet} kg")</td>
+                            <td>@log.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <a asp-action="Delete" asp-route-id="@log.Id"
+                                   class="btn btn-sm btn-danger shadow-sm">
+                                    🗑
+                                </a>
+                                ||
+                                <a asp-action="Edit" asp-route-id="@log.Id"
+                                   class="btn btn-sm btn-warning shadow-sm" title="Edit">
+                                    ✏️
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<style>
+    /* Excel-like style */
+    .excel-table th, .excel-table td {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        border: 1px solid #dee2e6 !important; /* Full borders */
+    }
+
+    .excel-table th {
+        background-color: #ff1313 !important;
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .excel-table td {
+        background-color: #f8f9fa;
+        font-weight: 500;
+    }
+
+    .excel-table tr:nth-child(even) td {
+        background-color: #e9ecef;
+    }
+
+    .excel-table tr:hover td {
+        background-color: #d6e9f8;
+    }
+
+    /* Responsive tweaks */
+    @@media (max-width: 768px) {
+        .excel-table {
+            font-size: 0.8rem;
+        }
+
+            .excel-table th, .excel-table td {
+                padding: 6px;
+                font-weight: bold;
             }
-        </tbody>
-    </table>
+    }
 
-    <a asp-action="Create" asp-route-clientId="@ViewBag.ClientId" asp-route-exerciseId="@ViewBag.ExerciseId" class="btn btn-primary">
-        ➕ Add New Log
-    </a>
-}
+    @@media (max-width: 576px) {
+        .excel-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+</style>

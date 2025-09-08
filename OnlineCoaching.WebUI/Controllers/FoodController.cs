@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
 
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize]
     public class FoodController : Controller
     {
         private readonly IFoodServices _foodService;

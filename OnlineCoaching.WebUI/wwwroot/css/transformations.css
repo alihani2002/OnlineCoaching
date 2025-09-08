@@ -1,0 +1,441 @@
+﻿html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ===== Breadcrumb Section ===== */
+.breadcrumb-section {
+    margin: 0;
+    padding: 30px 0;
+    margin-top: 80px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* ===== Outline Buttons ===== */
+button.btn.btn-outline {
+    color: white;
+    border: 1px solid white;
+}
+
+    button.btn.btn-outline:hover {
+        background-color: #ff3619;
+        color: white;
+        border-color: #ff3619;
+    }
+
+/* ===== Transformations Gallery Section ===== */
+.transformations-gallery {
+    margin-top: 20px;
+    padding: 0 15px;
+}
+
+    /* ===== Section Title ===== */
+    .transformations-gallery h2 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #ffc107;
+        margin-bottom: 30px;
+    }
+
+/* ===== Each transformation block spacing ===== */
+.transformation-preview {
+    margin-bottom: 40px;
+}
+
+/* ===== Flex layout for Before/After image groups ===== */
+.transformation-image-wrapper-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* ===== Each image group with label and button ===== */
+.image-button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    flex: 1;
+    min-width: 250px;
+}
+
+/* ===== Labels above images ===== */
+.label {
+    margin-bottom: 12px;
+    color: #ff3619;
+    padding: 6px 16px;
+    font-weight: bold;
+    font-family: "Oswald", sans-serif;
+    font-size: 22px;
+    text-align: center;
+}
+
+/* ===== Before/After images styling ===== */
+.transformation-photo {
+    width: 70%;
+    max-width: 300px;
+    height: auto;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px;
+    border-radius: 8px;
+}
+
+/* ===== View buttons under image ===== */
+.image-button-group button {
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+    max-width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== Modal Image Styling ===== */
+#modalImage {
+    border-radius: 12px;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+/* ===== Hide unused global button row on large screen ===== */
+.view-buttons-row {
+    display: none;
+}
+
+/* ===== Headings ===== */
+h2.text-center {
+    font-size: 32px;
+    font-family: "Oswald", sans-serif;
+    color: #ff3619;
+    margin-bottom: 20px;
+}
+
+/* ===== VS Label Styling ===== */
+.vs-label {
+    align-self: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: #ff3619;
+    font-family: "Oswald", sans-serif;
+}
+
+.vs-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    flex: 0 0 auto;
+}
+
+.logo-image {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* ===== Slider Styles ===== */
+.transformations-slider-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.transformations-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    touch-action: pan-y;
+}
+
+.transformation-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ff3619;
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.slider-arrow.left {
+        left: 5px;
+    }
+
+.slider-arrow.right {
+        right: 5px;
+    }
+
+.slider-arrow:hover {
+        opacity: 1;
+    }
+
+/* ===== Responsive Adjustments ===== */
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .breadcrumb-section {
+        margin-top: 120px;
+        padding: 50px 0;
+    }
+
+    .transformations-gallery h2 {
+        font-size: 28px;
+    }
+
+    h2.text-center {
+        font-size: 36px;
+    }
+
+    .transformation-image-wrapper-row {
+        gap: 50px;
+    }
+
+    .label {
+        font-size: 24px;
+    }
+
+    .vs-label {
+        font-size: 50px;
+    }
+
+    .logo-image {
+        width: 100px;
+    }
+
+    .slider-arrow {
+        font-size: 28px;
+        padding: 10px 14px;
+    }
+
+    h1.bold.text-white {
+        background-color: red;
+        padding: 10px;
+        border-radius: 38px;
+        font-size: larger;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .breadcrumb-section {
+        margin-top: 150px;
+    }
+
+    h2.text-center {
+        font-size: 40px;
+    }
+
+    .transformation-image-wrapper-row {
+        gap: 80px;
+    }
+
+    .vs-label {
+        font-size: 60px;
+    }
+
+    .logo-image {
+        width: 120px;
+    }
+
+    .slider-arrow {
+        font-size: 32px;
+        padding: 10px 16px;
+    }
+    h1.bold.text-white {
+        background-color: red;
+        padding: 10px;
+        border-radius: 38px;
+        font-size: larger;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .breadcrumb-section {
+        margin-top: 180px;
+    }
+
+    .transformation-image-wrapper-row {
+        gap: 100px;
+    }
+
+    .vs-label {
+        font-size: 70px;
+    }
+}
+/* تحسينات للعرض على الأجهزة المتوسطة */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .transformation-image-wrapper-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: nowrap;
+    }
+
+    .image-button-group {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .transformation-photo {
+        width: 70%;
+        height: 300px;
+        max-width: 280px;
+        object-fit: cover;
+    }
+
+    .vs-logo {
+        flex: 0 0 auto;
+        padding: 0 10px;
+    }
+
+    .logo-image {
+        width: 60px;
+        height: auto;
+    }
+
+    .label {
+        font-size: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .image-button-group button {
+        width: 100%;
+        max-width: 200px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* تحسينات إضافية للصور */
+.transformation-photo {
+    object-fit: cover;
+    object-position: center;
+    border: 3px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+    .transformation-photo:hover {
+        transform: scale(1.02);
+    }
+
+/* تحسينات للأزرار */
+.image-button-group button {
+    background-color: #ff3619;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+    .image-button-group button:hover {
+        background-color: #e03115;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+/* تحسينات للعنوان */
+h2.text-center {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+    h2.text-center::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: #ff3619;
+    }
+/* ===== Extra Small Devices (أقل من 400px) ===== */
+@media (max-width: 399.98px) {
+    .breadcrumb-section {
+        margin-top: 60px;
+        padding: 15px 0;
+    }
+
+    h2.text-center {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .label {
+        font-size: 14px;
+        padding: 4px 10px;
+    }
+
+    .vs-logo {
+        padding: 2px;
+    }
+
+    .logo-image {
+        width: 40px;
+    }
+
+    .transformation-photo {
+        height: 180px; /* ارتفاع ثابت للصورة */
+        width: 120px; /* عرض ثابت للصورة */
+        margin-bottom: 8px;
+    }
+
+    .image-button-group button {
+        padding: 5px 8px;
+        font-size: 12px;
+        max-width: 120px;
+    }
+
+    .slider-arrow {
+        font-size: 16px;
+        padding: 4px 8px;
+    }
+
+    /* تعديلات خاصة للزر */
+    button.btn.btn-outline {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    /* إعادة ترتيب العناصر */
+    .transformation-image-wrapper-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .image-button-group {
+        min-width: auto;
+    }
+}

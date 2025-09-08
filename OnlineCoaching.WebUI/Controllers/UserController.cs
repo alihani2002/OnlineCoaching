@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
-using OnlineCoaching.Domain.Dtos.User;
-using OnlineCoaching.WebUI.Models.Auth;
-using System.Threading.Tasks;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize(AppRoles.Admin)]
     public class UserController : Controller
     {
         private readonly IAuthService _authService;

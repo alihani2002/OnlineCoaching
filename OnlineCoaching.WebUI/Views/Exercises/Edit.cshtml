@@ -6,7 +6,7 @@
 
 <h2>Edit Exercise</h2>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
@@ -31,6 +31,20 @@
         <label asp-for="MuscleId">Muscle</label>
         <select asp-for="MuscleId" asp-items="ViewBag.Muscles" class="form-control"></select>
         <span asp-validation-for="MuscleId" class="text-danger"></span>
+    </div>
+
+    <!-- Upload Exercise Image -->
+    <div class="form-group">
+        <label for="ImageUrl">Exercise Image</label>
+        <input type="file" name="ImageUrl" class="form-control-file" />
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="mt-2">
+                <p>Current Image:</p>
+                <img src="@Url.Content(Model.ImageUrl)" alt="Exercise Image" width="150" />
+            </div>
+        }
     </div>
 
     <h4>Links</h4>

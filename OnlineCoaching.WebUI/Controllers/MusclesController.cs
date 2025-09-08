@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Domain.Dtos;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize]
     public class MusclesController : Controller
     {
         private readonly IMuscleServices _muscleService;

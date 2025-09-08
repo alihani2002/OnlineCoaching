@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos.ExerciseSheet;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize]
     public class ExerciseSheetLogsController : Controller
     {
         private readonly IExerciseServices _exerciseServices;
@@ -25,6 +27,8 @@ namespace OnlineCoaching.WebUI.Controllers
 
             ViewBag.ClientId = clientId;
             ViewBag.ExerciseId = exerciseId;
+            var nameExercise = _exerciseServices.GetExerciseByIdAsync(exerciseId).Result;
+            ViewBag.ExerciseName = nameExercise!.Name ;
 
             // Always return a view, even if no logs
             return View("ClientExerciseLogs", logs);
@@ -71,15 +75,19 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ExerciseSheetLog dto)
+        public async Task<IActionResult> Edit(ExerciseSheetLogDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
 
+
             var updated = await _exerciseServices.UpdateExerciseSheetLog(dto);
+
             if (updated == null) return NotFound();
 
-            return RedirectToAction(nameof(ClientExerciseLogs), new { clientId = dto.ClientId, exerciseId = dto.ExerciseId });
+            return RedirectToAction(nameof(ClientExerciseLogs),
+                new { clientId = dto.ClientId, exerciseId = dto.ExerciseId });
         }
+
 
 
         public async Task<IActionResult> Delete(int id)

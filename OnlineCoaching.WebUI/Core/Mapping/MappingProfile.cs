@@ -85,15 +85,25 @@ namespace OnlineCoaching.Web.Core.Mapping
             CreateMap<AssignFood, AssignFoodDto>().ReverseMap();
 
 
-            CreateMap<ExerciseSheetLog, CreateExerciseSheetDto>()
+            #region ExerciseSheetLog
+            CreateMap<ExerciseSheetLog, ExerciseSheetLogDto>()
                 .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.FullName : string.Empty))
-                .ForMember(dest => dest.ExerciseName, opt => opt.MapFrom(src => src.Exercise != null ? src.Exercise.Name : string.Empty))
-                .ReverseMap()
-                .ForMember(dest => dest.Client, opt => opt.Ignore()) 
+                .ForMember(dest => dest.ExerciseName, opt => opt.MapFrom(src => src.Exercise != null ? src.Exercise.Name : string.Empty));
+
+            CreateMap<ExerciseSheetLogDto, ExerciseSheetLog>()
+                .ForMember(dest => dest.Client, opt => opt.Ignore())
                 .ForMember(dest => dest.Exercise, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+
+            CreateMap<CreateExerciseSheetDto, ExerciseSheetLog>()
+                .ForMember(dest => dest.Client, opt => opt.Ignore())
+                .ForMember(dest => dest.Exercise, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+            #endregion
 
         }
     }

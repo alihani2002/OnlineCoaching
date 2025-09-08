@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Application.Services.AssignmentService;
 using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
@@ -10,6 +11,7 @@ using OnlineCoaching.WebUI.Models.RequestPackage;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize]
     public class ClientsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -50,11 +52,10 @@ namespace OnlineCoaching.WebUI.Controllers
 
             else
             {
-                // Normal user views their own profile
                 var userId = User.GetUserId();
                 if (string.IsNullOrEmpty(userId))
                 {
-                    return RedirectToAction("Login", "Account"); // not logged in
+                    return RedirectToAction("Login", "Account");
                 }
 
                 client = await _clientService.GetClientAsync(userId);
@@ -76,7 +77,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
             // Fetch assigned exercises and foods
             var assignedExercises = _unitOfWork.AssignExercises
-                .GetQueryable().Include(a => a.Exercise)
+                .GetQueryable().Include(a => a.Exercise).ThenInclude(m=>m!.Muscle)
                 .Where(a => a.ClientId == client.Id)
                 .ToList();
 
@@ -108,7 +109,9 @@ namespace OnlineCoaching.WebUI.Controllers
                     Sets = a.Sets,
                     Reps = a.Reps,
                     Notes = a.Notes,
-                    DayOfWeek = a.DayOfWeek
+                    DayOfWeek = a.DayOfWeek ,
+                    MuscleName = a.Exercise?.Muscle?.Name ,
+                    ImageUrl = a.Exercise?.ImageUrl 
                 }).ToList(),
 
                 AssignedFoods = assignedFoods.Select(f => new AssignFoodDto
@@ -132,12 +135,14 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(vm);
         }
 
+
         // Clients/CompleteQuestion
         public IActionResult CompleteQuestion()
         {
             var questions = _questionServices.GetQuestions();
             return View(questions);
         }
+
 
         // POST: Clients/CompleteQuestion
         [HttpPost]
@@ -213,6 +218,7 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
+
         // Clients/CompleteProfileData
 
         [HttpPost]
@@ -223,6 +229,7 @@ namespace OnlineCoaching.WebUI.Controllers
             await _clientService.CompleteClientData(client, userId);
             return RedirectToAction("Index", "Home");
         }
+
 
 
 
@@ -244,6 +251,8 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(client);
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleDelete(int id)
@@ -259,6 +268,8 @@ namespace OnlineCoaching.WebUI.Controllers
             TempData["Success"] = "Client status updated successfully.";
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool ClientExists(int id)
         {
@@ -356,7 +367,7 @@ namespace OnlineCoaching.WebUI.Controllers
             var model = new AssignedListViewModel
             {
                 ClientId = clientId,
-                RequestId = requestId,   // ✅ ensure it’s set
+                RequestId = requestId, 
                 AssignedExercises = assignedExercises,
                 AssignedFoods = assignedFoods,
                 AvailableExercises = _unitOfWork.Exercises.GetAll().ToList(),

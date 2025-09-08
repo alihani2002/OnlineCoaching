@@ -1,41 +1,95 @@
-﻿@model IEnumerable<ExerciseSheetLog>
+﻿@using OnlineCoaching.Domain.Dtos.ExerciseSheet
+@model IEnumerable<ExerciseSheetLogDto>
 
 @{
     ViewData["Title"] = "Exercise Logs";
 }
 
-<h2>Exercise Logs</h2>
+<div class="container my-4">
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Client</th>
-            <th>Exercise</th>
-            <th>1st Set</th>
-            <th>2nd Set</th>
-            <th>3rd Set</th>
-            <th>4th Set</th>
-            <th>5th Set</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var log in Model)
-        {
-            <tr>
-                <td>@log.Client.FullName</td>
-                <td>@log.Exercise.Name</td>
-                <td>@log.FirstSet</td>
-                <td>@log.SecondSet</td>
-                <td>@log.ThirdSet</td>
-                <td>@log.FourthSet</td>
-                <td>@log.FifthSet</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@log.Id">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@log.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@log.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info shadow-sm p-4 rounded">
+            No exercise logs found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped shadow-sm excel-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Client</th>
+                        <th>Exercise</th>
+                        <th>Set 1</th>
+                        <th>Set 2</th>
+                        <th>Set 3</th>
+                        <th>Set 4</th>
+                        <th>Set 5</th>
+                        <th>Created on</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td>@log.ClientName</td>
+                            <td>@log.ExerciseName</td>
+                            <td>@($"{log.FirstSet} kg")</td>
+                            <td>@($"{log.SecondSet} kg")</td>
+                            <td>@($"{log.ThirdSet} kg")</td>
+                            <td>@($"{log.FourthSet} kg")</td>
+                            <td>@($"{log.FifthSet} kg")</td>
+                            <td>@log.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@log.Id"
+                                   class="btn btn-sm btn-info shadow-sm me-1" title="View Details">
+                                    🔍
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@log.Id"
+                                   class="btn btn-sm btn-warning shadow-sm me-1" title="Edit">
+                                    ✏️
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@log.Id"
+                                   class="btn btn-sm btn-danger shadow-sm" title="Delete">
+                                    🗑
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<style>
+    /* Excel-like style */
+    .excel-table th, .excel-table td {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .excel-table th {
+        background-color: #ff1313 !important;
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .excel-table td {
+        background-color: #f8f9fa;
+        font-weight: 500;
+    }
+
+    .excel-table tr:nth-child(even) td {
+        background-color: #e9ecef;
+    }
+
+    .excel-table tr:hover td {
+        background-color: #d6e9f8;
+    }
+</style>

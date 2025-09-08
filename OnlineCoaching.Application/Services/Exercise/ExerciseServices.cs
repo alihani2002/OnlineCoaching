@@ -71,7 +71,7 @@ namespace OnlineCoaching.Application.Services
             return true;
         }
 
-        public async Task<IEnumerable<ExerciseSheetLog>> GetAllLogs()
+        public async Task<IEnumerable<ExerciseSheetLogDto>> GetAllLogs()
         {
             var logs = await _unitOfWork.ExerciseSheetLogs.GetQueryable()
                 .Include(c => c.Client)
@@ -79,7 +79,7 @@ namespace OnlineCoaching.Application.Services
                 .OrderByDescending(l => l.CreatedOn)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<ExerciseSheetLog>>(logs);
+            return _mapper.Map<IEnumerable<ExerciseSheetLogDto>>(logs);
         }
 
         public async Task<IEnumerable<ExerciseSheetLog>> GetLogsByClientAndExercise(int clientId, int exerciseId)
@@ -101,25 +101,26 @@ namespace OnlineCoaching.Application.Services
 
             var log = _mapper.Map<ExerciseSheetLog>(dto);
             log.CreatedOn = DateTime.Now;
-
             var addedLog = await _unitOfWork.ExerciseSheetLogs.AddAsync(log);
             _unitOfWork.Complete();
 
             return _mapper.Map<ExerciseSheetLog>(addedLog);
         }
 
-        public async Task<ExerciseSheetLog?> UpdateExerciseSheetLog(ExerciseSheetLog dto)
+        public async Task<ExerciseSheetLogDto?> UpdateExerciseSheetLog(ExerciseSheetLogDto dto)
         {
             var existingLog = await _unitOfWork.ExerciseSheetLogs.GetByIdAsync(dto.Id);
             if (existingLog == null || existingLog.IsDeleted) return null;
 
             _mapper.Map(dto, existingLog);
             existingLog.LastUpdatedOn = DateTime.Now;
+            existingLog.ClientId = dto.ClientId;
+            existingLog.ExerciseId = dto.ExerciseId;
 
             _unitOfWork.ExerciseSheetLogs.Update(existingLog);
             _unitOfWork.Complete();
 
-            return _mapper.Map<ExerciseSheetLog>(existingLog);
+            return _mapper.Map<ExerciseSheetLogDto>(existingLog);
         }
 
         public async Task<bool> DeletedLogs(int id)

@@ -11,10 +11,10 @@ namespace OnlineCoaching.Application.Services
             Task<bool> DeleteExerciseAsync(int id);
 
 
-            Task<IEnumerable<ExerciseSheetLog>> GetAllLogs();
+            Task<IEnumerable<ExerciseSheetLogDto>> GetAllLogs();
             Task<IEnumerable<ExerciseSheetLog>> GetLogsByClientAndExercise(int clientId, int exerciseId);
             Task<ExerciseSheetLog> AddExerciseSheetLog(CreateExerciseSheetDto dto);
-            Task<ExerciseSheetLog?> UpdateExerciseSheetLog(ExerciseSheetLog dto);
+            Task<ExerciseSheetLogDto?> UpdateExerciseSheetLog(ExerciseSheetLogDto dto);
             Task<bool> DeletedLogs(int id);
     }
 }

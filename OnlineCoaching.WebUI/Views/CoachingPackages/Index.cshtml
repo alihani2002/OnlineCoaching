@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.CoachingPackageDto>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Coaching Packages";
@@ -10,7 +12,11 @@
             <div class="col-xl-12">
                 <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
                     <h2>Pricing</h2>
-                    <a asp-action="Create" class="btn btn-success">Create New Package</a>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole(AppRoles.Admin))
+                    {
+                        <a asp-action="Create" class="btn btn-success">Create New Package</a>
+
+                    }
 
                 </div>
             </div>

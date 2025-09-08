@@ -87,6 +87,7 @@
 
     h5 {
         margin: 1rem 0 1rem 0; /* top & bottom spacing */
+        color : white ;
     }
 
     .btn-custom {
@@ -260,6 +261,7 @@
     };
 
     // Serialize server-side data to JS
+
     const assignedExercises = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedExercises))
     const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods)) 
 
@@ -272,36 +274,53 @@
         }, {});
     }
 
-     // --- Exercises as cards ---
+       // --- Exercises as cards ---
     const exercisesByDay = groupBy(assignedExercises, e => e.DayOfWeek);
     const exerciseContainer = document.getElementById('exercise-container');
     exerciseContainer.innerHTML = '';
+
     for (const [day, exercises] of Object.entries(exercisesByDay)) {
         const dayDiv = document.createElement('div');
         dayDiv.className = 'custom-card mb-4';
         dayDiv.innerHTML = `<h4 class="text-warning mb-3">🏋 ${dayNames[day] ?? day} - Exercises</h4>`;
 
-        exercises.forEach(e => {
-            const card = `
-                <div class="exercise-card">
-                    <div class="exercise-details">
-                        <span><strong>${e.NameOfExercise ?? ''}</strong></span>
-                        <span>Sets: ${e.Sets ?? ''}</span>
-                        <span>Reps: ${e.Reps ?? ''}</span>
-                        <span>Notes: ${e.Notes ?? ''}</span>
+        // ✅ جروبنج حسب العضلة
+        const exercisesByMuscle = groupBy(exercises, e => e.MuscleName ?? "Other");
+
+        for (const [muscle, muscleExercises] of Object.entries(exercisesByMuscle)) {
+            let muscleBlock = `<h5 class="text-white mb-3">💪 ${muscle}</h5>`;
+
+            muscleExercises.forEach(e => {
+                muscleBlock += `
+                    <div class="exercise-card">
+                        <div class="exercise-details">
+                            <span><strong>${e.NameOfExercise ?? ''}</strong></span>
+                            <span>Sets: ${e.Sets ?? ''}</span>
+                            <span>Reps: ${e.Reps ?? ''}</span>
+                            <span>Notes: ${e.Notes ?? ''}</span>
+                             ${e.ImageUrl
+                            ? `<img src="${e.ImageUrl}" alt="${e.NameOfExercise}" width="80" height="80" style="object-fit:cover;border-radius:8px;" />`
+                            : `<span class="text-muted">No Image</span>`}
+                        </div>
+
+                        
+                        <img src="/assets/img/logo/youtube.png" alt="YouTube Logo">
+                        <div class="d-flex flex-column ms-3">
+                            <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id"
+                               class="btn btn-sm btn-warning mt-2">➕ Log</a>
+                            <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id"
+                               class="btn btn-sm btn-info mt-2">📊 View Logs</a>
+                        </div>
                     </div>
-                    <img src="/assets/img/logo/youtube.png" alt="YouTube Logo"> <!-- ✅ logo on right -->
-                      <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" 
-               class="btn btn-sm btn-warning mt-2">➕ Log</a>
-               <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" 
-                   class="btn btn-sm btn-info">📊 View Logs</a>
-                </div>
-            `;
-            dayDiv.innerHTML += card;
-        });
+                `;
+            });
+
+            dayDiv.innerHTML += muscleBlock;
+        }
 
         exerciseContainer.appendChild(dayDiv);
     }
+
 
     // --- Foods ---
     const foodsByDay = groupBy(assignedFoods, f => f.DayOfWeek);

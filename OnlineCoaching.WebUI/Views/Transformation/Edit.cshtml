@@ -1,0 +1,72 @@
+﻿@model OnlineCoaching.Domain.Entities.Transformation
+
+@{
+    ViewData["Title"] = "Edit Transformation";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Edit Transformation</h2>
+
+    <form asp-action="Edit" enctype="multipart/form-data" method="post" class="row g-3">
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Client -->
+        <div class="col-md-6">
+            <label asp-for="ClientId" class="form-label">Client</label>
+            <select asp-for="ClientId" class="form-select"
+                    asp-items="@(ViewBag.Clients != null
+                                                        ? new SelectList(ViewBag.Clients, "Id", "FullName", Model.ClientId)
+                                                        : new SelectList(new List<OnlineCoaching.Domain.Entities.Client>()))">
+                <option value="">-- Select Client --</option>
+            </select>
+        </div>
+
+        <!-- Title -->
+        <div class="col-md-6">
+            <label asp-for="Titles" class="form-label">Title</label>
+            <input asp-for="Titles" class="form-control" />
+            <span asp-validation-for="Titles" class="text-danger"></span>
+        </div>
+
+        <!-- Notes -->
+        <div class="col-12">
+            <label asp-for="Notes" class="form-label">Notes</label>
+            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+
+        <!-- Before Image -->
+        <div class="col-md-6">
+            <label class="form-label">Before Image</label>
+            <input type="file" name="beforeImage" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.BeforeImageUrl))
+            {
+                <div class="mt-2">
+                    <img src="@Model.BeforeImageUrl" class="img-thumbnail" style="max-width:150px;" />
+                </div>
+            }
+        </div>
+
+        <!-- After Image -->
+        <div class="col-md-6">
+            <label class="form-label">After Image</label>
+            <input type="file" name="afterImage" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.AfterImageUrl))
+            {
+                <div class="mt-2">
+                    <img src="@Model.AfterImageUrl" class="img-thumbnail" style="max-width:150px;" />
+                </div>
+            }
+        </div>
+
+        <!-- Actions -->
+        <div class="col-12 d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">💾 Save</button>
+            <a asp-action="Index" class="btn btn-secondary">⬅ Back to List</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

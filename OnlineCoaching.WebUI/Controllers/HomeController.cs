@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineCoaching.Application.Services;
 using OnlineCoaching.WebUI.Models;
 using System.Diagnostics;
 
@@ -9,11 +9,19 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
-
-    public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
+    private readonly IQuestionServices _questionServices;
+    private readonly ICoachingPackageRequestService _coachingPackageRequestService;
+    private readonly IClientService _clientService;
+    public HomeController(ILogger<HomeController> logger,
+        UserManager<ApplicationUser> userManager,
+        ICoachingPackageRequestService coachingPackageRequestService 
+        , IQuestionServices questionServices , IClientService clientService)
     {
         _logger = logger;
         _userManager = userManager;
+        _coachingPackageRequestService = coachingPackageRequestService;
+        _questionServices = questionServices;
+        _clientService = clientService;
     }
 
     public async Task<IActionResult> Index()
@@ -22,6 +30,27 @@ public class HomeController : Controller
         if (user != null && !user.IsCompelteProfile)
         {
             ViewBag.ShowProfilePopup = true;
+        }
+
+        if (user != null)
+        {
+            var client = await _clientService.GetClientAsync(user.Id);
+
+            if (client != null)
+            {
+                var existingRequest = _coachingPackageRequestService.GetActiveOrPendingRequest(client!.Id);
+                if (existingRequest != null)
+                {
+                    if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == Domain.Enums.ClientStatus.Active)
+                    {
+                        return RedirectToAction("CompleteQuestion", "Clients", new { id = existingRequest.Id });
+                    }
+                    else
+                    {
+                        return View();
+                    }
+                }
+            }
         }
         return View();
     }

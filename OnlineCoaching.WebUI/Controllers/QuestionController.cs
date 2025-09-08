@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
+    [Authorize]
     public class QuestionController : Controller
     {
             private readonly IQuestionServices _questionServices;
