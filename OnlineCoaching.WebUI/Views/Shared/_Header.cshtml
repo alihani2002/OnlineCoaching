@@ -42,7 +42,9 @@
                                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                                 <li><a asp-controller="Clients" asp-action="Profile">Profile</a></li>
                                 <li><a asp-controller="CoachingPackages" asp-action="GetCoachingPackage">CoachPackages</a></li>
-                                    <li><a asp-controller="Transformation" asp-action="BeforeAndAfter">Transformations</a></li>
+                                <li><a asp-controller="Transformation" asp-action="BeforeAndAfter">Transformations</a></li>
+                                    <li><a asp-controller="Food" asp-action="Compare">Compare</a></li>
+
                             </ul>
                         </nav>
                     </div>
@@ -95,6 +97,7 @@ else if (User.IsInRole(AppRoles.Coach))
                             <nav>
                                 <ul id="navigation">
                                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+
                                     <li><a asp-controller="Clients" asp-action="Index" class="nav-link link-dark">Users</a></li>
                                     <li><a asp-controller="CoachingPackages" asp-action="Index">CoachPackages</a></li>
                                 </ul>
@@ -152,7 +155,7 @@ else
                                     <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                                     <li><a asp-controller="CoachingPackages" asp-action="Index">CoachPackages</a></li>
                                     <li><a asp-controller="Transformation" asp-action="BeforeAndAfter">Transformations</a></li>
-                                    <li><a asp-controller="Courses" asp-action="Index"> All Courses</a></li>
+                                    <li><a asp-controller="Food" asp-action="Compare">Compare</a></li>
                                     <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
                                 </ul>
                             </nav>

@@ -1,0 +1,116 @@
+﻿@model OnlineCoaching.WebUI.Core.ViewModels.Food.FoodCompareViewModel
+@{
+    ViewData["Title"] = "Food Protein Converter";
+}
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-dark text-white text-center">
+                    <h3 class="mb-0 text-white">
+                        <i class="bi bi-egg-fried me-2"></i> Food Protein Converter
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Compare" method="post">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="SelectedFoodId" class="form-label fw-bold">Food You Ate</label>
+                                <select id="SelectedFoodId" name="SelectedFoodId" class="form-select"></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Grams" class="form-label fw-bold">Grams</label>
+                                <input asp-for="Grams" type="number" class="form-control" min="1" />
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label for="TargetFoodId" class="form-label fw-bold">Food You Want Instead</label>
+                                <select id="TargetFoodId" name="TargetFoodId" class="form-select"></select>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg fw-bold">
+                                <i class="bi bi-arrow-left-right me-2"></i> Convert
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Result Section *@
+    @if (Model.SelectedFood != null && Model.TargetFood != null)
+    {
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <div class="alert alert-info shadow-sm p-4 rounded-3">
+                    <h4 class="fw-bold text-center mb-3">🍽️ Conversion Result</h4>
+                    <p class="fs-5 text-center">
+                        <strong>@Model.RequiredTargetGrams.ToString("0.0") g</strong> of
+                        <span class="text-success">@Model.TargetFood.Name</span>
+                    </p>
+                    <p class="text-center">
+                        Both provide <strong>
+                            @((Model.SelectedFood.Protein / (double)Model.SelectedFood.Gram) * Model.Grams) g
+                        </strong> protein.
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#SelectedFoodId').select2({
+                placeholder: "-- Search Food --",
+                allowClear: true,
+                width: '100%',
+                ajax: {
+                    url: '/Food/Search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { term: params.term };
+                    },
+                    processResults: function (data) {
+                        return { results: data };
+                    }
+                }
+            });
+
+            $('#TargetFoodId').select2({
+                placeholder: "-- Search Replacement --",
+                allowClear: true,
+                width: '100%',
+                ajax: {
+                    url: '/Food/Search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { term: params.term };
+                    },
+                    processResults: function (data) {
+                        return { results: data };
+                    }
+                }
+            });
+        });
+    </script>
+}
+<style>
+    div.nice-select.form-select{
+        display : none;
+    }
+   
+</style>
+               

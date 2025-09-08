@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
+using OnlineCoaching.WebUI.Core.ViewModels.Food;
 
 
 namespace OnlineCoaching.WebUI.Controllers
@@ -18,9 +19,60 @@ namespace OnlineCoaching.WebUI.Controllers
 
         public IActionResult Index()
         {
-            var foods =  _foodService.GetFoodsAsync();
+            var foods = _foodService.GetFoodsAsync();
             return View(foods);
         }
+
+        [HttpGet]
+        public IActionResult Compare()
+        {
+            var foods = _foodService.GetFoodsAsync();
+
+            var model = new FoodCompareViewModel
+            {
+                AllFoods = foods.ToList(),
+                Grams = 100 // default
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Compare(FoodCompareViewModel model)
+        {
+            if (model.SelectedFoodId <= 0 || model.TargetFoodId <= 0 || model.Grams <= 0)
+            {
+                ModelState.AddModelError("", "Please select foods and enter grams.");
+                model.AllFoods = _foodService.GetFoodsAsync().ToList();
+                return View(model);
+            }
+
+            var selectedFood = await _foodService.GetFoodByIdAsync(model.SelectedFoodId);
+            var targetFood = await _foodService.GetFoodByIdAsync(model.TargetFoodId);
+
+            if (selectedFood == null || targetFood == null)
+            {
+                ModelState.AddModelError("", "Food not found.");
+                model.AllFoods = _foodService.GetFoodsAsync().ToList();
+                return View(model);
+            }
+
+            // Protein in selected food (per entered grams)
+            var proteinSelected = (selectedFood.Protein / (double)selectedFood.Gram) * model.Grams;
+
+            // Required grams of target food to match protein
+            var proteinPerGramTarget = targetFood.Protein / (double)targetFood.Gram;
+            var requiredGrams = proteinSelected / proteinPerGramTarget;
+
+            model.SelectedFood = selectedFood;
+            model.TargetFood = targetFood;
+            model.RequiredTargetGrams = requiredGrams;
+            model.AllFoods = _foodService.GetFoodsAsync().ToList();
+
+            return View(model);
+        }
+
 
         public async Task<IActionResult> Details(int id)
         {
@@ -78,6 +130,16 @@ namespace OnlineCoaching.WebUI.Controllers
         {
             _foodService.DeleteFood(id);
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Search(string term)
+        {
+            var foods = _foodService.GetFoodsAsync()
+                .Where(f => string.IsNullOrEmpty(term) || f.Name!.Contains(term))
+                .Select(f => new { id = f.Id, text = f.Name })
+                .Take(20) // limit results
+                .ToList();
+
+            return Json(foods);
         }
     }
 }

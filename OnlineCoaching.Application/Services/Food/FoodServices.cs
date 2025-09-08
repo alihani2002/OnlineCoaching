@@ -11,6 +11,26 @@
             _mapper = mapper;
         }
 
+        public IEnumerable<FoodDto> GetFoodSubstitutes(int foodId, int grams)
+        {
+            var selectedFood = _unitOfWork.Foods.GetById(foodId);
+            if (selectedFood == null || selectedFood.IsDeleted) return Enumerable.Empty<FoodDto>();
+
+            // calculate protein for given grams
+            double selectedProtein = (selectedFood.Protein / (double)selectedFood.Gram) * grams;
+
+            var foods = _unitOfWork.Foods.GetAll().Where(f => !f.IsDeleted && f.Id != foodId);
+
+            // find foods that have nearly same protein content for same grams
+            var substitutes = foods.Where(f =>
+            {
+                double proteinForGrams = (f.Protein / (double)f.Gram) * grams;
+                return Math.Abs(proteinForGrams - selectedProtein) <= 1; 
+            });
+
+            return _mapper.Map<IEnumerable<FoodDto>>(substitutes);
+        }
+
         public IEnumerable<FoodDto> GetFoodsAsync()
         {
             var foods =  _unitOfWork.Foods.GetAll().Where(f=>f.IsDeleted is false);
