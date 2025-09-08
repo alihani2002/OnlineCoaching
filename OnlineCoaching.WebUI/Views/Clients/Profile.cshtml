@@ -3,7 +3,7 @@
 @model ClientDashboardViewModel
 
 @{
-    ViewData["Title"] =  @Model.Client.FullName + " Profile"  ;
+    ViewData["Title"] = @Model.Client.FullName + " Profile";
 }
 
 <style>
@@ -11,6 +11,12 @@
         background-color: #0b0b0b;
         color: #ffffff;
         font-family: Arial, sans-serif;
+    }
+
+    /* ---------- Shared Styles ---------- */
+    h3, h4, h5 {
+        font-weight: bold;
+        color: #ffffff;
     }
 
     .custom-card {
@@ -22,15 +28,34 @@
         border: 1px solid #444;
     }
 
-    h3, h4, h5 {
+    .day-header {
+        background-color: #000;
+        color: #ffc107;
+        padding: 10px 15px;
+        border-radius: 6px;
+        font-size: 1.2rem;
         font-weight: bold;
-        color: #ffffff;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .muscle-header {
+        background-color: #b30000;
+        color: #fff;
+        padding: 8px 12px;
+        margin: 1.5rem 0 1rem 0;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: bold;
     }
 
     .table-custom {
         width: 100%;
         border-collapse: collapse;
-        margin: 1.5rem 0; /* margin between tables */
+        margin: 1.5rem 0;
     }
 
         .table-custom th,
@@ -55,41 +80,82 @@
         .table-custom tr:hover {
             background-color: #333;
         }
-    /* Exercise card style */
+
+    /* ---------- Exercise Cards ---------- */
     .exercise-card {
+        display: flex;
+        background-color: #121212;
         border: 1px solid #fff;
         border-radius: 0.5rem;
-        padding: 1rem;
-        margin-bottom: 5.0rem;
-        display: flex;
-        justify-content: space-between; /* 🔥 logo goes to the right */
-        align-items: center;
-        background-color: #121212;
+        margin-bottom: 2rem;
+        overflow: hidden;
+        align-items: stretch;
+        max-height: 250px;
     }
 
-        .exercise-card img {
-            width: 40px;
-            height: 40px;
+    .exercise-image {
+        flex: 1;
+        max-width: 50%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        position: relative;
+    }
+
+        .exercise-image img.main-img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+            display: block;
         }
+
+        .exercise-image img.youtube-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+
+            .exercise-image img.youtube-overlay:hover {
+                opacity: 1;
+            }
 
     .exercise-details {
+        flex: 1;
+        padding: 1rem;
         display: flex;
         flex-direction: column;
+        gap: 6px;
+        color: #fff;
     }
 
-        .exercise-details span {
-            margin-bottom: 4px;
+    .exercise-actions {
+        margin-top: 0.5rem;
+    }
+
+        .exercise-actions .btn {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
         }
+
+    /* ---------- Meals ---------- */
     .meal-block {
-        margin-bottom: 2rem;
-        margin-top : 2rem;/* 🔥 margin between meals */
+        margin: 2rem 0;
     }
 
     h5 {
-        margin: 1rem 0 1rem 0; /* top & bottom spacing */
-        color : white ;
+        margin: 1rem 0;
     }
 
+    /* ---------- Buttons ---------- */
     .btn-custom {
         padding: 10px 20px;
         font-weight: bold;
@@ -114,6 +180,7 @@
             opacity: 0.85;
         }
 
+    /* ---------- Responsive ---------- */
     @@media (max-width: 576px) {
         .custom-card {
             padding: 1rem;
@@ -130,31 +197,17 @@
     }
 </style>
 
+<!-- ================== PROFILE SECTION ================== -->
 <div class="container py-5">
-    <!-- Profile Card -->
     @if (Model != null)
     {
-<!-- Header -->
-    
         <div class="custom-card">
             <h3 class="text-center text-danger mb-4">👤 Your Profile</h3>
             <table class="table-custom">
-                <tr>
-                    <th>Full Name</th>
-                    <td>@Model.Client.FullName</td>
-                </tr>
-                <tr>
-                    <th>Birth Date</th>
-                    <td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td>
-                </tr>
-                <tr>
-                    <th>Phone Number</th>
-                    <td>@Model.Client.PhoneNumber</td>
-                </tr>
-                <tr>
-                    <th>Address</th>
-                    <td>@Model.Client.Address</td>
-                </tr>
+                <tr><th>Full Name</th><td>@Model.Client.FullName</td></tr>
+                <tr><th>Birth Date</th><td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td></tr>
+                <tr><th>Phone Number</th><td>@Model.Client.PhoneNumber</td></tr>
+                <tr><th>Address</th><td>@Model.Client.Address</td></tr>
             </table>
 
             @if (User.IsInRole("Admin") || User.IsInRole("Coach"))
@@ -184,18 +237,29 @@
     }
 </div>
 
-<!-- Questions Section -->
+<!-- ================== QUESTIONS SECTION ================== -->
+
 @if (Model!.Questions.Any())
 {
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Answerd Question</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="custom-card">
             <h3 class="text-center text-warning mb-4">📝 Your Answers</h3>
             <table class="table-custom">
                 <thead>
-                    <tr>
-                        <th>Question</th>
-                        <th>Your Answer</th>
-                    </tr>
+                    <tr><th>Question</th><th>Your Answer</th></tr>
                 </thead>
                 <tbody>
                     @foreach (var question in Model.Questions)
@@ -210,12 +274,11 @@
                                 }
                                 else if (question.Type == QuestionType.SingleChoice)
                                 {
-                                    var selected = answer?.SelectedOptions.FirstOrDefault()?.Option?.Text;
-                                    @(selected ?? "No option selected")
+                                    @(answer?.SelectedOptions.FirstOrDefault()?.Option?.Text ?? "No option selected")
                                 }
                                 else if (question.Type == QuestionType.MultipleChoice)
                                 {
-                                    if (answer?.SelectedOptions != null && answer.SelectedOptions.Any())
+                                    if (answer?.SelectedOptions?.Any() == true)
                                     {
                                         <ul>
                                             @foreach (var opt in answer.SelectedOptions)
@@ -229,7 +292,6 @@
                                         <span class="text-muted">No options selected</span>
                                     }
                                 }
-
                             </td>
                         </tr>
                     }
@@ -239,31 +301,48 @@
     </div>
 }
 
-<!-- Containers for Dynamic Exercises and Foods -->
+<!-- ================== EXERCISES & FOODS ================== -->
 <div class="container">
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Exercises</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="exercise-container"></div>
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Nutrition Plan</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="food-container"></div>
 </div>
 
-<!-- Scripts for Dynamic Grouping -->
+<!-- ================== SCRIPTS ================== -->
 <script>
     const dayNames = {
-        1: "First Day",
-        2: "Second Day",
-        3: "Third Day",
-        4: "Fourth Day",
-        5: "Fifth Day",
-        6: "Sixth Day",
-        7: "Seventh Day" ,
-        8: "1,2,3,4,5,6 & 7" ,
-        9: "1,2,3" ,
-        10: "4,5,6,7"
+        1: "First Day", 2: "Second Day", 3: "Third Day", 4: "Fourth Day",
+        5: "Fifth Day", 6: "Sixth Day", 7: "Seventh Day",
+        8: "1,2,3,4,5,6 & 7", 9: "1,2,3", 10: "4,5,6,7"
     };
 
-    // Serialize server-side data to JS
-
     const assignedExercises = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedExercises))
-    const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods)) 
+    const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods))
 
     function groupBy(array, keyFunc) {
         return array.reduce((result, item) => {
@@ -274,62 +353,62 @@
         }, {});
     }
 
-       // --- Exercises as cards ---
-    const exercisesByDay = groupBy(assignedExercises, e => e.DayOfWeek);
-    const exerciseContainer = document.getElementById('exercise-container');
-    exerciseContainer.innerHTML = '';
+    /* ---------- Exercises ---------- */
+      const exercisesByDay = groupBy(assignedExercises, e => e.DayOfWeek);
+      const exerciseContainer = document.getElementById('exercise-container');
 
-    for (const [day, exercises] of Object.entries(exercisesByDay)) {
-        const dayDiv = document.createElement('div');
-        dayDiv.className = 'custom-card mb-4';
-        dayDiv.innerHTML = `<h4 class="text-warning mb-3">🏋 ${dayNames[day] ?? day} - Exercises</h4>`;
+      for (const [day, exercises] of Object.entries(exercisesByDay)) {
+          const dayDiv = document.createElement('div');
+          dayDiv.className = 'custom-card mb-4';
+          dayDiv.innerHTML = `
+              <div class="day-header">
+                  <span>🏋 ${dayNames[day] ?? day}</span>
+                  <span>Exercises</span>
+              </div>`;
 
-        // ✅ جروبنج حسب العضلة
-        const exercisesByMuscle = groupBy(exercises, e => e.MuscleName ?? "Other");
+          const exercisesByMuscle = groupBy(exercises, e => e.MuscleName ?? "Other");
+          for (const [muscle, muscleExercises] of Object.entries(exercisesByMuscle)) {
+              let muscleBlock = `<div class="muscle-header">💪 ${muscle}</div>`;
+              muscleExercises.forEach(e => {
+                  muscleBlock += `
+                      <div class="exercise-card">
+                          <div class="exercise-details">
+                              <div><strong>${e.NameOfExercise ?? ''}</strong></div>
+                              <div>Sets: ${e.Sets ?? ''}</div>
+                              <div>Reps: ${e.Reps ?? ''}</div>
+                              <div>Notes: ${e.Notes ?? ''}</div>
+                              <div class="exercise-actions">
+                                  <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" class="btn btn-warning btn-sm">➕ Log</a>
+                                  <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" class="btn btn-info btn-sm">📊 Logs</a>
+                              </div>
+                          </div>
+                          <div class="exercise-image">
+                              ${e.ImageUrl
+                                  ? `<a href="${e.VideoUrl ?? '#'}" target="_blank">
+                                         <img src="${e.ImageUrl}" class="main-img" alt="${e.NameOfExercise}" />
+                                         <img src="/assets/img/logo/youtube.png" class="youtube-overlay" alt="YouTube" />
+                                     </a>`
+                                  : `<span class="text-muted p-3">No Image</span>`}
+                          </div>
+                      </div>`;
+              });
+              dayDiv.innerHTML += muscleBlock;
+          }
+          exerciseContainer.appendChild(dayDiv);
+      }
 
-        for (const [muscle, muscleExercises] of Object.entries(exercisesByMuscle)) {
-            let muscleBlock = `<h5 class="text-white mb-3">💪 ${muscle}</h5>`;
-
-            muscleExercises.forEach(e => {
-                muscleBlock += `
-                    <div class="exercise-card">
-                        <div class="exercise-details">
-                            <span><strong>${e.NameOfExercise ?? ''}</strong></span>
-                            <span>Sets: ${e.Sets ?? ''}</span>
-                            <span>Reps: ${e.Reps ?? ''}</span>
-                            <span>Notes: ${e.Notes ?? ''}</span>
-                             ${e.ImageUrl
-                            ? `<img src="${e.ImageUrl}" alt="${e.NameOfExercise}" width="80" height="80" style="object-fit:cover;border-radius:8px;" />`
-                            : `<span class="text-muted">No Image</span>`}
-                        </div>
-
-                        
-                        <img src="/assets/img/logo/youtube.png" alt="YouTube Logo">
-                        <div class="d-flex flex-column ms-3">
-                            <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id"
-                               class="btn btn-sm btn-warning mt-2">➕ Log</a>
-                            <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id"
-                               class="btn btn-sm btn-info mt-2">📊 View Logs</a>
-                        </div>
-                    </div>
-                `;
-            });
-
-            dayDiv.innerHTML += muscleBlock;
-        }
-
-        exerciseContainer.appendChild(dayDiv);
-    }
-
-
-    // --- Foods ---
+    /* ---------- Foods ---------- */
     const foodsByDay = groupBy(assignedFoods, f => f.DayOfWeek);
     const foodContainer = document.getElementById('food-container');
-    foodContainer.innerHTML = '';
+
     for (const [day, foods] of Object.entries(foodsByDay)) {
         const dayDiv = document.createElement('div');
         dayDiv.className = 'custom-card mb-4';
-        dayDiv.innerHTML = `<h4 class="text-warning mb-3">🥗 ${dayNames[day] ?? day} - Nutrition Plan</h4>`;
+        dayDiv.innerHTML = `
+            <div class="day-header">
+                <span>🥗 ${dayNames[day] ?? day}</span>
+                <span>Nutrition Plan</span>
+            </div>`;
 
         const foodsByMeal = groupBy(foods, f => f.MealNumber);
         for (const [mealNumber, mealFoods] of Object.entries(foodsByMeal)) {
@@ -337,29 +416,21 @@
                 <h5>Meal ${mealNumber}</h5>
                 <table class="table-custom mb-3">
                     <thead>
-                        <tr>
-                             <th>Food</th>
-                            <th>Quantity (g)</th>
-                            <th>Servings</th>
-                            <th>Notes</th>
-                            <th>Day</th>
-                            <th>Meal</th>
-                        </tr>
+                        <tr><th>Food</th><th>Quantity (g)</th><th>Servings</th><th>Notes</th></tr>
                     </thead>
                     <tbody>`;
             mealFoods.forEach(f => {
                 mealHtml += `<tr>
-                   <td>${f.FoodName ?? ''}</td>
+                    <td>${f.FoodName ?? ''}</td>
                     <td>${f.Quantity ?? ''} g</td>
                     <td>${f.NumberOfServings ?? ''} serving(s)</td>
                     <td>${f.Notes ?? ''}</td>
-                    <td>${f.DayOfWeekName ?? ''}</td>
-                    <td>${f.MealNumberName ?? ''}</td>
                 </tr>`;
             });
             mealHtml += `</tbody></table></div>`;
             dayDiv.innerHTML += mealHtml;
         }
         foodContainer.appendChild(dayDiv);
+    
     }
 </script>

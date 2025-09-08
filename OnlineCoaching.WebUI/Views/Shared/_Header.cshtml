@@ -10,7 +10,8 @@
         font-size: 14px;
     }
 
-    /* Fix for mobile (white bg => dark text) */
+
+
     @@media (max-width: 991px) {
         .username-text
     {
@@ -23,13 +24,14 @@
     <div class="header-area header-transparent">
         <div class="main-header header-sticky">
             <div class="container-fluid">
+                <div class="logo">
+                    <a asp-controller="Home" asp-action="Index" class="logo-text mt-3">
+                        BadrReda For OnlineCoach
+                    </a>
+                </div>
                 <div class="menu-wrapper d-flex align-items-center justify-content-between">
                     <!-- Logo -->
-                    <div class="logo">
-                        <a asp-controller="Home" asp-action="Index" class="logo-text">
-                            BadrReda For OnlineCoach
-                        </a>
-                    </div>
+                  
 
                     <!-- Main-menu -->
                     <div class="main-menu  d-none d-lg-block">
