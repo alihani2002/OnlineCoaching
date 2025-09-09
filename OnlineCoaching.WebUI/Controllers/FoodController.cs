@@ -16,7 +16,7 @@ namespace OnlineCoaching.WebUI.Controllers
         {
             _foodService = foodService;
         }
-
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult Index()
         {
             var foods = _foodService.GetFoodsAsync();
@@ -31,7 +31,7 @@ namespace OnlineCoaching.WebUI.Controllers
             var model = new FoodCompareViewModel
             {
                 AllFoods = foods.ToList(),
-                Grams = 100 // default
+                Grams = 100 
             };
 
             return View(model);
@@ -73,7 +73,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Details(int id)
         {
             var food = await _foodService.GetFoodByIdAsync(id);
@@ -88,6 +88,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Create(Food model)
         {
             if (ModelState.IsValid)
@@ -98,6 +99,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Edit(int id)
         {
             var food = await _foodService.GetFoodByIdAsync(id);
@@ -107,6 +109,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult Edit(FoodDto model)
         {
             if (ModelState.IsValid)
@@ -117,6 +120,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             var food = await _foodService.GetFoodByIdAsync(id);
@@ -126,6 +130,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult DeleteConfirmed(int id)
         {
             _foodService.DeleteFood(id);

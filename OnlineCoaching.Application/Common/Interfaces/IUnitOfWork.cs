@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Entities.Foods;
-
-namespace OnlineCoaching.Application.Common.Interfaces
+﻿namespace OnlineCoaching.Application.Common.Interfaces
 {
     public interface IUnitOfWork
     {

@@ -1,4 +1,4 @@
-﻿using OnlineCoaching.Domain.Entities.Foods;
+﻿using OnlineCoaching.Domain.Entities;
 
 namespace OnlineCoaching.Domain.Entities
 {

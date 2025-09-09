@@ -1,4 +1,4 @@
-﻿namespace OnlineCoaching.Domain.Enums.DayOfWeek
+﻿namespace OnlineCoaching.Domain.Enums
 {
     public enum DayOfWeekEnum
     {

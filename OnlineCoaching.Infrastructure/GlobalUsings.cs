@@ -6,3 +6,4 @@ global using OnlineCoaching.Infrastructure.Persistence;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using OnlineCoaching.Domain.Entities;
 global using System.Reflection;
+global using OnlineCoaching.Domain.Enums;

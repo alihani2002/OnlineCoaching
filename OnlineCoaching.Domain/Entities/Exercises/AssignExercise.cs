@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Enums.DayOfWeek;
-
-namespace OnlineCoaching.Domain.Entities
+﻿namespace OnlineCoaching.Domain.Entities
 {
     public class AssignExercise : BaseEntity
     {

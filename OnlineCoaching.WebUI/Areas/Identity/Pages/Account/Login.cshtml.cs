@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
 {
+    [EnableRateLimiting("LoginPolicy")]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -55,6 +57,9 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        /// 
+        public bool IsLockedOut { get; set; }
+
         public class InputModel
         {
             /// <summary>
@@ -79,6 +84,8 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
             /// </summary>
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -137,8 +144,9 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
+                    IsLockedOut = true;
                     _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    return Page(); // Stay on the login page so Razor can show the alert
                 }
                 else
                 {

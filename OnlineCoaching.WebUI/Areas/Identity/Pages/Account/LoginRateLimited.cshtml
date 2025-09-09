@@ -1,0 +1,24 @@
+﻿@page
+@model OnlineCoaching.WebUI.Areas.Identity.Pages.Account.Manage.LoginRateLimitedModel
+@{
+    ViewData["Title"] = "Login Restricted";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // use your main layout
+}
+
+<section class="d-flex align-items-center justify-content-center" style="min-height:80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-7 col-md-9">
+                <div class="card shadow-lg p-5 border-0 text-center" style="border-radius:20px;">
+                    <h2 class="text-danger fw-bold">You can’t sign in right now</h2>
+                    <p class="text-muted">Too many failed login attempts.<br />Please try again later.</p>
+
+                    <a asp-controller="Home" asp-action="Index"
+                       class="btn btn-primary mt-3" style="border-radius:30px;">
+                        Go to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

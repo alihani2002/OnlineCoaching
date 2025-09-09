@@ -1,7 +1,6 @@
 ﻿using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
-using OnlineCoaching.Domain.Entities.Foods;
 
-namespace OnlineCoaching.Application.Services.AssignmentService
+namespace OnlineCoaching.Application.Services
 {
     public class AssignmentService : IAssignmentService
     {

@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Enums.DayOfWeek;
-
-namespace OnlineCoaching.Domain.Dtos.AssignmentCoaching
+﻿namespace OnlineCoaching.Domain.Dtos.AssignmentCoaching
 {
     public class AssignFoodDto :BaseEntity
     {

@@ -1,5 +1,4 @@
-﻿using OnlineCoaching.Domain.Enums.QuestionType;
-using System.Collections;
+﻿using OnlineCoaching.Domain.Enums;
 
 namespace OnlineCoaching.Application.Services
 {
@@ -146,11 +145,14 @@ namespace OnlineCoaching.Application.Services
             }
         }
 
+
         public async Task<bool> QuestionExists(int id) =>
             await _unitOfWork.Questions.GetQueryable().AnyAsync(e => e.Id == id);
 
+
         public async Task<bool> OptionExists(int id) =>
             await _unitOfWork.Options.GetQueryable().AnyAsync(e => e.Id == id);
+
 
         public IEnumerable<ClientAnswer> GetClientAnswer(int clientId)
         {
@@ -162,9 +164,5 @@ namespace OnlineCoaching.Application.Services
                 .Where(ca => ca.ClientId == clientId)
                 .ToList();
         }
-
-
     }
-
-
 }

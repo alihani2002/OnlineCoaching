@@ -1,4 +1,4 @@
-﻿@using OnlineCoaching.Domain.Enums.QuestionType
+﻿@using OnlineCoaching.Domain.Dtos.AssignmentCoaching
 @using OnlineCoaching.WebUI.Models.Clients
 @model ClientDashboardViewModel
 
@@ -6,196 +6,7 @@
     ViewData["Title"] = @Model.Client.FullName + " Profile";
 }
 
-<style>
-    body {
-        background-color: #0b0b0b;
-        color: #ffffff;
-        font-family: Arial, sans-serif;
-    }
-
-    /* ---------- Shared Styles ---------- */
-    h3, h4, h5 {
-        font-weight: bold;
-        color: #ffffff;
-    }
-
-    .custom-card {
-        background-color: #1a1a1a;
-        border-radius: 0.75rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        border: 1px solid #444;
-    }
-
-    .day-header {
-        background-color: #000;
-        color: #ffc107;
-        padding: 10px 15px;
-        border-radius: 6px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    }
-
-    .muscle-header {
-        background-color: #b30000;
-        color: #fff;
-        padding: 8px 12px;
-        margin: 1.5rem 0 1rem 0;
-        border-radius: 6px;
-        font-size: 1.1rem;
-        font-weight: bold;
-    }
-
-    .table-custom {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1.5rem 0;
-    }
-
-        .table-custom th,
-        .table-custom td {
-            border: 1px solid #ffffff;
-            padding: 12px;
-            text-align: left;
-            vertical-align: middle;
-            color: #ffffff;
-        }
-
-        .table-custom th {
-            background-color: #222;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .table-custom tr:nth-child(even) {
-            background-color: #2a2a2a;
-        }
-
-        .table-custom tr:hover {
-            background-color: #333;
-        }
-
-    /* ---------- Exercise Cards ---------- */
-    .exercise-card {
-        display: flex;
-        background-color: #121212;
-        border: 1px solid #fff;
-        border-radius: 0.5rem;
-        margin-bottom: 2rem;
-        overflow: hidden;
-        align-items: stretch;
-        max-height: 250px;
-    }
-
-    .exercise-image {
-        flex: 1;
-        max-width: 50%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        position: relative;
-    }
-
-        .exercise-image img.main-img {
-            width: 100%;
-            height: auto;
-            max-height: 150px;
-            object-fit: contain;
-            display: block;
-        }
-
-        .exercise-image img.youtube-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            opacity: 0.85;
-            transition: opacity 0.3s;
-        }
-
-            .exercise-image img.youtube-overlay:hover {
-                opacity: 1;
-            }
-
-    .exercise-details {
-        flex: 1;
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        color: #fff;
-    }
-
-    .exercise-actions {
-        margin-top: 0.5rem;
-    }
-
-        .exercise-actions .btn {
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-right: 5px;
-        }
-
-    /* ---------- Meals ---------- */
-    .meal-block {
-        margin: 2rem 0;
-    }
-
-    h5 {
-        margin: 1rem 0;
-    }
-
-    /* ---------- Buttons ---------- */
-    .btn-custom {
-        padding: 10px 20px;
-        font-weight: bold;
-        border-radius: 0.5rem;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s ease;
-    }
-
-    .btn-warning {
-        background-color: #ffc107;
-        color: #000;
-    }
-
-    .btn-success {
-        background-color: #28a745;
-        color: #fff;
-    }
-
-        .btn-warning:hover,
-        .btn-success:hover {
-            opacity: 0.85;
-        }
-
-    /* ---------- Responsive ---------- */
-    @@media (max-width: 576px) {
-        .custom-card {
-            padding: 1rem;
-        }
-
-        .table-custom th,
-        .table-custom td {
-            padding: 8px;
-        }
-
-        h4, h5 {
-            font-size: 1rem;
-        }
-    }
-</style>
+<link rel="stylesheet" href="~/assets/css/profile.css" />
 
 <!-- ================== PROFILE SECTION ================== -->
 <div class="container py-5">
@@ -238,7 +49,6 @@
 </div>
 
 <!-- ================== QUESTIONS SECTION ================== -->
-
 @if (Model!.Questions.Any())
 {
     <div class="slider-area2">
@@ -247,7 +57,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap hero-cap2 pt-70">
-                            <h2>Answerd Question</h2>
+                            <h2>Answered Questions</h2>
                         </div>
                     </div>
                 </div>
@@ -317,6 +127,7 @@
         </div>
     </div>
     <div id="exercise-container"></div>
+
     <div class="slider-area2">
         <div class="slider-height2 d-flex align-items-center">
             <div class="container">
@@ -333,104 +144,10 @@
     <div id="food-container"></div>
 </div>
 
-<!-- ================== SCRIPTS ================== -->
+<!-- Inject JSON into window object -->
 <script>
-    const dayNames = {
-        1: "First Day", 2: "Second Day", 3: "Third Day", 4: "Fourth Day",
-        5: "Fifth Day", 6: "Sixth Day", 7: "Seventh Day",
-        8: "1,2,3,4,5,6 & 7", 9: "1,2,3", 10: "4,5,6,7"
-    };
-
-    const assignedExercises = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedExercises))
-    const assignedFoods = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods))
-
-    function groupBy(array, keyFunc) {
-        return array.reduce((result, item) => {
-            const key = keyFunc(item);
-            if (!result[key]) result[key] = [];
-            result[key].push(item);
-            return result;
-        }, {});
-    }
-
-    /* ---------- Exercises ---------- */
-      const exercisesByDay = groupBy(assignedExercises, e => e.DayOfWeek);
-      const exerciseContainer = document.getElementById('exercise-container');
-
-      for (const [day, exercises] of Object.entries(exercisesByDay)) {
-          const dayDiv = document.createElement('div');
-          dayDiv.className = 'custom-card mb-4';
-          dayDiv.innerHTML = `
-              <div class="day-header">
-                  <span>🏋 ${dayNames[day] ?? day}</span>
-                  <span>Exercises</span>
-              </div>`;
-
-          const exercisesByMuscle = groupBy(exercises, e => e.MuscleName ?? "Other");
-          for (const [muscle, muscleExercises] of Object.entries(exercisesByMuscle)) {
-              let muscleBlock = `<div class="muscle-header">💪 ${muscle}</div>`;
-              muscleExercises.forEach(e => {
-                  muscleBlock += `
-                      <div class="exercise-card">
-                          <div class="exercise-details">
-                              <div><strong>${e.NameOfExercise ?? ''}</strong></div>
-                              <div>Sets: ${e.Sets ?? ''}</div>
-                              <div>Reps: ${e.Reps ?? ''}</div>
-                              <div>Notes: ${e.Notes ?? ''}</div>
-                              <div class="exercise-actions">
-                                  <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" class="btn btn-warning btn-sm">➕ Log</a>
-                                  <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=@Model.Client.Id" class="btn btn-info btn-sm">📊 Logs</a>
-                              </div>
-                          </div>
-                          <div class="exercise-image">
-                              ${e.ImageUrl
-                                  ? `<a href="${e.VideoUrl ?? '#'}" target="_blank">
-                                         <img src="${e.ImageUrl}" class="main-img" alt="${e.NameOfExercise}" />
-                                         <img src="/assets/img/logo/youtube.png" class="youtube-overlay" alt="YouTube" />
-                                     </a>`
-                                  : `<span class="text-muted p-3">No Image</span>`}
-                          </div>
-                      </div>`;
-              });
-              dayDiv.innerHTML += muscleBlock;
-          }
-          exerciseContainer.appendChild(dayDiv);
-      }
-
-    /* ---------- Foods ---------- */
-    const foodsByDay = groupBy(assignedFoods, f => f.DayOfWeek);
-    const foodContainer = document.getElementById('food-container');
-
-    for (const [day, foods] of Object.entries(foodsByDay)) {
-        const dayDiv = document.createElement('div');
-        dayDiv.className = 'custom-card mb-4';
-        dayDiv.innerHTML = `
-            <div class="day-header">
-                <span>🥗 ${dayNames[day] ?? day}</span>
-                <span>Nutrition Plan</span>
-            </div>`;
-
-        const foodsByMeal = groupBy(foods, f => f.MealNumber);
-        for (const [mealNumber, mealFoods] of Object.entries(foodsByMeal)) {
-            let mealHtml = `<div class="meal-block">
-                <h5>Meal ${mealNumber}</h5>
-                <table class="table-custom mb-3">
-                    <thead>
-                        <tr><th>Food</th><th>Quantity (g)</th><th>Servings</th><th>Notes</th></tr>
-                    </thead>
-                    <tbody>`;
-            mealFoods.forEach(f => {
-                mealHtml += `<tr>
-                    <td>${f.FoodName ?? ''}</td>
-                    <td>${f.Quantity ?? ''} g</td>
-                    <td>${f.NumberOfServings ?? ''} serving(s)</td>
-                    <td>${f.Notes ?? ''}</td>
-                </tr>`;
-            });
-            mealHtml += `</tbody></table></div>`;
-            dayDiv.innerHTML += mealHtml;
-        }
-        foodContainer.appendChild(dayDiv);
-    
-    }
+    window.assignedExercises = JSON.parse('@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedExercises ?? new List<AssignExerciseDto>()))');
+    window.assignedFoods = JSON.parse('@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods ?? new List<AssignFoodDto>()))');
+    window.clientId = '@Model.Client.Id';
 </script>
+<script src="~/assets/js/profile.js" asp-append-version="true"></script>

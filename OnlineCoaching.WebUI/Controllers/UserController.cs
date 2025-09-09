@@ -4,7 +4,7 @@ using OnlineCoaching.Application.Services;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
-    [Authorize(AppRoles.Admin)]
+    [Authorize(Roles = AppRoles.Admin)]
     public class UserController : Controller
     {
         private readonly IAuthService _authService;

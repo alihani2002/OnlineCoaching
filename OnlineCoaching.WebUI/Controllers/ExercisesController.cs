@@ -7,7 +7,7 @@ using OnlineCoaching.WebUI.Helper;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = AppRoles.Admin)]
     public class ExercisesController : Controller
     {
         private readonly IExerciseServices _exerciseService;

@@ -6,8 +6,6 @@ global using OnlineCoaching.Application.Common.Interfaces.Repositories;
 global using OnlineCoaching.Domain.Entities;
 global using Microsoft.EntityFrameworkCore;
 global using OnlineCoaching.Application.Common.Interfaces;
-
-
 global using AutoMapper;
 global using OnlineCoaching.Domain.Dtos;
 global using System.ComponentModel.DataAnnotations;

@@ -4,19 +4,21 @@
     ViewData["Title"] = "Muscles";
 }
 
-<h2>Muscles</h2>
+<h2 class="mb-3">Muscles</h2>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">+ Add Muscle</a>
 </p>
 
-<table class="table table-bordered table-striped">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+<table id="musclesTable" class="display table table-bordered table-striped" style="width:100%">
     <thead class="table-dark">
         <tr>
             <th>Name</th>
             <th>Description</th>
             <th>Created On</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -27,11 +29,33 @@
                 <td>@muscle.Description</td>
                 <td>@muscle.CreatedOn.ToString("yyyy-MM-dd")</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@muscle.Id" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Edit" asp-route-id="@muscle.Id" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@muscle.Id" class="btn btn-danger btn-sm">Delete</a>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@muscle.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@muscle.Id">
+                            <li><a class="dropdown-item text-dark" asp-action="Details" asp-route-id="@muscle.Id">Details</a></li>
+                            <li><a class="dropdown-item text-dark" asp-action="Edit" asp-route-id="@muscle.Id">Edit</a></li>
+                            <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@muscle.Id">Delete</a></li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#musclesTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50, 100],
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+}

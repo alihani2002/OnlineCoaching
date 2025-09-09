@@ -1,7 +1,5 @@
 ﻿using ActiveGym.Infrastructure.Persistence.Repositories;
 using OnlineCoaching.Application.Common.Interfaces.Repositories;
-using OnlineCoaching.Domain.Entities;
-using OnlineCoaching.Domain.Entities.Foods;
 
 namespace OnlineCoaching.Infrastructure.Persistence
 {

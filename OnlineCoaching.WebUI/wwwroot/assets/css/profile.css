@@ -1,0 +1,189 @@
+﻿body {
+    background-color: #0b0b0b;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size:18px;
+}
+
+/* ---------- Shared Styles ---------- */
+h3, h4, h5 {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.custom-card {
+    background-color: #1a1a1a;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #444;
+}
+
+.day-header {
+    background-color: #000;
+    color: #ffc107;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.muscle-header {
+    background-color: #b30000;
+    color: #fff;
+    padding: 8px 12px;
+    margin: 1.5rem 0 1rem 0;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+    .table-custom th,
+    .table-custom td {
+        border: 1px solid #ffffff;
+        padding: 12px;
+        text-align: left;
+        vertical-align: middle;
+        color: #ffffff;
+    }
+
+    .table-custom th {
+        background-color: #222;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tr:nth-child(even) {
+        background-color: #2a2a2a;
+    }
+
+    .table-custom tr:hover {
+        background-color: #333;
+    }
+
+/* ---------- Exercise Cards ---------- */
+.exercise-card {
+    display: flex;
+    background-color: #121212;
+    border: 1px solid #fff;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    align-items: stretch;
+    max-height: 250px;
+}
+
+.exercise-image {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+    .exercise-image img.main-img {
+        width: 100%;
+        height: auto;
+        max-height: 150px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .exercise-image img.youtube-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        opacity: 0.85;
+        transition: opacity 0.3s;
+    }
+
+        .exercise-image img.youtube-overlay:hover {
+            opacity: 1;
+        }
+
+.exercise-details {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #fff;
+}
+
+.exercise-actions {
+    margin-top: 0.5rem;
+}
+
+    .exercise-actions .btn {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-right: 5px;
+    }
+
+/* ---------- Meals ---------- */
+.meal-block {
+    margin: 2rem 0;
+}
+
+h5 {
+    margin: 1rem 0;
+}
+
+/* ---------- Buttons ---------- */
+.btn-custom {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+    .btn-warning:hover,
+    .btn-success:hover {
+        opacity: 0.85;
+    }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 576px) {
+    .custom-card {
+        padding: 1rem;
+    }
+
+    .table-custom th,
+    .table-custom td {
+        padding: 8px;
+    }
+
+    h4, h5 {
+        font-size: 1rem;
+    }
+}

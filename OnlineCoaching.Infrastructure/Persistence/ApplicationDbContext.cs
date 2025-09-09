@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Entities.Foods;
-
-namespace OnlineCoaching.Infrastructure.Persistence
+﻿namespace OnlineCoaching.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {

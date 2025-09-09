@@ -73,9 +73,10 @@ namespace OnlineCoaching.Web.Core.Mapping
             #region CoachingPackageRequest
             CreateMap<CoachingPackageRequest, CoachingPackageRequestDto>()
                 .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.FullName : string.Empty))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Client!.PhoneNumber))
                 .ForMember(dest => dest.PackageTitle, opt => opt.MapFrom(src => src.Titles))
                 .ReverseMap()
-                .ForMember(dest => dest.Client, opt => opt.Ignore()) // prevent overwriting navigation
+                .ForMember(dest => dest.Client, opt => opt.Ignore()) 
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());

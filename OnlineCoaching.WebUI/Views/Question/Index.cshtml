@@ -4,12 +4,13 @@
     ViewData["Title"] = "Table Questions";
 }
 
-
 <p>
     <a asp-action="Create" class="btn btn-primary">Add New Question</a>
 </p>
 
-<table class="table table-bordered table-striped">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+<table id="questionsTable" class="display table table-bordered table-striped" style="width:100%">
     <thead>
         <tr>
             <th>#</th>
@@ -58,8 +59,23 @@
         else
         {
             <tr>
-                <td colspan="6" class="text-center">No questions found.</td>
+                <td colspan="7" class="text-center">No questions found.</td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#questionsTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50, 100],
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+}

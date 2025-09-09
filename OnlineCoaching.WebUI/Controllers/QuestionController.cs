@@ -4,7 +4,7 @@ using OnlineCoaching.Application.Services;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = AppRoles.Admin)]
     public class QuestionController : Controller
     {
             private readonly IQuestionServices _questionServices;
@@ -14,14 +14,12 @@ namespace OnlineCoaching.WebUI.Controllers
                 _questionServices = questionServices;
             }
 
-            // GET: /Question
             public IActionResult Index()
             {
                 var questions = _questionServices.GetQuestions();
                 return View(questions);
             }
 
-            // GET: /Question/Details/5
             public async Task<IActionResult> Details(int id)
             {
                 var question = await _questionServices.GetQuestionById(id);
@@ -31,13 +29,11 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(question);
             }
 
-            // GET: /Question/Create
             public IActionResult Create()
             {
                 return View();
             }
 
-            // POST: /Question/Create
             [HttpPost]
             [ValidateAntiForgeryToken]
             public IActionResult Create(Question question)
@@ -50,7 +46,6 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(question);
             }
 
-            // GET: /Question/Edit/5
             public async Task<IActionResult> Edit(int id)
             {
                 var question = await _questionServices.GetQuestionById(id);
@@ -60,7 +55,6 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(question);
             }
 
-            // POST: /Question/Edit/5
             [HttpPost]
             [ValidateAntiForgeryToken]
             public IActionResult Edit(Question question)
@@ -73,7 +67,6 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(question);
             }
 
-            // GET: /Question/Delete/5
             public async Task<IActionResult> Delete(int id)
             {
                 var question = await _questionServices.GetQuestionById(id);
@@ -83,7 +76,6 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(question);
             }
 
-            // POST: /Question/Delete/5
             [HttpPost]
             [ValidateAntiForgeryToken]
             public IActionResult DeleteConfirmed(int id)

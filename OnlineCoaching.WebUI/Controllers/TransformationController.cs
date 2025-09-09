@@ -30,6 +30,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(transformations);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult Create()
         {
             var clients = _clientService.GetAllClients();
@@ -40,6 +41,7 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Create(Transformation model, IFormFile? beforeImage, IFormFile? afterImage)
         {
             if (!ModelState.IsValid)
@@ -51,11 +53,12 @@ namespace OnlineCoaching.WebUI.Controllers
 
             model.BeforeImageUrl = await _imageHelper.UploadImageAsync(beforeImage, "Transformations");
             model.AfterImageUrl = await _imageHelper.UploadImageAsync(afterImage, "Transformations");
-
+            model.CreatedOn = DateTime.Now;
             await _transformationService.CreateAsync(model);
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult Edit(int id)
         {
             var transformation = _transformationService.GetById(id);
@@ -69,6 +72,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Edit(int id, Transformation model, IFormFile? beforeImage, IFormFile? afterImage)
         {
             if (!ModelState.IsValid) return View(model);
@@ -86,6 +90,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             await _transformationService.DeleteAsync(id);

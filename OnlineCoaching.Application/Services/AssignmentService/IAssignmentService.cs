@@ -1,6 +1,6 @@
 ﻿using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
 
-namespace OnlineCoaching.Application.Services.AssignmentService
+namespace OnlineCoaching.Application.Services
 {
     public interface IAssignmentService
     {

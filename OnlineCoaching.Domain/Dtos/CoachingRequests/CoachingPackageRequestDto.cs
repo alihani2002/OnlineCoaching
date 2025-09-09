@@ -13,5 +13,8 @@
         public string? PackageTitle { get; set; }
         public int ClientId { get; set; }
         public string? ClientName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+
     }
 }

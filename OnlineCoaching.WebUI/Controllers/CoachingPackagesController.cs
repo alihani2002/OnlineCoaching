@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
@@ -34,7 +34,7 @@ namespace OnlineCoaching.WebUI.Controllers
             var sessionId = User.GetUserId();
             if (string.IsNullOrEmpty(sessionId))
             {
-                return View("GetCoachingPackage", packages); // ✅ show packages to guest
+                return View("GetCoachingPackage", packages); 
             }
 
             var client = await _clientService.GetClientAsync(sessionId);
@@ -57,16 +57,17 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> ClientRequest(int id)
         {
             var request = await _requestServices.GetRequestByIdAsync(id);
             if (request == null) return NotFound();
-            return View(request);  // ✅ view gets CoachingPackageRequestDto
+            return View(request);  
         }
 
 
 
-
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Details(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
@@ -84,6 +85,7 @@ namespace OnlineCoaching.WebUI.Controllers
         // POST: CoachingPackage/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Create(CreateCoachingPackageDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
@@ -100,6 +102,7 @@ namespace OnlineCoaching.WebUI.Controllers
             }
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Edit(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
@@ -110,6 +113,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Edit(CoachingPackageDto dto)
         {
             if (!ModelState.IsValid) return View(dto);
@@ -124,6 +128,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
@@ -134,6 +139,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deleted = await _packageService.DeleteCoachingPackageAsync(id);

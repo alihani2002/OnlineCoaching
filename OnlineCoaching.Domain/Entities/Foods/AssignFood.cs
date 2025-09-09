@@ -1,5 +1,4 @@
-﻿using OnlineCoaching.Domain.Entities.Foods;
-using OnlineCoaching.Domain.Enums.DayOfWeek;
+﻿using OnlineCoaching.Domain.Enums;
 
 namespace OnlineCoaching.Domain.Entities
 {

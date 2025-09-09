@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using OnlineCoaching.Application.Common.Interfaces;
-using OnlineCoaching.Domain.Dtos.User;
-using OnlineCoaching.Domain.Entities;
-
 namespace OnlineCoaching.Application.Services
 {
     internal class AuthService : IAuthService

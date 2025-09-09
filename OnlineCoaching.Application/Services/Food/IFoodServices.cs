@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Dtos;
-
-namespace OnlineCoaching.Application.Services
+﻿namespace OnlineCoaching.Application.Services
 {
     public interface IFoodServices
     {

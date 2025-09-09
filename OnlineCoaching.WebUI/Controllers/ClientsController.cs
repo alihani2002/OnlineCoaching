@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
-using OnlineCoaching.Application.Services.AssignmentService;
 using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
-using OnlineCoaching.Domain.Entities;
-using OnlineCoaching.Domain.Entities.Foods;
-using OnlineCoaching.Domain.Enums;
 using OnlineCoaching.WebUI.Models.Clients;
 using OnlineCoaching.WebUI.Models.RequestPackage;
 
@@ -47,8 +43,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
             Client? client = null;
 
-            if (id > 0)
-                client = _clientService.GetClientById(id);
+            if (id > 0) client = _clientService.GetClientById(id);
 
             else
             {
@@ -62,9 +57,9 @@ namespace OnlineCoaching.WebUI.Controllers
             }
 
 
-
             if (client == null)
                 return NotFound("Client not found.");
+
 
             // Check if client has an active approved request
             var activeRequest = _requestService.GetActiveOrPendingRequest(client.Id);
@@ -267,13 +262,6 @@ namespace OnlineCoaching.WebUI.Controllers
 
             TempData["Success"] = "Client status updated successfully.";
             return RedirectToAction(nameof(Index));
-        }
-
-
-
-        private bool ClientExists(int id)
-        {
-            return _context.Clients.Any(e => e.Id == id);
         }
 
 

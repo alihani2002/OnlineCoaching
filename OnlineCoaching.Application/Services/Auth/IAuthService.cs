@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineCoaching.Domain.Dtos.User;
-
 namespace OnlineCoaching.Application.Services
 {
     public interface IAuthService

@@ -4,57 +4,91 @@
     ViewData["Title"] = "Exercises";
 }
 
-<h2>Exercises</h2>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    
+        <a asp-action="Create" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> New Exercise
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">+ New Exercise</a>
-</p>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>image</th>
-            <th>Muscle</th>
-            <th>Video</th>
-            <th>Links</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+    <div class="card shadow-lg rounded-3">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Muscle</th>
+                        <th>Video</th>
+                        <th>Links</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
                     {
-                        <img src="@Url.Content(item.ImageUrl)" alt="@item.Name" width="100" height="100" style="object-fit:cover;" />
+                        <tr>
+                            <td class="fw-semibold">@item.Name</td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                {
+                                    <img src="@Url.Content(item.ImageUrl)"
+                                         alt="@item.Name"
+                                         class="rounded shadow-sm border"
+                                         width="80" height="80"
+                                         style="object-fit:cover;" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">No image</span>
+                                }
+                            </td>
+                            <td>@item.MuscleName</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.VideoUrl))
+                                {
+                                    <a href="@item.VideoUrl" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-play-circle"></i> Watch
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.LinkUrls != null && item.LinkUrls.Any())
+                                {
+                                    @foreach (var link in item.LinkUrls)
+                                    {
+                                        <div>
+                                            <a href="@link" target="_blank" class="text-decoration-none text-info">
+                                                <i class="bi bi-link-45deg"></i> @link
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No links</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">
+                                    Details
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">
+                                    Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span class="text-muted">No image</span>
-                    }
-                </td>
-                <td>@item.MuscleName</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.VideoUrl))
-                    {
-                        <a href="@item.VideoUrl" target="_blank">Video</a>
-                    }
-                </td>
-                <td>
-                    @foreach (var link in item.LinkUrls)
-                    {
-                        <div><a href="@link" target="_blank">@link</a></div>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

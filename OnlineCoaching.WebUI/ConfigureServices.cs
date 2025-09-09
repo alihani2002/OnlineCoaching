@@ -1,5 +1,6 @@
 ﻿using OnlineCoaching.Web.Core.Mapping;
 using OnlineCoaching.WebUI.Helper;
+using System.Threading.RateLimiting;
 using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
 namespace OnlineCoaching.Web
@@ -15,9 +16,12 @@ namespace OnlineCoaching.Web
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            // Identity
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+
+            // Identity To prevent brute force and credential stuffing
+            services.AddIdentity<ApplicationUser, IdentityRole> (
+                options=> {
+                    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                }).AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders()
                 .AddSignInManager<SignInManager<ApplicationUser>>();
@@ -36,6 +40,11 @@ namespace OnlineCoaching.Web
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
+
+                // Lockout (protect against brute-force)
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); // lock for 15 minutes
+                options.Lockout.MaxFailedAccessAttempts = 5; // after 5 failed attempts
+                options.Lockout.AllowedForNewUsers = true;
             });
 
             services.ConfigureApplicationCookie(options =>
@@ -45,10 +54,50 @@ namespace OnlineCoaching.Web
                 options.LoginPath = "/Identity/Account/Login";
             });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Name = "OnlineCoaching.Auth";
+
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.SlidingExpiration = true;
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
+
+       
+
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            options.ValidationInterval = TimeSpan.Zero);
+
             builder.Services.AddScoped<ImageHelper>(provider =>
             {
                 var env = provider.GetRequiredService<IWebHostEnvironment>();
                 return new ImageHelper(env, "uploads"); 
+            });
+
+
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.AddPolicy("LoginPolicy", httpContext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 5,
+                            Window = TimeSpan.FromMinutes(15),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = 0
+                        }));
+
+                options.OnRejected = async (context, token) =>
+                {
+                    context.HttpContext.Response.Redirect("/Identity/Account/LoginRateLimited");
+                    await Task.CompletedTask;
+                };
             });
 
             // AutoMapper

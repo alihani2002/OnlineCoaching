@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Entities.Foods;
-
-namespace OnlineCoaching.Domain.Entities
+﻿namespace OnlineCoaching.Domain.Entities
 {
     public class Client : BaseEntity
     {

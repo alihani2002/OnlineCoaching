@@ -1,6 +1,4 @@
 ﻿using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
-using OnlineCoaching.Domain.Enums;
-using OnlineCoaching.Domain.Enums.DayOfWeek;
 
 namespace OnlineCoaching.WebUI.Models.Clients
 {

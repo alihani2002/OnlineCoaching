@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<Client>
 
 @{
-    ViewData["Title"] = "Clients";
+    ViewData["Title"] = "Clients Table";
 }
 
 <link rel="stylesheet" href="~/css/Client-Index.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 
 <table id="clientsTable" class="display table table-bordered table-striped" style="width:100%">
-    <thead>
+    <thead class="table-dark">
         <tr>
             <th>Full Name</th>
             <th>Birth Date</th>
@@ -16,14 +17,14 @@
             <th>User</th>
             <th>Created On</th>
             <th>Last Updated</th>
-            <th>Is deleted</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var client in Model)
         {
-            <tr>
+            <tr class="@(client.IsDeleted ? "table-secondary" : "")">
                 <td>@client.FullName</td>
                 <td>@client.BirthDate.ToString("yyyy-MM-dd")</td>
                 <td>@client.PhoneNumber</td>
@@ -31,17 +32,24 @@
                 <td>@client.User?.UserName</td>
                 <td>@client.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@client.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@client.IsDeleted</td>
-
+                <td>
+                    @if (client.IsDeleted)
+                    {
+                        <span class="badge bg-danger">Deleted</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@client.Id" class="btn btn-info btn-sm">Details</a>
-@*                     <a asp-action="Edit" asp-route-id="@client.Id" class="btn btn-warning btn-sm">Edit</a>
- *@                          <form asp-action="ToggleDelete" asp-route-id="@client.Id" method="post" style="display:inline;">
+
+                    <form asp-action="ToggleDelete" asp-route-id="@client.Id" method="post" style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to @(client.IsDeleted ? "restore" : "delete") this client?');">
                         <button type="submit" class="btn btn-sm @(client.IsDeleted ? "btn-success" : "btn-danger")">
                             @(client.IsDeleted ? "Restore" : "Delete")
                         </button>
-
-                     
                     </form>
                 </td>
             </tr>
@@ -58,7 +66,11 @@
                 responsive: true,
                 pageLength: 10,
                 lengthMenu: [5, 10, 25, 50, 100],
-                order: [[0, 'asc']]
+                order: [[0, 'asc']],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search clients..."
+                }
             });
         });
     </script>

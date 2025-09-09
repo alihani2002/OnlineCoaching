@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OnlineCoaching.Application.Services;
-using OnlineCoaching.Application.Services.AssignmentService;
-
 namespace OnlineCoaching.Application
 {
     public static class ConfigureServices
@@ -9,7 +7,6 @@ namespace OnlineCoaching.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IAssignmentService, AssignmentService>();
-
             services.AddScoped<ICoachingPackageRequestService, CoachingPackageRequestService>();
             services.AddScoped<ICoachingPackageServices, CoachingPackageServices>();
             services.AddScoped<IExerciseServices, ExerciseServices>();
@@ -19,8 +16,6 @@ namespace OnlineCoaching.Application
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IQuestionServices, QuestionServices>();
             services.AddScoped<ITransformationService, TransformationService>();
-
-
             return services;
 
         }

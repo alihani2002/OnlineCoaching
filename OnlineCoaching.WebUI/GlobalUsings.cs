@@ -11,3 +11,4 @@ global using OnlineCoaching.Web;
 
 global using OnlineCoaching.Domain.Consts;
 global using OnlineCoaching.Web.Extensions;
+global using OnlineCoaching.Domain.Enums;  

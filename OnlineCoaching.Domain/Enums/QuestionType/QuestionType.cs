@@ -1,4 +1,4 @@
-﻿namespace OnlineCoaching.Domain.Enums.QuestionType
+﻿namespace OnlineCoaching.Domain.Enums
 {
     public enum QuestionType
     {

@@ -20,6 +20,7 @@
                     </div>
 
                     <form id="account" method="post">
+                        @Html.AntiForgeryToken()
                         <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3" role="alert"></div>
 
                         <div class="form-group mb-3">
@@ -39,7 +40,7 @@
                         </div>
 
                         <button id="login-submit" type="submit"
-                                class="btn btn-primary w-100 py-3 fs-5"
+                                class="btn btn-primary w-100  fs-5"
                                 style="border-radius:40px; font-weight:600;">
                             Log in
                         </button>
@@ -68,6 +69,12 @@
                                 }
                             </div>
                             <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post"></form>
+                        </div>
+                    }
+                    @if (Model.IsLockedOut)
+                    {
+                        <div class="alert alert-warning text-center">
+                            Your account has been locked due to multiple failed login attempts. Please try again later.
                         </div>
                     }
                 </div>

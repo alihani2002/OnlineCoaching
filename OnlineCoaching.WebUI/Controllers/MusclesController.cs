@@ -4,7 +4,8 @@ using OnlineCoaching.Domain.Dtos;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
-    [Authorize]
+
+    [Authorize(Roles = AppRoles.Admin)]
     public class MusclesController : Controller
     {
         private readonly IMuscleServices _muscleService;
@@ -14,14 +15,12 @@ namespace OnlineCoaching.WebUI.Controllers
             _muscleService = muscleService;
         }
 
-        // GET: Muscle
         public IActionResult Index()
         {
             var muscles = _muscleService.GetMuscles();
             return View(muscles);
         }
 
-        // GET: Muscle/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var muscle = await _muscleService.GetMuscleByIdAsync(id);
@@ -29,10 +28,8 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(muscle);
         }
 
-        // GET: Muscle/Create
         public IActionResult Create() => View();
 
-        // POST: Muscle/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateMuscleDto dto)
@@ -45,7 +42,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(dto);
         }
 
-        // GET: Muscle/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var muscle = await _muscleService.GetMuscleByIdAsync(id);
@@ -53,7 +49,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(muscle);
         }
 
-        // POST: Muscle/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MuscleDto dto)
@@ -66,7 +61,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(dto);
         }
 
-        // GET: Muscle/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var muscle = await _muscleService.GetMuscleByIdAsync(id);
@@ -74,7 +68,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(muscle);
         }
 
-        // POST: Muscle/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
-using OnlineCoaching.Domain.Enums;
 using OnlineCoaching.WebUI.Models.RequestPackage;
 namespace OnlineCoaching.WebUI.Controllers
 {
@@ -13,6 +12,8 @@ namespace OnlineCoaching.WebUI.Controllers
         private readonly ICoachingPackageRequestService _requestService = requestService;
         private readonly IClientService _clientService = clientService;
 
+
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult Index()
         {
             var requests = _requestService.GetRequests();
@@ -20,7 +21,7 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
-
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Details(int id)
         {
             var request = await _requestService.GetRequestByIdAsync(id);
@@ -33,6 +34,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
       
         [HttpPost]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> ChangeStatus(int id, ClientStatus status)
         {
             var updated = await _requestService.ManageRequestStatusAsync(id, status);
@@ -57,7 +59,7 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
-
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> EditStatus(int id)
         {
             var request = await _requestService.GetRequestByIdAsync(id);
@@ -70,6 +72,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> EditStatus(int id, ClientStatus status)
         {
             var updated = await _requestService.UpdateStatusAsync(id, status);
@@ -79,7 +82,7 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
-
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             var request = await _requestService.GetRequestByIdAsync(id);
@@ -92,6 +95,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deleted = await _requestService.DeleteRequestAsync(id);

@@ -9,9 +9,6 @@
         font-weight: 600;
         font-size: 14px;
     }
-
-
-
     @@media (max-width: 991px) {
         .username-text
     {
@@ -26,7 +23,7 @@
             <div class="container-fluid">
                 <div class="logo">
                     <a asp-controller="Home" asp-action="Index" class="logo-text mt-3">
-                        BadrReda For OnlineCoach
+                       Coach BadrReda 
                     </a>
                 </div>
                 <div class="menu-wrapper d-flex align-items-center justify-content-between">
@@ -72,8 +69,8 @@
                                 }
                                 else
                                 {
-                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-dark btn-sm">Login</a>
-                                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-dark btn-sm">Register</a>
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-danger btn-lg">Login</a>
+                                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-danger btn-lg">Register</a>
                                 }
                             </ul>
                         </nav>
