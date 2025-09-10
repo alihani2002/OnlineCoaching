@@ -76,7 +76,16 @@ namespace OnlineCoaching.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Exercises");
+                if (ImageUrl != null && ImageUrl.Length > 0)
+                {
+                    dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Exercises");
+                }
+                else
+                {
+                    var existing = await _exerciseService.GetExerciseByIdAsync(dto.Id);
+                    dto.ImageUrl = existing?.ImageUrl;
+                }
+
                 dto.LastUpdatedOn = DateTime.Now;
                 await _exerciseService.UpdateExerciseAsync(dto);
                 return RedirectToAction(nameof(Index));

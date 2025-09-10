@@ -5,11 +5,11 @@
 }
 
 <div class="container py-5">
-    <div class="card shadow-lg">
-        <div class="card-header text-white text-center">
-            <h3 class="mb-0">Answer the Questions</h3>
+    <div class="card shadow-lg border-0" style="border-radius: 18px; overflow: hidden;">
+        <div class="card-header text-white text-center" style="background: linear-gradient(90deg, #bec2c6, #962121);">
+            <h3 class="mb-0 fw-bold text-white">📝 Answer the Questions</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f9f9fb;">
             <form asp-action="CompleteQuestion" method="post">
                 <div id="questionList">
                     @{
@@ -22,10 +22,11 @@
                         var isArabic = System.Text.RegularExpressions.Regex.IsMatch(question.Text, @"\p{IsArabic}");
 
                         <div class="mb-5 question-item">
-                            <div class="card shadow-lg border-0" style="transition: 0.3s; border-radius: 15px;">
-                                <div class="card-body p-4" dir="@(isArabic ? "rtl" : "ltr")">
-                                    <h5 class="card-title fw-bold mb-3">
-                                        Question @(question.NumberOfQuestion): @question.Text
+                            <div class="card shadow-sm border-0 h-100" style="border-radius: 16px; background: #ffffff;">
+                                <div class="card-body p-4 text-dark" dir="@(isArabic ? "rtl" : "ltr")">
+                                    <h5 class="card-title fw-bold mb-3 text-dark d-flex align-items-center">
+                                        <span class="question-number me-2">@(i + 1) - </span>
+                                        <span> @question.Text</span>
                                     </h5>
 
                                     <input type="hidden" name="answers[@i].QuestionId" value="@question.Id" />
@@ -34,13 +35,13 @@
                                     {
                                         foreach (var option in question.Options!)
                                         {
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input"
+                                            <div class="form-check option-item mb-2">
+                                                <input class="form-check-input styled-check"
                                                        type="radio"
                                                        name="answers[@i].SelectedOptions[0].OptionId"
                                                        value="@option.Id"
                                                        id="option-@option.Id-@i" />
-                                                <label class="form-check-label" for="option-@option.Id-@i">
+                                                <label class="form-check-label text-dark fw-semibold" for="option-@option.Id-@i">
                                                     @option.Text
                                                 </label>
                                             </div>
@@ -52,41 +53,91 @@
                                         for (int j = 0; j < optionsList.Count; j++)
                                         {
                                             var option = optionsList[j];
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input"
+                                            <div class="form-check option-item mb-2">
+                                                <input class="form-check-input styled-check"
                                                        type="checkbox"
                                                        name="answers[@i].SelectedOptions[@j].OptionId"
                                                        value="@option.Id"
                                                        id="option-@option.Id-@i-@j" />
-                                                <label class="form-check-label" for="option-@option.Id-@i-@j">
+                                                <label class="form-check-label text-dark fw-semibold" for="option-@option.Id-@i-@j">
                                                     @option.Text
                                                 </label>
                                             </div>
                                         }
-
                                     }
                                     else if (question.Type == QuestionType.OpenText)
                                     {
-                                        <input type="text"
-                                               name="answers[@i].AnswerText"
-                                               class="form-control mt-2"
-                                               placeholder="Enter your answer here..."
-                                               dir="@(isArabic ? "rtl" : "ltr")" />
+                                        <textarea name="answers[@i].AnswerText"
+                                          class="form-control mt-2 text-dark"
+                                          rows="3"
+                                          placeholder="✍️ اكتب إجابتك هنا..."
+                                          dir="@(isArabic ? "rtl" : "ltr")"></textarea>
                                     }
                                 </div>
                             </div>
                         </div>
                     }
-
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg px-5">Submit</button>
+                    <button type="submit" class="btn btn-lg px-5 text-white fw-bold" style="background: linear-gradient(90deg,#007bff,#6610f2); border-radius: 50px;">
+                        🚀 Submit
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    /* يجعل حدود الـ checkbox والـ radio سوداء */
+    .styled-check[type="checkbox"],
+    .styled-check[type="radio"] {
+        border: 2px solid #000 !important; /* أسود */
+        accent-color: #000 !important; /* يجعل الصح/النقطة سوداء */
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    /* ======== Custom Checkboxes / Radios ======== */
+    .styled-check {
+        accent-color: #000000 !important; /* يجعل الصح أسود واضح */
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    /* تحسين عرض النصوص */
+    .form-check-label {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .option-item:hover .form-check-label {
+        background-color: #f1f3f6;
+    }
+
+    .option-selected .form-check-label {
+        background: linear-gradient(90deg, #79af7f, #30a642);
+        color: #fff !important;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 12px;
+        transition: border 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #6610f2;
+            box-shadow: 0px 0px 6px rgba(102,16,242,0.3);
+        }
+</style>
 
 @section Scripts {
     <script>
@@ -119,7 +170,7 @@
                 });
 
                 // Text input
-                $item.find('input[type="text"]').on('input', function () {
+                $item.find('textarea').on('input', function () {
                     if ($(this).val().trim().length > 2) {
                         scrollToNext(index);
                     }

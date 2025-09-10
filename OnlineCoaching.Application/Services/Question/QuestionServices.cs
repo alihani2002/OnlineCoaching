@@ -14,6 +14,7 @@ namespace OnlineCoaching.Application.Services
         public IEnumerable<Question> GetQuestions() => _unitOfWork.Questions
                 .GetQueryable().Include(q => q.Options!)
                 .ThenInclude(o => o.SelectedOptions)
+                .Where(q=> !q.IsDeleted)
                 .OrderBy(o => o.NumberOfQuestion).ToList();
 
         public async Task<Question?> GetQuestionById(int id) =>

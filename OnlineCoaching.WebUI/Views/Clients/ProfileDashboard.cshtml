@@ -1,0 +1,150 @@
+﻿@using OnlineCoaching.Domain.Dtos.AssignmentCoaching
+@using OnlineCoaching.WebUI.Models.Clients
+@model ClientDashboardViewModel
+
+<body>
+    <link rel="stylesheet" href="~/assets/css/profile.css" />
+
+    <!-- ================== PROFILE SECTION ================== -->
+    <div class="container py-5">
+        @if (Model != null)
+        {
+            <div class="custom-card">
+                <h3 class="text-center text-danger mb-4">👤 Your Profile</h3>
+                <table class="table-custom">
+                    <tr><th>Full Name</th><td>@Model.Client.FullName</td></tr>
+                    <tr><th>Birth Date</th><td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td></tr>
+                    <tr><th>Phone Number</th><td>@Model.Client.PhoneNumber</td></tr>
+                    <tr><th>Address</th><td>@Model.Client.Address</td></tr>
+                </table>
+
+                @if (User.IsInRole("Admin") || User.IsInRole("Coach"))
+                {
+                    <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a asp-controller="Clients" asp-action="Assign" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-warning">
+                            ➕ Assign Foods / Exercises
+                        </a>
+                        <a asp-controller="Clients" asp-action="AssignedList" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-success">
+                            📋 View Assigned Items
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        else if (User.IsInRole("Admin"))
+        {
+            <div class="custom-card text-center">
+                <h3 class="text-danger">⚡ Welcome to Admin Dashboard</h3>
+            </div>
+        }
+        else
+        {
+            <div class="custom-card text-center">
+                <p>No profile data available.</p>
+            </div>
+        }
+    </div>
+
+    <!-- ================== QUESTIONS SECTION ================== -->
+    @if (Model!.Questions.Any())
+    {
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-70">
+                                <h2>Answered Questions</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            @foreach (var question in Model.Questions)
+            {
+                var answer = Model.Answers.FirstOrDefault(a => a.QuestionId == question.Id);
+
+                <div class="qa-card d-flex flex-column flex-md-row align-items-stretch mb-4 p-3">
+                    <!-- السؤال -->
+                    <div class="qa-question flex-fill text-md-end text-center p-3">
+                        <h5 class="fw-bold text-warning mb-2">
+                            @(question.NumberOfQuestion). @question.Text
+                        </h5>
+                    </div>
+
+                    <!-- الإجابة -->
+                    <div class="qa-answer flex-fill text-md-start text-center p-3">
+                        @if (question.Type == QuestionType.OpenText)
+                        {
+                            <p class="text-light">@((answer?.AnswerText) ?? "No answer provided")</p>
+                        }
+                        else if (question.Type == QuestionType.SingleChoice)
+                        {
+                            <p class="text-light">@((answer?.SelectedOptions.FirstOrDefault()?.Option?.Text) ?? "No option selected")</p>
+                        }
+                        else if (question.Type == QuestionType.MultipleChoice)
+                        {
+                            if (answer?.SelectedOptions?.Any() == true)
+                            {
+                                <ul class="list-unstyled text-light">
+                                    @foreach (var opt in answer.SelectedOptions)
+                                    {
+                                        <li>✔ @opt.Option!.Text</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No options selected</span>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- ================== EXERCISES & FOODS ================== -->
+    <div class="container">
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-70">
+                                <h2>Exercises</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="exercise-container"></div>
+
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-70">
+                                <h2>Nutrition Plan</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="food-container"></div>
+    </div>
+
+    <!-- Inject JSON into window object -->
+    <script>
+        window.assignedExercises = JSON.parse('@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model!.AssignedExercises ?? new List<AssignExerciseDto>()))');
+        window.assignedFoods = JSON.parse('@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AssignedFoods ?? new List<AssignFoodDto>()))');
+        window.clientId = '@Model.Client.Id';
+    </script>
+    <script src="~/assets/js/ProfileDashboard.js" asp-append-version="true"></script>
+</body>

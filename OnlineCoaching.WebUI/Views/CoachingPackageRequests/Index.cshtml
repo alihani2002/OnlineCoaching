@@ -4,8 +4,40 @@
 @{
     ViewData["Title"] = "Requests";
 }
+<style>
+    @@media (max-width: 768px) {
+        #requestsTable thead
 
+    {
+        display: none;
+    }
 
+    #requestsTable tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #444;
+        border-radius: 10px;
+        padding: 10px;
+        background: #1a1a1a;
+        color: #fff;
+    }
+
+    #requestsTable tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+        font-size: 0.9rem;
+        border: none;
+    }
+
+        #requestsTable tbody td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #ffc107;
+        }
+
+    }
+</style>
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -17,70 +49,74 @@
         </a>
     </div>
 
-    <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
-        <div class="card-body p-0">
-            <table id="requestsTable" class="display table table-bordered table-striped" style="width:100%">
-                <thead class="bg-dark text-white">
-                    <tr>
-                        <th>📦 Package</th>
-                        <th>👤 Client</th>
-                        <th>PhoneNumber</th>
-                        <th>📌 Status</th>
-                        <th>💲 Price</th>
-                        <th>📅 Start</th>
-                        <th>⏳ End</th>
-                        <th>⚙️ Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var r in Model)
-                    {
-                        <tr>
-                            <td class="fw-semibold">@r.Titles</td>
-                            <td>@r.ClientName</td>
-                            <td>@r.PhoneNumber</td>
-                            <td>
-                                @if (r.Status == ClientStatus.Pending)
-                                {
-                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">Pending</span>
-                                }
-                                else if (r.Status == ClientStatus.Active)
-                                {
-                                    <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">Approved</span>
-                                }
-                                else if (r.Status == ClientStatus.Suspended)
-                                {
-                                    <span class="badge bg-danger px-3 py-2 rounded-pill shadow-sm">Suspended</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary px-3 py-2 rounded-pill shadow-sm">@r.Status</span>
-                                }
-                            </td>
-                            <td class="text-success fw-bold">@r.Price</td>
-                            <td>@r.StartDate?.ToShortDateString()</td>
-                            <td>@r.EndDate?.ToShortDateString()</td>
-                            <td>
-                                <a asp-action="Details" asp-route-id="@r.Id"
-                                   class="btn btn-outline-info btn-sm rounded-pill me-1">
-                                    Details
-                                </a>
-                                <button class="btn btn-outline-primary btn-sm rounded-pill me-1"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#statusModal"
-                                        data-id="@r.Id"
-                                        data-status="@r.Status">
-                                    status
-                                </button>
-                                <a asp-action="Delete" asp-route-id="@r.Id"
-                                   class="btn btn-outline-danger btn-sm rounded-pill">
-                                    Remove
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    <div class="container mt-4">
+
+
+        <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="requestsTable" class="display table table-bordered table-striped w-100">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th>📦 Package</th>
+                                <th>👤 Client</th>
+                                <th>📞 Phone</th>
+                                <th>📌 Status</th>
+                                <th>💲 Price</th>
+                                <th>📅 Start</th>
+                                <th>⏳ End</th>
+                                <th>⚙️ Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in Model)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@r.Titles</td>
+                                    <td>@r.ClientName</td>
+                                    <td>@r.PhoneNumber</td>
+                                    <td>
+                                        @if (r.Status == ClientStatus.Pending)
+                                        {
+                                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">Pending</span>
+                                        }
+                                        else if (r.Status == ClientStatus.Active)
+                                        {
+                                            <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">Approved</span>
+                                        }
+                                        else if (r.Status == ClientStatus.Suspended)
+                                        {
+                                            <span class="badge bg-danger px-3 py-2 rounded-pill shadow-sm">Suspended</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary px-3 py-2 rounded-pill shadow-sm">@r.Status</span>
+                                        }
+                                    </td>
+                                    <td class="text-success fw-bold">@r.Price</td>
+                                    <td>@r.StartDate?.ToShortDateString()</td>
+                                    <td>@r.EndDate?.ToShortDateString()</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm rounded-pill me-1 mb-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#statusModal"
+                                                data-id="@r.Id"
+                                                data-status="@r.Status">
+                                            Status
+                                        </button>
+                                        <a asp-action="Delete" asp-route-id="@r.Id"
+                                           class="btn btn-outline-danger btn-sm rounded-pill mb-1">
+                                            Remove
+                                        </a>
+                                        <a asp-controller="Clients" asp-action="ProfileDashboard" asp-route-id="@r.ClientId" class="btn btn-outline-info btn-sm rounded-pill me-1 mb-1">View Profile</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

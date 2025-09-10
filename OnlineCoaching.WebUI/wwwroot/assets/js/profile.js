@@ -48,10 +48,10 @@ for (const [day, exercises] of Object.entries(exercisesByDay)) {
                     </div>
                     <div class="exercise-image">
                         ${e.ImageUrl
-                    ? `<a href="${e.VideoUrl ?? '#'}" target="_blank">
-                                   <img src="${e.ImageUrl}" class="main-img" alt="${e.NameOfExercise}" />
-                                   <img src="/assets/img/logo/youtube.png" class="youtube-overlay" alt="YouTube" />
-                               </a>`
+                       ? `<a href="javascript:void(0);" onclick="openVideo('${e.VideoUrl ?? ''}')">
+                       <img src="${e.ImageUrl}" class="main-img" alt="${e.NameOfExercise}" />
+                       <img src="/assets/img/logo/youtube.png" class="youtube-overlay" alt="YouTube" />
+                        </a>`
                     : `<span class="text-muted p-3">No Image</span>`}
                     </div>
                 </div>`;
@@ -96,3 +96,71 @@ for (const [day, foods] of Object.entries(foodsByDay)) {
     }
     foodContainer.appendChild(dayDiv);
 }
+
+function openVideo(url) {
+    const modal = document.getElementById("videoModal");
+    const frame = document.getElementById("videoFrame");
+    const videoTag = document.getElementById("videoTag");
+
+    let embedUrl = "";
+    let useIframe = true;
+
+    if (!url) return;
+
+    // YouTube
+    if (url.includes("youtube.com/watch?v=")) {
+        const videoId = url.split("v=")[1].split("&")[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    } else if (url.includes("youtu.be/")) {
+        const videoId = url.split("youtu.be/")[1].split("?")[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    }
+    // Vimeo
+    else if (url.includes("vimeo.com/")) {
+        const videoId = url.split("/").pop();
+        embedUrl = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+    }
+    // Direct video files
+    else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+        useIframe = false;
+        videoTag.src = url;
+        videoTag.style.display = "block";
+        frame.style.display = "none";
+
+        // Force autoplay
+        videoTag.autoplay = true;
+        videoTag.load();
+        videoTag.play();
+    }
+    // Default → treat as iframe
+    else {
+        embedUrl = url + (url.includes("?") ? "&" : "?") + "autoplay=1";
+    }
+
+    if (useIframe) {
+        frame.src = embedUrl;
+        frame.style.display = "block";
+        videoTag.style.display = "none";
+    }
+
+    modal.style.display = "flex";
+}
+
+function closeVideo() {
+    const modal = document.getElementById("videoModal");
+    const frame = document.getElementById("videoFrame");
+    const videoTag = document.getElementById("videoTag");
+
+    frame.src = "";
+    videoTag.pause();
+    videoTag.src = "";
+    modal.style.display = "none";
+}
+
+// Optional: Close when clicking outside video
+window.onclick = function (event) {
+    const modal = document.getElementById("videoModal");
+    if (event.target === modal) {
+        closeVideo();
+    }
+};

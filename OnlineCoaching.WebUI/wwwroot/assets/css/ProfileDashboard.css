@@ -1,0 +1,135 @@
+﻿/* ----- Global Light Theme ----- */
+body , html{
+    background-color: white; /* White background */
+    color: #000000; /* Black text */
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+/* ----- Cards ----- */
+.custom-card {
+    background-color: #f8f9fa; /* Light gray card */
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #ddd;
+}
+
+/* ----- Tables ----- */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+    .table-custom th,
+    .table-custom td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+        vertical-align: middle;
+        color: #000;
+    }
+
+    .table-custom th {
+        background-color: #e9ecef;
+    }
+
+    .table-custom tr:nth-child(even) {
+        background-color: #f1f3f5;
+    }
+
+    .table-custom tr:hover {
+        background-color: #dee2e6;
+    }
+
+/* ----- Day & Muscle Headers ----- */
+.day-header {
+    background-color: #ffc107; /* Yellow header */
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.muscle-header {
+    background-color: #dc3545; /* Red header */
+    color: #fff;
+    padding: 8px 12px;
+    margin: 1.5rem 0 1rem 0;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* ----- Exercises ----- */
+.exercise-card {
+    display: flex;
+    background-color: #f1f3f5;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    align-items: stretch;
+    max-height: 250px;
+}
+
+.exercise-details {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #000;
+}
+
+.exercise-actions .btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+/* ----- Buttons ----- */
+.btn-custom {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+    .btn-warning:hover,
+    .btn-success:hover {
+        opacity: 0.85;
+    }
+
+
+
+/* ----- Responsive ----- */
+@media (max-width: 576px) {
+    .custom-card {
+        padding: 1rem;
+    }
+
+    .table-custom th, .table-custom td {
+        padding: 8px;
+    }
+}

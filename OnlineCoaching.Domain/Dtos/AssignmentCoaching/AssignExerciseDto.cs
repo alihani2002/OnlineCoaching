@@ -4,6 +4,7 @@
     {
         public int ExerciseId { get; set; }
         public string? NameOfExercise { get; set; }
+        public string? VideoUrl { get; set; }
         public string? ImageUrl { get; set; }
         public int Sets { get; set; }
         public int Reps { get; set; }

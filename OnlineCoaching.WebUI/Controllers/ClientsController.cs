@@ -40,7 +40,6 @@ namespace OnlineCoaching.WebUI.Controllers
         //Profile of Client
         public async Task<IActionResult> Profile(int id)
         {
-
             Client? client = null;
 
             if (id > 0) client = _clientService.GetClientById(id);
@@ -49,26 +48,17 @@ namespace OnlineCoaching.WebUI.Controllers
             {
                 var userId = User.GetUserId();
                 if (string.IsNullOrEmpty(userId))
-                {
                     return RedirectToAction("Login", "Account");
-                }
 
                 client = await _clientService.GetClientAsync(userId);
             }
 
-
-            if (client == null)
-                return NotFound("Client not found.");
-
-
             // Check if client has an active approved request
-            var activeRequest = _requestService.GetActiveOrPendingRequest(client.Id);
+            var activeRequest = _requestService.GetActiveOrPendingRequest(client!.Id);
             bool showQuestions = activeRequest != null && activeRequest.Status == ClientStatus.Active;
 
             var questions = showQuestions ? _questionServices.GetQuestions() : new List<Question>();
             var answers = showQuestions ? _questionServices.GetClientAnswer(client.Id) : new List<ClientAnswer>();
-
-
 
             // Fetch assigned exercises and foods
             var assignedExercises = _unitOfWork.AssignExercises
@@ -82,15 +72,6 @@ namespace OnlineCoaching.WebUI.Controllers
                 .Where(f => f.ClientId == client.Id)
                 .ToList();
 
-                 var exercisesByDay = assignedExercises
-                .GroupBy(e => e.DayOfWeek)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            var foodsByMeal = assignedFoods
-                .GroupBy(f => f.MealNumber)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-
             var vm = new ClientDashboardViewModel
             {
                 Client = client,
@@ -101,6 +82,7 @@ namespace OnlineCoaching.WebUI.Controllers
                     Id = a.Id,
                     ExerciseId = a.ExerciseId,
                     NameOfExercise = a.Exercise?.Name,
+                    VideoUrl = a.Exercise?.VideoUrl,
                     Sets = a.Sets,
                     Reps = a.Reps,
                     Notes = a.Notes,
@@ -124,6 +106,80 @@ namespace OnlineCoaching.WebUI.Controllers
                     MealNumberName = (f.Meal?.MealNumber ?? f.MealNumber).ToString(),
                 }).ToList(),
               
+
+            };
+
+            return View(vm);
+        }
+
+        public async Task<IActionResult> ProfileDashboard(int id)
+        {
+            Client? client = null;
+
+            if (id > 0) client = _clientService.GetClientById(id);
+
+            else
+            {
+                var userId = User.GetUserId();
+                if (string.IsNullOrEmpty(userId))
+                    return RedirectToAction("Login", "Account");
+
+                client = await _clientService.GetClientAsync(userId);
+            }
+
+            // Check if client has an active approved request
+            var activeRequest = _requestService.GetActiveOrPendingRequest(client.Id);
+            bool showQuestions = activeRequest != null && activeRequest.Status == ClientStatus.Active;
+
+            var questions = showQuestions ? _questionServices.GetQuestions() : new List<Question>();
+            var answers = showQuestions ? _questionServices.GetClientAnswer(client.Id) : new List<ClientAnswer>();
+
+            // Fetch assigned exercises and foods
+            var assignedExercises = _unitOfWork.AssignExercises
+                .GetQueryable().Include(a => a.Exercise).ThenInclude(m => m!.Muscle)
+                .Where(a => a.ClientId == client.Id)
+                .ToList();
+
+            var assignedFoods = _unitOfWork.AssignFoods
+                .GetQueryable().Include(f => f.Food)
+                .Include(f => f.Meal)
+                .Where(f => f.ClientId == client.Id)
+                .ToList();
+
+
+            var vm = new ClientDashboardViewModel
+            {
+                Client = client,
+                Questions = questions,
+                Answers = answers,
+                AssignedExercises = assignedExercises.Select(a => new AssignExerciseDto
+                {
+                    Id = a.Id,
+                    ExerciseId = a.ExerciseId,
+                    NameOfExercise = a.Exercise?.Name,
+                    Sets = a.Sets,
+                    Reps = a.Reps,
+                    Notes = a.Notes,
+                    DayOfWeek = a.DayOfWeek,
+                    MuscleName = a.Exercise?.Muscle?.Name,
+                    ImageUrl = a.Exercise?.ImageUrl
+                }).ToList(),
+
+                AssignedFoods = assignedFoods.Select(f => new AssignFoodDto
+                {
+                    Id = f.Id,
+                    FoodId = f.FoodId,
+                    FoodName = f.Food?.Name,
+                    Quantity = f.Quantity,
+                    Notes = f.Notes,
+                    NumberOfServings = f.NumberOfServings,
+                    DayOfWeek = f.Meal?.DayOfWeek ?? f.DayOfWeek,
+                    MealNumber = f.Meal?.MealNumber ?? f.MealNumber,
+
+                    DayOfWeekName = (f.Meal?.DayOfWeek ?? f.DayOfWeek).ToString(),
+                    MealNumberName = (f.Meal?.MealNumber ?? f.MealNumber).ToString(),
+                }).ToList(),
+
 
             };
 
