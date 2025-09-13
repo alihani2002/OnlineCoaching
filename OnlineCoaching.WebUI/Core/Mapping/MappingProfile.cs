@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using OnlineCoaching.Domain.Dtos;
 using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
+using OnlineCoaching.Domain.Dtos.Cooking;
 using OnlineCoaching.Domain.Dtos.ExerciseSheet;
+using OnlineCoaching.Domain.Dtos.Gallery;
+using OnlineCoaching.Domain.Entities.Gallery;
 
 namespace OnlineCoaching.Web.Core.Mapping
 {
@@ -9,8 +12,6 @@ namespace OnlineCoaching.Web.Core.Mapping
     {
         public MappingProfile()
         {
-         
-
             #region Food 
 
             CreateMap<Food , FoodDto>().ReverseMap();
@@ -65,10 +66,9 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedById, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore());
-            #endregion
 
-            // CoachingPackage
             CreateMap<CoachingPackage, CoachingPackageDto>().ReverseMap();
+            #endregion
 
             #region CoachingPackageRequest
             CreateMap<CoachingPackageRequest, CoachingPackageRequestDto>()
@@ -82,9 +82,12 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
             #endregion
 
+            #region assign program
+
             CreateMap<AssignExercise, AssignExerciseDto>().ReverseMap();
             CreateMap<AssignFood, AssignFoodDto>().ReverseMap();
 
+            #endregion
 
             #region ExerciseSheetLog
             CreateMap<ExerciseSheetLog, ExerciseSheetLogDto>()
@@ -106,6 +109,17 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
             #endregion
 
+            #region gallery
+            CreateMap<HomeGallary, GalleryDto>().ReverseMap();
+            CreateMap<GalleryDto, HomeGallary>().ReverseMap();
+            CreateMap<CreateGalleryDto, HomeGallary>().ReverseMap();
+            CreateMap<HomeGallary, ProfileImageDto>().ReverseMap();
+            #endregion
+
+            #region Cooking
+            CreateMap<Cooking, Cookingdto>().ReverseMap();
+            CreateMap<Cooking, Cooking>().ReverseMap();
+            #endregion
         }
     }
 }

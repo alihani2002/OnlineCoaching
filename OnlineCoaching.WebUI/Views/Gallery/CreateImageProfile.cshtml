@@ -1,0 +1,12 @@
+﻿@model OnlineCoaching.Domain.Dtos.Gallery.CreateGalleryDto
+
+<h2>Add New Image</h2>
+
+<form asp-action="CreateImageProfile" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Coach Profile Image</label>
+        <input type="file" name="coachImageFile" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

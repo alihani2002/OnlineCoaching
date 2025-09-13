@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Application.Common.Interfaces
+﻿using OnlineCoaching.Domain.Entities.Gallery;
+
+namespace OnlineCoaching.Application.Common.Interfaces
 {
     public interface IApplicationDbContext
     {
@@ -24,6 +26,9 @@
         public DbSet<Meal> Meals { get; set; }
         public DbSet<ExerciseSheetLog> ExerciseSheetLogs { get; set; }
         public DbSet<ClientAnswerOption> ClientAnswerOptions { get; set; }
+        public DbSet<HomeGallary> Images { get; set; }
+        public DbSet<Cooking> Cookings { get; set; }
+
 
         int SaveChanges();
     }

@@ -19,21 +19,17 @@
             // calculate protein for given grams
             double selectedProtein = (selectedFood.Protein / (double)selectedFood.Gram) * grams;
 
-            var foods = _unitOfWork.Foods.GetAll().Where(f => !f.IsDeleted && f.Id != foodId);
+            var foods = _unitOfWork.Foods.GetQueryable().Where(f => !f.IsDeleted && f.Id != foodId);
 
             // find foods that have nearly same protein content for same grams
-            var substitutes = foods.Where(f =>
-            {
-                double proteinForGrams = (f.Protein / (double)f.Gram) * grams;
-                return Math.Abs(proteinForGrams - selectedProtein) <= 1; 
-            });
+            var substitutes = foods.Where(f =>Math.Abs(((f.Protein / (double)f.Gram) * grams) - selectedProtein) <= 1);
 
             return _mapper.Map<IEnumerable<FoodDto>>(substitutes);
         }
 
         public IEnumerable<FoodDto> GetFoodsAsync()
         {
-            var foods =  _unitOfWork.Foods.GetAll().Where(f=>f.IsDeleted is false);
+            var foods =  _unitOfWork.Foods.GetQueryable().Where(f=>!f.IsDeleted);
             return _mapper.Map<IEnumerable<FoodDto>>(foods);
         }
 

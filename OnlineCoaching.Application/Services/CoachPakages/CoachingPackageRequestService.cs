@@ -50,7 +50,7 @@ namespace OnlineCoaching.Application.Services
                 throw new Exception("Package not found");
 
             var existingActive = _unitOfWork.CoachingPackageRequests
-                .GetAll()
+                .GetQueryable()
                 .FirstOrDefault(r =>
                     r.PackageId == packageId &&
                     r.ClientId == clientId &&
@@ -161,7 +161,7 @@ namespace OnlineCoaching.Application.Services
             var today = DateTime.Now;
 
             var requests = _unitOfWork.CoachingPackageRequests
-                            .GetAll()
+                            .GetQueryable()
                             .Where(r => !r.IsDeleted && r.Status == ClientStatus.Active)
                             .ToList();
 

@@ -48,7 +48,7 @@ internal class BaseRepository<T> : IBaseRepository<T> where T : class
     }
 
 
-    public IEnumerable<T> GetAll(bool withNoTracking = true)
+    public IEnumerable<T> GetQueryable(bool withNoTracking = true)
     {
         IQueryable<T> query = _context.Set<T>();
 

@@ -8,7 +8,7 @@
         Task<bool> IsExistsAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includes);
 
-        IEnumerable<T> GetAll(bool withNoTracking = true);
+        IEnumerable<T> GetQueryable(bool withNoTracking = true);
         IQueryable<T> GetQueryable();
         PaginatedList<T> GetPaginatedList(IQueryable<T> query, int pageNumber, int pageSize);
         T? GetById(int id);

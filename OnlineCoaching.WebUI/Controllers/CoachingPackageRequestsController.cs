@@ -4,7 +4,6 @@ using OnlineCoaching.Application.Services;
 using OnlineCoaching.WebUI.Models.RequestPackage;
 namespace OnlineCoaching.WebUI.Controllers
 {
-
     [Authorize]
     public class CoachingPackageRequestsController(ICoachingPackageRequestService requestService, IClientService clientService, ICoachingPackageServices coachingPackage) : Controller
     {

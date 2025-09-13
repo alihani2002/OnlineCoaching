@@ -13,7 +13,7 @@
 
             public IEnumerable<CoachingPackageDto> GetCoachingPackages()
             {
-                var packages = _unitOfWork.CoachingPackages.GetAll()
+                var packages = _unitOfWork.CoachingPackages.GetQueryable()
                                     .Where(p => !p.IsDeleted)
                                     .ToList();
                 return _mapper.Map<IEnumerable<CoachingPackageDto>>(packages);

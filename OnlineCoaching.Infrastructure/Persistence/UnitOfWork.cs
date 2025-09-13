@@ -1,5 +1,6 @@
 ﻿using ActiveGym.Infrastructure.Persistence.Repositories;
 using OnlineCoaching.Application.Common.Interfaces.Repositories;
+using OnlineCoaching.Domain.Entities.Gallery;
 
 namespace OnlineCoaching.Infrastructure.Persistence
 {
@@ -44,6 +45,10 @@ namespace OnlineCoaching.Infrastructure.Persistence
 
         public IBaseRepository<ExerciseSheetLog> ExerciseSheetLogs => new BaseRepository<ExerciseSheetLog>(_context);
         public IBaseRepository<ClientAnswerOption> ClientAnswerOptions => new BaseRepository<ClientAnswerOption>(_context);
+
+        public IBaseRepository<HomeGallary> Images => new BaseRepository<HomeGallary>(_context);
+
+        public IBaseRepository<Cooking> Cookings => new BaseRepository<Cooking>(_context);
 
         public int Complete()
         {

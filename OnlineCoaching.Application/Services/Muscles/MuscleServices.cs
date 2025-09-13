@@ -13,7 +13,7 @@
 
         public IEnumerable<MuscleDto> GetMuscles()
         {
-            var muscles = _unitOfWork.Muscles.GetAll().Where(m => !m.IsDeleted);
+            var muscles = _unitOfWork.Muscles.GetQueryable().Where(m => !m.IsDeleted);
             return _mapper.Map<IEnumerable<MuscleDto>>(muscles);
         }
 

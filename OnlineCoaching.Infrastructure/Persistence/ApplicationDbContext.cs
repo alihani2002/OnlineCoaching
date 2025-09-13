@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Infrastructure.Persistence
+﻿using OnlineCoaching.Domain.Entities.Gallery;
+
+namespace OnlineCoaching.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
@@ -30,6 +32,8 @@
         public DbSet<Meal> Meals { get; set ; }
         public DbSet<ExerciseSheetLog> ExerciseSheetLogs { get ; set; }
         public DbSet<ClientAnswerOption> ClientAnswerOptions { get; set; }
+        public DbSet<HomeGallary> Images { get; set; }
+        public DbSet<Cooking> Cookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

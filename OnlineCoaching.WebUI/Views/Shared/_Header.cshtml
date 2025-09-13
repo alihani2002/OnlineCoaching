@@ -43,6 +43,8 @@
                                     <li><a asp-controller="CoachingPackages" asp-action="GetCoachingPackage">CoachPackages</a></li>
                                     <li><a asp-controller="Transformation" asp-action="BeforeAndAfter">Transformations</a></li>
                                     <li><a asp-controller="Food" asp-action="Compare">Compare</a></li>
+                                    <li><a asp-controller="Gallery" asp-action="Galleries">Gallery</a></li>
+
                                 }
                                 else if (User.IsInRole(AppRoles.Coach))
                                 {
@@ -54,7 +56,7 @@
                                     <li><a asp-controller="CoachingPackages" asp-action="Index">CoachPackages</a></li>
                                     <li><a asp-controller="Transformation" asp-action="BeforeAndAfter">Transformations</a></li>
                                     <li><a asp-controller="Food" asp-action="Compare">Compare</a></li>
-                                    <li><a asp-controller="Gallery" asp-action="Index">Gallery</a></li>
+                                    <li><a asp-controller="Gallery" asp-action="Galleries">Gallery</a></li>
                                 }
                                 @if (SignInManager.IsSignedIn(User))
                                 {

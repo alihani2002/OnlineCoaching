@@ -1,0 +1,41 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.Gallery.GalleryDto>
+
+@{
+    ViewData["Title"] = "Galleries Page";
+}
+
+<!--? Gallery Area Start -->
+<div class="gallery-area section-padding30">
+    <div class="container-fluid">
+        <div class="row">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                        <div class="box snake mb-30">
+                            <div class="gallery-img big-img"
+                                 style="background-image: url(@item.Image);">
+                            </div>
+                            <div class="overlay">
+                                <div class="overlay-content">
+                                    <h3>Gallery Image @item.Id</h3>
+                                    <a asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="ti-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <p>No images available in the gallery.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Gallery Area End -->

@@ -31,48 +31,52 @@
 
                                     <input type="hidden" name="answers[@i].QuestionId" value="@question.Id" />
 
-                                    @if (question.Type == QuestionType.SingleChoice)
+                                @if (question.Type == QuestionType.SingleChoice)
+                                {
+                                    foreach (var option in question.Options!)
                                     {
-                                        foreach (var option in question.Options!)
-                                        {
-                                            <div class="form-check option-item mb-2">
-                                                <input class="form-check-input styled-check"
-                                                       type="radio"
-                                                       name="answers[@i].SelectedOptions[0].OptionId"
-                                                       value="@option.Id"
-                                                       id="option-@option.Id-@i" />
-                                                <label class="form-check-label text-dark fw-semibold" for="option-@option.Id-@i">
-                                                    @option.Text
-                                                </label>
-                                            </div>
-                                        }
+                                        <div class="form-check option-item mb-2">
+                                            <input class="form-check-input styled-check"
+                                                    type="radio"
+                                                    name="answers[@i].SelectedOptions[0].OptionId"
+                                                    value="@option.Id"
+                                                    id="option-@option.Id-@i"
+                                                    required />   <!-- 🔹 Required -->
+                                            <label class="form-check-label text-dark fw-semibold" for="option-@option.Id-@i">
+                                                @option.Text
+                                            </label>
+                                        </div>
                                     }
-                                    else if (question.Type == QuestionType.MultipleChoice)
+                                }
+                                else if (question.Type == QuestionType.MultipleChoice)
+                                {
+                                    var optionsList = question.Options!.ToList();
+                                    for (int j = 0; j < optionsList.Count; j++)
                                     {
-                                        var optionsList = question.Options!.ToList();
-                                        for (int j = 0; j < optionsList.Count; j++)
-                                        {
-                                            var option = optionsList[j];
-                                            <div class="form-check option-item mb-2">
-                                                <input class="form-check-input styled-check"
-                                                       type="checkbox"
-                                                       name="answers[@i].SelectedOptions[@j].OptionId"
-                                                       value="@option.Id"
-                                                       id="option-@option.Id-@i-@j" />
-                                                <label class="form-check-label text-dark fw-semibold" for="option-@option.Id-@i-@j">
-                                                    @option.Text
-                                                </label>
-                                            </div>
-                                        }
+                                        var option = optionsList[j];
+                                        <div class="form-check option-item mb-2">
+                                            <input class="form-check-input styled-check"
+                                                    type="checkbox"
+                                                    name="answers[@i].SelectedOptions[@j].OptionId"
+                                                    value="@option.Id"
+                                                    id="option-@option.Id-@i-@j"
+                                                    data-required="true" /> <!-- 🔹 Custom check for group -->
+                                            <label class="form-check-label text-dark fw-semibold" for="option-@option.Id-@i-@j">
+                                                @option.Text
+                                            </label>
+                                        </div>
                                     }
-                                    else if (question.Type == QuestionType.OpenText)
-                                    {
-                                        <textarea name="answers[@i].AnswerText"
-                                          class="form-control mt-2 text-dark"
-                                          rows="3"
-                                          placeholder="✍️ اكتب إجابتك هنا..."
-                                          dir="@(isArabic ? "rtl" : "ltr")"></textarea>
-                                    }
+                                }
+                                else if (question.Type == QuestionType.OpenText)
+                                {
+                                    <textarea name="answers[@i].AnswerText"
+                                                class="form-control mt-2 text-dark"
+                                                rows="3"
+                                                placeholder="✍️ اكتب إجابتك هنا..."
+                                                dir="@(isArabic ? "rtl" : "ltr")"
+                                                required></textarea>  <!-- 🔹 Required -->
+                                }
+
                                 </div>
                             </div>
                         </div>
@@ -164,17 +168,30 @@
                     scrollToNext(index);
                 });
 
-                // Checkboxes
+                // Checkboxes (require at least one)
                 $item.find('input[type="checkbox"]').on('change', function () {
                     $(this).closest('.form-check').toggleClass('option-selected', this.checked);
                 });
+            });
 
-                // Text input
-                $item.find('textarea').on('input', function () {
-                    if ($(this).val().trim().length > 2) {
-                        scrollToNext(index);
+            // 🔹 Prevent form submission if required checkboxes are empty
+            $("form").on("submit", function (e) {
+                let valid = true;
+
+                $(".question-item").each(function () {
+                    const checkboxes = $(this).find("input[type='checkbox'][data-required='true']");
+                    if (checkboxes.length > 0) {
+                        if (!checkboxes.is(":checked")) {
+                            valid = false;
+                            $(this).find(".form-check-label").first().append("<span class='text-danger ms-2'>* Required</span>");
+                        }
                     }
                 });
+
+                if (!valid) {
+                    e.preventDefault();
+                    alert("⚠️ Please answer all required questions before submitting.");
+                }
             });
         });
     </script>

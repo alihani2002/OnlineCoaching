@@ -1,0 +1,32 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.Gallery.GalleryDto>
+
+<h2>Gallery</h2>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Image in gallery</a>
+    <a asp-action="CreateImageProfile" class="btn btn-primary">Add New Image in gallery</a>
+
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var img in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@img.Image" class="img-thumbnail" width="150" />
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@img.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@img.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@img.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

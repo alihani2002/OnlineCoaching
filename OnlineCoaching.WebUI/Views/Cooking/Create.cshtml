@@ -1,0 +1,43 @@
+﻿@model OnlineCoaching.Domain.Dtos.Cooking.Cookingdto
+
+@{
+    ViewData["Title"] = "Create Cooking";
+}
+
+<h2>Create Cooking</h2>
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control"  />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Upload Image</label>
+        <input type="file" name="imageFile" class="form-control"  />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="VideoUrl"></label>
+        <input asp-for="VideoUrl" class="form-control"  />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

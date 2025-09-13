@@ -29,15 +29,16 @@ namespace OnlineCoaching.WebUI.Controllers
             _assignmentService = assignmentService;
         }
 
-        //Get all Clients in tables
+        #region Get all Clients in tables in dashboard of Admin
         public IActionResult Index()
         {
             var clients = _clientService.GetAllClients();
             return View(clients);
         }
+        #endregion
 
+        #region Profile of Client 
 
-        //Profile of Client
         public async Task<IActionResult> Profile(int id)
         {
             Client? client = null;
@@ -111,6 +112,9 @@ namespace OnlineCoaching.WebUI.Controllers
 
             return View(vm);
         }
+        #endregion
+
+        #region Profile of client for admin
 
         public async Task<IActionResult> ProfileDashboard(int id)
         {
@@ -128,7 +132,7 @@ namespace OnlineCoaching.WebUI.Controllers
             }
 
             // Check if client has an active approved request
-            var activeRequest = _requestService.GetActiveOrPendingRequest(client.Id);
+            var activeRequest = _requestService.GetActiveOrPendingRequest(client!.Id);
             bool showQuestions = activeRequest != null && activeRequest.Status == ClientStatus.Active;
 
             var questions = showQuestions ? _questionServices.GetQuestions() : new List<Question>();
@@ -186,7 +190,9 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(vm);
         }
 
+        #endregion
 
+        #region Get action Questions of clients to answer it 
         // Clients/CompleteQuestion
         public IActionResult CompleteQuestion()
         {
@@ -194,7 +200,9 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(questions);
         }
 
+        #endregion
 
+        #region Post action Questions of clients to answer it 
         // POST: Clients/CompleteQuestion
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -268,10 +276,10 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction("Profile");
         }
 
+        #endregion
 
 
-        // Clients/CompleteProfileData
-
+        #region CompleteProfileData
         [HttpPost]
         public async Task<IActionResult> CompleteProfile(Client client)
         {
@@ -281,15 +289,13 @@ namespace OnlineCoaching.WebUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
+        #endregion
 
 
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var client = await _context.Clients
                 .Include(c => c.User)
@@ -323,8 +329,8 @@ namespace OnlineCoaching.WebUI.Controllers
 
         public IActionResult Assign(int clientId)
         {
-            var exercises = _unitOfWork.Exercises.GetAll();
-            var foods = _unitOfWork.Foods.GetAll();
+            var exercises = _unitOfWork.Exercises.GetQueryable();
+            var foods = _unitOfWork.Foods.GetQueryable();
             var request = _requestService.GetUserRequest(clientId).Result;
 
             var model = new AssignViewModel
@@ -414,8 +420,8 @@ namespace OnlineCoaching.WebUI.Controllers
                 RequestId = requestId, 
                 AssignedExercises = assignedExercises,
                 AssignedFoods = assignedFoods,
-                AvailableExercises = _unitOfWork.Exercises.GetAll().ToList(),
-                AvailableFoods = _unitOfWork.Foods.GetAll().ToList()
+                AvailableExercises = _unitOfWork.Exercises.GetQueryable().ToList(),
+                AvailableFoods = _unitOfWork.Foods.GetQueryable().ToList()
             };
 
             return View(model);

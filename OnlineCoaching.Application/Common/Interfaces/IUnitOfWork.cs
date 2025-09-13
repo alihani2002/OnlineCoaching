@@ -1,4 +1,6 @@
-﻿namespace OnlineCoaching.Application.Common.Interfaces
+﻿using OnlineCoaching.Domain.Entities.Gallery;
+
+namespace OnlineCoaching.Application.Common.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -45,6 +47,9 @@
         IBaseRepository<ExerciseSheetLog> ExerciseSheetLogs { get; }
 
         IBaseRepository<ClientAnswerOption> ClientAnswerOptions { get; }
+        IBaseRepository<HomeGallary> Images { get; }
+        IBaseRepository<Cooking> Cookings { get; }
+
 
         int Complete();
 
