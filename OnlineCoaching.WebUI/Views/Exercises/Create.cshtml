@@ -1,75 +1,98 @@
-﻿@using OnlineCoaching.Domain.Dtos
-@model CreateExerciseDto
+﻿@model OnlineCoaching.Domain.Dtos.CreateExerciseDto
 
 @{
     ViewData["Title"] = "Create Exercise";
 }
 
-<h2>Create Exercise</h2>
-
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="VideoUrl" class="control-label"></label>
-        <input asp-for="VideoUrl" class="form-control" />
-        <span asp-validation-for="VideoUrl" class="text-danger"></span>
-    </div>
-
-    <!-- Dropdown for Muscles -->
-    <div class="form-group">
-        <label asp-for="MuscleId" class="control-label"></label>
-        <select asp-for="MuscleId" class="form-control" asp-items="ViewBag.Muscles">
-            <option value="">-- Select Muscle --</option>
-        </select>
-        <span asp-validation-for="MuscleId" class="text-danger"></span>
-    </div>
-
-    <!-- Upload Exercise Image -->
-    <div class="form-group">
-        <label for="ImageUrl">Exercise Image</label>
-        <input type="file" name="ImageUrl" class="form-control-file" />
-    </div>
-
-    <!-- Dynamic list of LinkUrls -->
-    <div class="form-group">
-        <label>Additional Links</label>
-        <div id="links-container">
-            <input type="text" name="LinkUrls[0]" class="form-control mb-2" placeholder="Enter link" />
+<div class="container py-5" style="max-width: 800px;">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Create New Exercise</h3>
         </div>
-        <button type="button" id="add-link" class="btn btn-sm btn-secondary">Add another link</button>
-    </div>
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
 
-    <div class="form-group mt-3">
-        <button type="submit" class="btn btn-primary">Create</button>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                <div class="mb-4">
+                    <label asp-for="Name" class="form-label fw-bold"></label>
+                    <input asp-for="Name" class="form-control form-control-lg" placeholder="e.g., Bench Press" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control form-control-lg" rows="4" placeholder="Describe the exercise technique and purpose."></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="MuscleId" class="form-label fw-bold">Target Muscle</label>
+                        <select asp-for="MuscleId" class="form-control form-control-lg" asp-items="ViewBag.Muscles">
+                            <option value="">-- Select Muscle --</option>
+                        </select>
+                        <span asp-validation-for="MuscleId" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="VideoUrl" class="form-label fw-bold">Video URL</label>
+                        <input asp-for="VideoUrl" class="form-control form-control-lg" placeholder="e.g., https://youtube.com/..." />
+                        <span asp-validation-for="VideoUrl" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="ImageUrl" class="form-label fw-bold">Exercise Image</label>
+                    <input type="file" name="ImageUrl" class="form-control form-control-lg" accept="image/*" />
+                    <div class="form-text text-muted">Upload an image for the exercise (optional).</div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-3">Additional Links</h5>
+                    <div id="links-container">
+                        <div class="d-flex mb-2">
+                            <input type="text" name="LinkUrls" class="form-control form-control-lg me-2" placeholder="Enter link" />
+                            <button type="button" class="btn btn-outline-danger" onclick="removeLink(this)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary mt-2" onclick="addLink()">
+                        <i class="bi bi-plus-circle me-1"></i> Add Link
+                    </button>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-arrow-left-circle me-1"></i> Back to List
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Create
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+</div>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
-        let linkIndex = 1;
-        document.getElementById("add-link").addEventListener("click", function () {
-            let container = document.getElementById("links-container");
-            let input = document.createElement("input");
-            input.type = "text";
-            input.name = `LinkUrls[${linkIndex}]`;
-            input.className = "form-control mb-2";
-            input.placeholder = "Enter link";
-            container.appendChild(input);
-            linkIndex++;
-        });
+        function addLink() {
+            var container = document.getElementById('links-container');
+            var div = document.createElement('div');
+            div.classList.add('d-flex', 'mb-2');
+            div.innerHTML = `
+                <input type="text" name="LinkUrls" class="form-control form-control-lg me-2" placeholder="Enter link URL" />
+                <button type="button" class="btn btn-outline-danger" onclick="removeLink(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeLink(button) {
+            button.parentElement.remove();
+        }
     </script>
 }

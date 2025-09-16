@@ -4,58 +4,79 @@
     ViewData["Title"] = "Delete Exercise";
 }
 
-<h2>Delete Exercise</h2>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0">Delete Exercise</h3>
+        </div>
+        <div class="card-body">
+            <h5 class="text-danger fw-bold mb-3">
+                Are you sure you want to delete this exercise?
+            </h5>
 
-<h4>Are you sure you want to delete this exercise?</h4>
-<hr />
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Name</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
 
-<div class="card p-3">
-    <dl class="row">
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@Model.Name</dd>
+                <dt class="col-sm-3 fw-bold">Muscle</dt>
+                <dd class="col-sm-9">@Model.MuscleName</dd>
 
-        <dt class="col-sm-2">ImageUrl</dt>
-        <dd class="col-sm-10">@Model.ImageUrl</dd>
-
-        <dt class="col-sm-2">Description</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
-
-        <dt class="col-sm-2">Muscle</dt>
-        <dd class="col-sm-10">@Model.MuscleName</dd>
-
-        <dt class="col-sm-2">Video</dt>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.VideoUrl))
-            {
-                <a href="@Model.VideoUrl" target="_blank">Watch Video</a>
-            }
-            else
-            {
-                <span class="text-muted">No video</span>
-            }
-        </dd>
-
-        <dt class="col-sm-2">Links</dt>
-        <dd class="col-sm-10">
-            @if (Model.LinkUrls != null && Model.LinkUrls.Any())
-            {
-                <ul>
-                    @foreach (var link in Model.LinkUrls)
+                <dt class="col-sm-3 fw-bold">Image</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
                     {
-                        <li><a href="@link" target="_blank">@link</a></li>
+                        <img src="@Url.Content(Model.ImageUrl)" alt="Exercise Image" class="rounded" width="100" />
                     }
-                </ul>
-            }
-            else
-            {
-                <span class="text-muted">No links</span>
-            }
-        </dd>
-    </dl>
-</div>
+                    else
+                    {
+                        <span class="text-muted fst-italic">No image</span>
+                    }
+                </dd>
 
-<form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+                <dt class="col-sm-3 fw-bold">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3 fw-bold">Video</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                    {
+                        <a href="@Model.VideoUrl" target="_blank">Watch Video</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No video</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3 fw-bold">Links</dt>
+                <dd class="col-sm-9">
+                    @if (Model.LinkUrls != null && Model.LinkUrls.Any())
+                    {
+                        <ul class="list-unstyled">
+                            @foreach (var link in Model.LinkUrls)
+                            {
+                                <li><a href="@link" target="_blank">@link</a></li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No links</span>
+                    }
+                </dd>
+            </dl>
+
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

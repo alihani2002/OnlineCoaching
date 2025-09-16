@@ -1,0 +1,63 @@
+﻿/* Custom CSS for a professional form layout */
+.register-card {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+    .form-header h2 {
+        font-weight: 600;
+    }
+
+.form-group label {
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    }
+
+.btn-custom-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    font-size: 1.1rem;
+    padding: 10px 30px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+    .btn-custom-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+.btn-custom-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    font-size: 1.1rem;
+    padding: 10px 30px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+    .btn-custom-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }

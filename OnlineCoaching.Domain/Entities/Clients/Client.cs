@@ -6,11 +6,16 @@
         public string? FullName { get; set; }
         public DateTime BirthDate { get; set; }
 
-        [MaxLength(20)]
-        public string? PhoneNumber { get; set; }
+        [MaxLength(11)]
+        public string? WhatsUpNumber { get; set; }
 
         [MaxLength(200)]
         public string? Address { get; set; }
+
+        [MaxLength(14)]
+        public string? NationalId { get; set; }
+
+
 
         [ForeignKey("User")]
         public string? UserId { get; set; }

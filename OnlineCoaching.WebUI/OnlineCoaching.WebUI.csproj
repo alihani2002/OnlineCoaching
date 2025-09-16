@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\Dashboard\" />
     <Folder Include="wwwroot\templete\" />
   </ItemGroup>
 

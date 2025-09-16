@@ -4,38 +4,60 @@
     ViewData["Title"] = "Edit Package";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container py-5" style="max-width: 700px;">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Edit Coaching Package</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="Title" class="form-control" placeholder="Package Title" required />
+                            <label asp-for="Title">Package Title</label>
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+                    </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+                    <div class="col-md-12 mb-4">
+                        <div class="form-floating">
+                            <textarea asp-for="Description" class="form-control" placeholder="Package Description" style="height: 150px" required></textarea>
+                            <label asp-for="Description">Description</label>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="DurationInMonths" class="form-control" type="number" placeholder="Duration" required />
+                            <label asp-for="DurationInMonths">Duration (in months)</label>
+                            <span asp-validation-for="DurationInMonths" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Price" required />
+                            <label asp-for="Price">Price</label>
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="DurationInMonths"></label>
-        <input asp-for="DurationInMonths" class="form-control" type="number" />
-        <span asp-validation-for="DurationInMonths" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="Price"></label>
-        <input asp-for="Price" class="form-control" type="number" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Update</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
-</form>
+</div>
 
 @section Scripts {
     @{

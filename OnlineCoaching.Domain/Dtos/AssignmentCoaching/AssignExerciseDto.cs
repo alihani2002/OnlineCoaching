@@ -2,10 +2,8 @@
 {
     public class AssignExerciseDto : BaseEntity
     {
-            [Required(ErrorMessage = "Exercise ID is required.")]
             public int ExerciseId { get; set; }
 
-            [Required(ErrorMessage = "Exercise name is required.")]
             [StringLength(100, ErrorMessage = "Exercise name cannot exceed 100 characters.")]
             public string? NameOfExercise { get; set; }
 
@@ -24,7 +22,6 @@
             [StringLength(500, ErrorMessage = "Notes cannot exceed 500 characters.")]
             public string? Notes { get; set; }
 
-            [Required]
             public DayOfWeekEnum DayOfWeek { get; set; }
 
             [StringLength(100, ErrorMessage = "Muscle name cannot exceed 100 characters.")]

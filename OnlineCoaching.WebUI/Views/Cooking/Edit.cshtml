@@ -5,45 +5,73 @@
     ViewData["Title"] = "Edit Cooking";
 }
 
-<h2>Edit Cooking</h2>
+<div class="container my-5" style="max-width: 800px;">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-dark text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Edit Cooking Recipe</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="row g-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedOn" />
+                <input type="hidden" asp-for="ImageUrl" />
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <input type="hidden" asp-for="CreatedOn" />
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Name" class="form-control" placeholder="Recipe Name" required />
+                        <label asp-for="Name"></label>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Title" class="form-control" placeholder="Recipe Title" required />
+                        <label asp-for="Title"></label>
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" required />
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea asp-for="Description" class="form-control" placeholder="Description" style="height: 120px;" required></textarea>
+                        <label asp-for="Description"></label>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="imageFile" class="form-label d-block mb-2">Recipe Image</label>
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="mt-3 text-center">
+                            <img src="@Url.Content(Model.ImageUrl)" class="img-thumbnail rounded shadow-sm" alt="Current Image" style="max-width: 200px; height: auto;" />
+                            <p class="small text-muted mt-1">Current Image</p>
+                        </div>
+                    }
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input asp-for="VideoUrl" class="form-control" placeholder="Video URL" required />
+                        <label asp-for="VideoUrl"></label>
+                        <span asp-validation-for="VideoUrl" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-end gap-2 mt-5">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Update
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control" required></textarea>
-    </div>
-
-    <div class="form-group">
-        <label>Current Image</label><br />
-        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-        {
-            <img src="@Model.ImageUrl" width="120" class="mb-2" />
-        }
-        <input type="file" name="imageFile" class="form-control" />
-    </div>
-
-
-    <div class="form-group">
-        <label asp-for="VideoUrl"></label>
-        <input asp-for="VideoUrl" class="form-control" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

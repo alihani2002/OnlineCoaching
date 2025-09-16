@@ -4,36 +4,79 @@
     ViewData["Title"] = "Food Details";
 }
 
-<div class="card shadow p-4">
-    <dl class="row">
-        <dt class="col-sm-3 text-dark">ID</dt>
-        <dd class="col-sm-9">@Model.Id</dd>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+                <img src="~/assets/img/logo/noimage.jpg"
+                     alt="Food image for @Model.Name"
+                     class="rounded-circle me-4"
+                     style="width: 100px; height: 100px; object-fit: cover;" />
 
-        <dt class="col-sm-3 text-dark">Name</dt>
-        <dd class="col-sm-9">@Model.Name</dd>
+                <div>
+                    <h2 class="fw-bold mb-0 text-dark">@Model.Name</h2>
+                </div>
+            </div>
 
-        <dt class="col-sm-3 text-dark">Calories</dt>
-        <dd class="col-sm-9">@Model.Calories kcal</dd>
+            <hr class="my-4" />
 
-        <dt class="col-sm-3 text-dark">Protein</dt>
-        <dd class="col-sm-9">@Model.Protein g</dd>
+            <div class="row text-center mb-4">
+                <div class="col">
+                    <div class="fw-bold">
+                        <i class="bi bi-fire text-danger me-1"></i>
+                        @Model.Calories kcal
+                    </div>
+                    <small class="text-muted">Calories</small>
+                </div>
+                <div class="col">
+                    <div class="fw-bold">
+                        <i class="bi bi-egg-fried text-success me-1"></i>
+                        @Model.Protein g
+                    </div>
+                    <small class="text-muted">Protein</small>
+                </div>
+                <div class="col">
+                    <div class="fw-bold">
+                        <i class="bi bi-graph-up text-warning me-1"></i>
+                        @Model.Carbs g
+                    </div>
+                    <small class="text-muted">Carbs</small>
+                </div>
+                <div class="col">
+                    <div class="fw-bold">
+                        <i class="bi bi-droplet-fill text-info me-1"></i>
+                        @Model.Fats g
+                    </div>
+                    <small class="text-muted">Fats</small>
+                </div>
+                <div class="col">
+                    <div class="fw-bold">
+                        <i class="bi bi-rulers text-secondary me-1"></i>
+                        @Model.Gram g
+                    </div>
+                    <small class="text-muted">Gram</small>
+                </div>
+            </div>
 
-        <dt class="col-sm-3 text-dark">Carbs</dt>
-        <dd class="col-sm-9">@Model.Carbs g</dd>
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="card bg-light p-3 rounded-3 mb-4">
+                    <h5 class="fw-bold">Description</h5>
+                    <p class="mb-0">@Model.Description</p>
+                </div>
+            }
+        </div>
+    </div>
 
-        <dt class="col-sm-3 text-dark">Fats</dt>
-        <dd class="col-sm-9">@Model.Fats g</dd>
-
-        <dt class="col-sm-3 text-dark">Gram</dt>
-        <dd class="col-sm-9">@Model.Gram g</dd>        
-
-        <dt class="col-sm-3 text-dark">Description</dt>
-        <dd class="col-sm-9">@Model.Description</dd>
-    </dl>
-</div>
-
-<div class="mt-4">
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle me-1"></i> Back to List
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="bi bi-pencil-square me-1"></i> Edit
+        </a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+            <i class="bi bi-trash me-1"></i> Delete
+        </a>
+    </div>
 </div>

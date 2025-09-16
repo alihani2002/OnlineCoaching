@@ -1,0 +1,72 @@
+﻿/* Custom styles for the professional details page */
+.details-card {
+    max-width: 800px;
+    margin: 3rem auto;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.details-card-header {
+    background-color: #007bff; /* Professional blue */
+    color: #fff;
+    padding: 1.5rem 2rem;
+    border-bottom: none;
+}
+
+    .details-card-header h4 {
+        font-weight: 500;
+        margin: 0;
+    }
+
+.details-card-body {
+    padding: 2rem;
+    background-color: #ffffff;
+}
+
+.details-list dt {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.details-list dd {
+    margin-bottom: 1.5rem;
+    color: #343a40;
+}
+
+.details-icon {
+    color: #007bff;
+    margin-right: 10px;
+}
+
+.options-section {
+    margin-top: 2rem;
+}
+
+    .options-section h5 {
+        color: #343a40;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+.options-list-group-item {
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .options-list-group-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+.btn-custom {
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+}

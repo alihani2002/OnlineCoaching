@@ -1,64 +1,74 @@
 ﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.FoodDto>
 
 @{
-    ViewData["Title"] = "Table Foods";
+    ViewData["Title"] = "Food Catalog";
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-dark">Food Catalog</h2>
+        <a asp-action="Create" class="btn btn-primary shadow">
+            <i class="bi bi-plus-circle-fill me-2"></i> Add New Food
+        </a>
+    </div>
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-<table class="display table align-middle mb-0 bg-white text-dark" id="foodsTable" style="width:100%">
-    <thead class="bg-light text-dark">
-        <tr>
-            <th>Food</th>
-            <th>Gram</th>
-            <th>Calories</th>
-            <th>Protein</th>
-            <th>Carbs</th>
-            <th>Fats</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="text-dark">
-                <td>
-                    <div class="d-flex align-items-center">
-                        <img src="~/assets/img/logo/noimage.jpg"
-                             alt="food image"
-                             class="rounded-circle"
-                             style="width: 45px; height: 45px;" />
-                        <div class="ms-3">
-                            <p class="fw-bold mb-1 text-dark">@item.Name</p>
-                        </div>
-                    </div>
-                </td>
-                <td><span class="badge bg-primary rounded-pill">@item.Gram</span></td>
-                <td><span class="badge bg-primary rounded-pill">@item.Calories</span></td>
-                <td><span class="badge bg-success rounded-pill">@item.Protein g</span></td>
-                <td><span class="badge bg-warning text-dark rounded-pill">@item.Carbs g</span></td>
-                <td><span class="badge bg-info text-dark rounded-pill">@item.Fats g</span></td>
-                <td>
-                    <!-- Dropdown Actions -->
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@item.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                            Actions
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@item.Id">
-                            <li><a class="dropdown-item text-dark" asp-action="Details" asp-route-id="@item.Id">Details</a></li>
-                            <li><a class="dropdown-item text-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-lg rounded-4">
+        <div class="card-body">
+            <table class="display table align-middle mb-0 text-dark" id="foodsTable" style="width:100%">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-secondary fw-semibold">Food</th>
+                        <th class="text-secondary fw-semibold">Gram</th>
+                        <th class="text-secondary fw-semibold">Calories</th>
+                        <th class="text-secondary fw-semibold">Protein</th>
+                        <th class="text-secondary fw-semibold">Carbs</th>
+                        <th class="text-secondary fw-semibold">Fats</th>
+                        <th class="text-secondary fw-semibold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/assets/img/logo/noimage.jpg"
+                                         alt="food image"
+                                         class="rounded-circle me-3"
+                                         style="width: 45px; height: 45px; object-fit: cover;" />
+                                    <div>
+                                        <p class="fw-bold mb-1 text-dark">@item.Name</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-primary-subtle text-primary fw-bold rounded-pill">@item.Gram g</span></td>
+                            <td><span class="badge bg-primary-subtle text-primary fw-bold rounded-pill">@item.Calories kcal</span></td>
+                            <td><span class="badge bg-success-subtle text-success fw-bold rounded-pill">@item.Protein g</span></td>
+                            <td><span class="badge bg-warning-subtle text-warning fw-bold rounded-pill">@item.Carbs g</span></td>
+                            <td><span class="badge bg-info-subtle text-info fw-bold rounded-pill">@item.Fats g</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                                        <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-info-circle me-2"></i>Details</a></li>
+                                        <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square me-2"></i>Edit</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash-fill me-2"></i>Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

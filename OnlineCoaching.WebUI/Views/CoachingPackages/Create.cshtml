@@ -4,51 +4,55 @@
     ViewData["Title"] = "Create Coaching Package";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg border-0 rounded-3">
-                <div class="card-header text-white text-center py-3" style="background-color:#FF0000 ">
-                    <h3 class="mb-0 text-white">@ViewData["Title"]</h3>
+<div class="container py-5" style="max-width: 700px;">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Create New Coaching Package</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post">
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="Title" class="form-control" placeholder="Package Title" required />
+                            <label asp-for="Title">Package Title</label>
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-4">
+                        <div class="form-floating">
+                            <textarea asp-for="Description" class="form-control" placeholder="Package Description" style="height: 150px" required></textarea>
+                            <label asp-for="Description">Description</label>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="DurationInMonths" class="form-control" type="number" placeholder="Duration" required />
+                            <label asp-for="DurationInMonths">Duration (in months)</label>
+                            <span asp-validation-for="DurationInMonths" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Price" required />
+                            <label asp-for="Price">Price</label>
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    <form asp-action="Create" method="post">
-                        <div class="form-floating mb-3">
-                            <input asp-for="Title" class="form-control" placeholder="Package Title" required/>
-                            <label asp-for="Title"></label>
-                            <span asp-validation-for="Title" class="text-danger"></span>
-                        </div>
 
-                        <div class="form-floating mb-3">
-                            <textarea asp-for="Description" class="form-control" placeholder="Package Description" style="height: 120px" required></textarea>
-                            <label asp-for="Description"></label>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input asp-for="DurationInMonths" class="form-control" type="number" placeholder="Duration" required />
-                                    <label asp-for="DurationInMonths"></label>
-                                    <span asp-validation-for="DurationInMonths" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Price" required />
-                                    <label asp-for="Price"></label>
-                                    <span asp-validation-for="Price" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <a class="btn btn-outline-secondary px-4" asp-action="Index">Cancel</a>
-                            <button type="submit" class="btn btn-success px-4">Save</button>
-                        </div>
-                    </form>
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Save
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

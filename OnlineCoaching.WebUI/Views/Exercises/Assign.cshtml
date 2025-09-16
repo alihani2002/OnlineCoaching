@@ -8,7 +8,7 @@
 
 <h2 class="mb-4">Assign to Client</h2>
 
-<form asp-action="Assign" method="post">
+<form asp-action="Assign" asp-controller="Exercises" method="post">
     <input type="hidden" asp-for="ClientId" />
     <input type="hidden" asp-for="RequestId" />
 

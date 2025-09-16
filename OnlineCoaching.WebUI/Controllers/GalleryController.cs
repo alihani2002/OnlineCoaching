@@ -32,16 +32,6 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(images);
         }
 
-        [Authorize(Roles = AppRoles.Admin)]
-        public IActionResult Details(int id)
-        {
-            var image = _galleryServices.GetImageById(id);
-            if (image == null) return NotFound();
-            return View(image);
-        }
-
-
-
         [HttpGet]
         [Authorize(Roles = AppRoles.Admin)]
         public IActionResult Create()

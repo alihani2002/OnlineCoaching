@@ -3,39 +3,50 @@
     ViewData["Title"] = "Register Admin";
 }
 
-<div class="container mt-5">
-    <div class="card shadow-lg p-4 bg-white rounded" style="max-width:600px; margin:auto;">
+<link rel="stylesheet" href="~/css/User-AdminRegister.css" />
+
+
+<div class="container-fluid">
+    <div class="register-card">
+        <div class="form-header">
+            <h2 class="display-5 fw-bold">
+                <i class="fas fa-user-shield me-2 text-primary"></i>
+                Create New Admin
+            </h2>
+            <p class="text-muted">Fill out the form below to register a new administrator.</p>
+        </div>
+
         <form asp-action="AdminRegister" method="post">
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+            <div asp-validation-summary="All" class="text-danger mb-4"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="FullName" class="form-label"></label>
+            <div class="form-group mb-4">
+                <label asp-for="FullName" class="form-label">Full Name</label>
                 <input asp-for="FullName" class="form-control" required />
-                <span asp-validation-for="FullName" class="text-danger"></span>
+                <span asp-validation-for="FullName" class="text-danger mt-1"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="UserName" class="form-label"></label>
+            <div class="form-group mb-4">
+                <label asp-for="UserName" class="form-label">Username</label>
                 <input asp-for="UserName" class="form-control" required />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+                <span asp-validation-for="UserName" class="text-danger mt-1"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="form-label"></label>
+            <div class="form-group mb-4">
+                <label asp-for="Email" class="form-label">Email Address</label>
                 <input asp-for="Email" type="email" class="form-control" required />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <span asp-validation-for="Email" class="text-danger mt-1"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label>Password</label>
+            <div class="form-group mb-4">
+                <label class="form-label">Password</label>
                 <input name="PasswordHash" type="password" class="form-control" required />
             </div>
 
             <input type="hidden" asp-for="Role" value="Admin" />
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-success btn-lg">Register</button>
-                <a asp-action="Index" class="btn btn-secondary btn-lg">Cancel</a>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <button type="submit" class="btn btn-custom-success">Register Admin</button>
+                <a asp-action="Index" class="btn btn-custom-secondary">Cancel</a>
             </div>
         </form>
     </div>

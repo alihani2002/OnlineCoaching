@@ -40,16 +40,10 @@ public class HomeController : Controller
             {
                 var existingRequest = _coachingPackageRequestService.GetActiveOrPendingRequest(client!.Id);
                 if (existingRequest != null)
-                {
-                    if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == Domain.Enums.ClientStatus.Active)
-                    {
-                        return RedirectToAction("CompleteQuestion", "Clients", new { id = existingRequest.Id });
-                    }
+                    if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == ClientStatus.Active)
+                        return RedirectToAction("CompleteQuestion", "Question", new { id = existingRequest.Id });
                     else
-                    {
                         return View();
-                    }
-                }
             }
         }
         return View();

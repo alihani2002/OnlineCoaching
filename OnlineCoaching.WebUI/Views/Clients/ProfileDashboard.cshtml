@@ -14,17 +14,19 @@
                 <table class="table-custom">
                     <tr><th>Full Name</th><td>@Model.Client.FullName</td></tr>
                     <tr><th>Birth Date</th><td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td></tr>
-                    <tr><th>Phone Number</th><td>@Model.Client.PhoneNumber</td></tr>
+                    <tr><th>Phone Number</th><td>@Model.Client.WhatsUpNumber</td></tr>
                     <tr><th>Address</th><td>@Model.Client.Address</td></tr>
+                    <tr><th>NationalId</th><td>@Model.Client.NationalId</td></tr>
+
                 </table>
 
                 @if (User.IsInRole("Admin") || User.IsInRole("Coach"))
                 {
                     <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-3">
-                        <a asp-controller="Clients" asp-action="Assign" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-warning">
+                        <a asp-controller="Exercises" asp-action="Assign" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-warning">
                             ➕ Assign Foods / Exercises
                         </a>
-                        <a asp-controller="Clients" asp-action="AssignedList" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-success">
+                        <a asp-controller="Exercises" asp-action="AssignedList" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-success">
                             📋 View Assigned Items
                         </a>
                     </div>

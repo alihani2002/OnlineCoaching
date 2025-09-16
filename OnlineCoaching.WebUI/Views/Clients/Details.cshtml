@@ -4,48 +4,71 @@
     ViewData["Title"] = "Client Details";
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header text-white" style="background-color:#ff1313;">
-            <h4 class="mb-0 text-white">Client Details</h4>
+<link rel="stylesheet" href="~/css/Client-Details.css" />
+
+<div class="container mt-5">
+    <div class="card details-card">
+        <div class="card-header details-card-header">
+            <h4 class="mb-0 text-white">
+                <i class="fas fa-user-circle me-2"></i>
+                Client Details
+            </h4>
         </div>
-        <div class="card-body bg-white">
-            <dl class="row">
-                <dt class="col-sm-3 fw-bold">Full Name</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.FullName) ? Model.FullName : "Empty")</dd>
+        <div class="card-body details-card-body">
 
-                <dt class="col-sm-3 fw-bold">Birth Date</dt>
+            <h5 class="mb-3 pb-2 border-bottom text-primary"><i class="fas fa-info-circle me-2"></i>Personal Information</h5>
+            <dl class="row details-list">
+                <dt class="col-sm-3"><i class="fas fa-user details-icon"></i>Full Name</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.FullName) ? Model.FullName : "Not provided")</dd>
+
+                <dt class="col-sm-3"><i class="fas fa-id-card details-icon"></i>National ID</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.NationalId) ? Model.NationalId : "Not provided")</dd>
+
+                <dt class="col-sm-3"><i class="fas fa-birthday-cake details-icon"></i>Birth Date</dt>
                 <dd class="col-sm-9">@( Model.BirthDate.ToString("yyyy-MM-dd") )</dd>
+            </dl>
 
-                <dt class="col-sm-3 fw-bold">Phone Number</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.PhoneNumber) ? Model.PhoneNumber : "Empty")</dd>
+            <h5 class="mt-4 mb-3 pb-2 border-bottom text-primary"><i class="fas fa-address-book me-2"></i>Contact Information</h5>
+            <dl class="row details-list">
+                <dt class="col-sm-3"><i class="fab fa-whatsapp details-icon"></i>Phone Number</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.WhatsUpNumber) ? Model.WhatsUpNumber : "Not provided")</dd>
 
-                <dt class="col-sm-3 fw-bold">Address</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.Address) ? Model.Address : "Empty")</dd>
+                <dt class="col-sm-3"><i class="fas fa-map-marker-alt details-icon"></i>Address</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.Address) ? Model.Address : "Not provided")</dd>
+            </dl>
 
-                <dt class="col-sm-3 fw-bold">User Email</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.User?.Email) ? Model.User.Email : "Empty")</dd>
+            <h5 class="mt-4 mb-3 pb-2 border-bottom text-primary"><i class="fas fa-shield-alt me-2"></i>System & Account Status</h5>
+            <dl class="row details-list">
+                <dt class="col-sm-3"><i class="fas fa-at details-icon"></i>User Email</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.User?.Email) ? Model.User.Email : "No user linked")</dd>
 
-                <dt class="col-sm-3 fw-bold">Is Deleted</dt>
-                <dd class="col-sm-9">@(Model.IsDeleted ? "Yes" : "No")</dd>
+                <dt class="col-sm-3"><i class="fas fa-toggle-on details-icon"></i>Account Status</dt>
+                <dd class="col-sm-9">
+                    <span class="badge rounded-pill py-2 px-3 @(Model.IsDeleted ? "bg-danger" : "bg-success")">
+                        @(Model.IsDeleted ? "Deleted" : "Active")
+                    </span>
+                </dd>
+            </dl>
 
-                <dt class="col-sm-3 fw-bold">Created By</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.CreatedById) ? Model.CreatedById : "Empty")</dd>
+            <h5 class="mt-4 mb-3 pb-2 border-bottom text-primary"><i class="fas fa-history me-2"></i>Audit Log</h5>
+            <dl class="row details-list">
+                <dt class="col-sm-3"><i class="fas fa-user-plus details-icon"></i>Created By</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.CreatedById) ? Model.CreatedById : "System")</dd>
 
-                <dt class="col-sm-3 fw-bold">Created On</dt>
+                <dt class="col-sm-3"><i class="far fa-calendar-alt details-icon"></i>Created On</dt>
                 <dd class="col-sm-9">@( Model.CreatedOn.ToString("yyyy-MM-dd HH:mm") )</dd>
 
-                <dt class="col-sm-3 fw-bold">Last Updated By</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.LastUpdatedById) ? Model.LastUpdatedById : "Empty")</dd>
+                <dt class="col-sm-3"><i class="fas fa-user-edit details-icon"></i>Last Updated By</dt>
+                <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.LastUpdatedById) ? Model.LastUpdatedById : "N/A")</dd>
 
-                <dt class="col-sm-3 fw-bold">Last Updated On</dt>
-                <dd class="col-sm-9">@((Model.LastUpdatedOn != null) ? Model.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm") : "Empty")</dd>
+                <dt class="col-sm-3"><i class="fas fa-clock details-icon"></i>Last Updated On</dt>
+                <dd class="col-sm-9">@((Model.LastUpdatedOn != null) ? Model.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm") : "N/A")</dd>
             </dl>
-        </div>
-        <div class="card-footer text-end">
-@*             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Edit</a>
- *@            <a asp-action="Profile" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">View Profile</a>
-            <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+
+       
+        <div class="card-footer details-card-footer d-flex justify-content-end gap-2">
+            <a asp-action="Profile" asp-route-id="@Model.Id" class="btn btn-primary btn-custom">View Profile</a>
+            <a asp-action="Index" class="btn btn-secondary btn-custom">Back to List</a>
         </div>
     </div>
 </div>

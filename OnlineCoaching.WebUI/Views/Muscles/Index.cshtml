@@ -4,46 +4,55 @@
     ViewData["Title"] = "Muscles";
 }
 
-<h2 class="mb-3">Muscles</h2>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">Muscles</h2>
+        <a asp-action="Create" class="btn btn-primary shadow">
+            <i class="bi bi-plus-circle-fill me-2"></i> Add New Muscle
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">+ Add Muscle</a>
-</p>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
-
-<table id="musclesTable" class="display table table-bordered table-striped" style="width:100%">
-    <thead class="table-dark">
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Created On</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var muscle in Model)
-        {
-            <tr>
-                <td>@muscle.Name</td>
-                <td>@muscle.Description</td>
-                <td>@muscle.CreatedOn.ToString("yyyy-MM-dd")</td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@muscle.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                            Actions
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@muscle.Id">
-                            <li><a class="dropdown-item text-dark" asp-action="Details" asp-route-id="@muscle.Id">Details</a></li>
-                            <li><a class="dropdown-item text-dark" asp-action="Edit" asp-route-id="@muscle.Id">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@muscle.Id">Delete</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-lg rounded-4">
+        <div class="card-body">
+            <table id="musclesTable" class="display table table-hover" style="width:100%">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-secondary fw-semibold">Name</th>
+                        <th class="text-secondary fw-semibold">Description</th>
+                        <th class="text-secondary fw-semibold">Created On</th>
+                        <th class="text-secondary fw-semibold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var muscle in Model)
+                    {
+                        <tr>
+                            <td>@muscle.Name</td>
+                            <td>@muscle.Description</td>
+                            <td>@muscle.CreatedOn.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                                        <li><a class="dropdown-item" asp-action="Details" asp-route-id="@muscle.Id"><i class="bi bi-info-circle me-2"></i>Details</a></li>
+                                        <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@muscle.Id"><i class="bi bi-pencil-square me-2"></i>Edit</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@muscle.Id"><i class="bi bi-trash-fill me-2"></i>Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

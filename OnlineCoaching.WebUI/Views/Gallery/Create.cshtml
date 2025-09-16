@@ -1,12 +1,37 @@
 ﻿@model OnlineCoaching.Domain.Dtos.Gallery.CreateGalleryDto
 
-<h2>Add New Image</h2>
+@{
+    ViewData["Title"] = "Add Image";
+}
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label>Gallery Image</label>
-        <input type="file" name="imageFile" class="form-control" />
+<div class="container my-5" style="max-width: 600px;">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-dark text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Add New Gallery Image</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-4">
+                    <label for="imageFile" class="form-label d-block mb-2">Image File</label>
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" required />
+                    <span asp-validation-for="Image" class="text-danger mt-2 d-block"></span>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

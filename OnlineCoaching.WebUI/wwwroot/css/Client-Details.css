@@ -1,0 +1,54 @@
+﻿/* Custom styles for the client details page */
+.details-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.details-card-header {
+    background-color: #007bff; /* Professional blue */
+    color: #fff;
+    padding: 1.5rem;
+    border-bottom: none;
+}
+
+    .details-card-header h4 {
+        font-weight: 500;
+    }
+
+.details-card-body {
+    padding: 2rem;
+}
+
+.details-card-footer {
+    background-color: #f8f9fa;
+    padding: 1rem 2rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.details-list .row {
+    margin-bottom: 1rem;
+}
+
+.details-list dt {
+    color: #6c757d;
+    font-weight: 400;
+}
+
+.details-list dd {
+    font-weight: 500;
+    color: #343a40;
+}
+
+.details-icon {
+    margin-right: 0.75rem;
+    color: #007bff;
+    font-size: 1.1rem;
+}
+
+.btn-custom {
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+}

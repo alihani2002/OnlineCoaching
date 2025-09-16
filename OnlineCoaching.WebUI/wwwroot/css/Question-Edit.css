@@ -1,0 +1,101 @@
+﻿/* Custom styles for a professional form layout */
+.edit-card {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    /* Added a subtle border to frame the card */
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+    .form-header h2 {
+        font-weight: 600;
+        color: #007bff;
+    }
+
+.form-group label {
+    font-weight: 500;
+    color: #555;
+}
+
+/* Added borders to all form controls and selects */
+.form-control, .form-select {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    }
+
+.options-section {
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+}
+
+.option-block {
+    margin-bottom: 1rem;
+}
+
+.btn-remove-option {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+    .btn-remove-option:hover {
+        background-color: #c82333;
+    }
+
+.btn-add-option {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: background-color 0.2s;
+}
+
+    .btn-add-option:hover {
+        background-color: #218838;
+    }
+
+.btn-save-changes {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-size: 1.1rem;
+    padding: 10px 30px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+    .btn-save-changes:hover {
+        background-color: #0069d9;
+    }
+
+.btn-cancel {
+    font-size: 1.1rem;
+    padding: 10px 30px;
+    border-radius: 8px;
+}

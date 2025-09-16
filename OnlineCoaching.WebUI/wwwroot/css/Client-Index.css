@@ -1,14 +1,64 @@
-﻿body {
-    background-color: #f8f9fa;
+﻿/* General Body and Container Styling */
+body {
+    background-color: #f0f2f5; /* A light, calming background color */
 }
 
+.card {
+    border: none; /* Remove default card border */
+    border-radius: 12px; /* Rounded corners for a modern look */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* A more pronounced, professional shadow */
+}
+
+/* Table Specifics */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa; /* Subtle hover effect */
+}
+
+.table thead th {
+    font-weight: 600; /* Bolder header font */
+    color: #495057; /* Darker gray for readability */
+    border-bottom: 2px solid #e9ecef; /* A clean bottom border */
+    padding: 1rem 1.25rem;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    padding: 1rem 1.25rem;
+    color: #343a40; /* Darker text for body cells */
+}
+
+.table-row-deleted {
+    opacity: 0.6; /* Dim the row to indicate a deleted status */
+    font-style: italic;
+}
+
+/* DataTables Wrapper Styling */
 .dataTables_wrapper {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: transparent; /* No background, let the card handle it */
+    padding: 0 !important;
+    border-radius: 0;
+    box-shadow: none;
 }
 
-table.dataTable {
-    background-color: #ffffff !important;
+.dataTables_filter input {
+    border-radius: 20px;
+    padding: 8px 15px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    transition: all 0.2s ease-in-out;
+}
+
+    .dataTables_filter input:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+/* Action Buttons */
+.btn-sm.rounded-circle {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }

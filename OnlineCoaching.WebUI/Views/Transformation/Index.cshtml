@@ -1,104 +1,113 @@
 ﻿@model IEnumerable<Transformation>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Transformations";
 }
 
-<h2 class="mb-3">Transformations</h2>
-
-<p>
-    @if (User.IsInRole(AppRoles.Admin))
-    {
-        <a asp-action="Create" class="btn btn-primary">+ Add Transformation</a>
-    }
-</p>
-
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
-
-<table id="transformationsTable" class="display table table-bordered table-striped" style="width:100%">
-    <thead class="table-dark">
-        <tr>
-            <th>Title</th>
-            <th>Client</th>
-            <th>Before</th>
-            <th>After</th>
-            <th>Created On</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var t in Model)
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">Client Transformations</h2>
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole(AppRoles.Admin))
         {
-            <tr>
-                <td>@t.Titles</td>
-                <td>@t.Client?.FullName</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(t.BeforeImageUrl))
-                    {
-                        <a href="#" class="view-image" data-image="@t.BeforeImageUrl">
-                            <img src="@t.BeforeImageUrl" alt="Before" width="80" height="80" style="object-fit:cover;" />
-                        </a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">No Image</span>
-                    }
-                </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(t.AfterImageUrl))
-                    {
-                        <a href="#" class="view-image" data-image="@t.AfterImageUrl">
-                            <img src="@t.AfterImageUrl" alt="After" width="80" height="80" style="object-fit:cover;" />
-                        </a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">No Image</span>
-                    }
-                </td>
-                <td>@t.CreatedOn.ToString("yyyy-MM-dd")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-warning me-1">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-                    <form asp-action="Delete" asp-route-id="@t.Id" method="post" style="display:inline;"
-                          onsubmit="return confirm('Are you sure you want to delete this?');">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            <i class="bi bi-trash"></i> Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
+            <a asp-action="Create" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle-fill me-1"></i> Add New
+            </a>
         }
-    </tbody>
-</table>
+    </div>
 
-<!-- Modal for Preview -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <div class="card shadow-lg rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            <table id="transformationsTable" class="table table-hover align-middle mb-0" style="width:100%">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-secondary fw-semibold">Title</th>
+                        <th class="text-secondary fw-semibold">Client</th>
+                        <th class="text-secondary fw-semibold">Before</th>
+                        <th class="text-secondary fw-semibold">After</th>
+                        <th class="text-secondary fw-semibold">Created On</th>
+                        <th class="text-secondary fw-semibold text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@t.Titles</td>
+                            <td>@t.Client?.FullName</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(t.BeforeImageUrl))
+                                {
+                                    <a href="#" class="view-image" data-image="@t.BeforeImageUrl">
+                                        <img src="@Url.Content(t.BeforeImageUrl)" alt="Before" class="rounded shadow-sm border" style="width: 80px; height: 80px; object-fit: cover;" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">N/A</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(t.AfterImageUrl))
+                                {
+                                    <a href="#" class="view-image" data-image="@t.AfterImageUrl">
+                                        <img src="@Url.Content(t.AfterImageUrl)" alt="After" class="rounded shadow-sm border" style="width: 80px; height: 80px; object-fit: cover;" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">N/A</span>
+                                }
+                            </td>
+                            <td>@t.CreatedOn.ToString("yyyy-MM-dd")</td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Transformation Actions">
+                                    <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-outline-warning btn-sm" data-bs-toggle="tooltip" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form asp-action="Delete" asp-route-id="@t.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this transformation?');" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-body text-center">
-                <img id="modalImage" src="" class="img-fluid rounded shadow" />
+            <div class="modal-body p-4 text-center">
+                <img id="modalImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;" />
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <!-- DataTables -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#transformationsTable').DataTable({
                 responsive: true,
                 pageLength: 10,
+                lengthMenu: [5, 10, 25, 50, 100],
                 order: [[0, 'asc']]
             });
 
@@ -110,6 +119,12 @@
                 var modal = new bootstrap.Modal(document.getElementById("imagePreviewModal"));
                 modal.show();
             });
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
         });
     </script>
 }

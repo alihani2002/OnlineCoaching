@@ -1,45 +1,91 @@
-﻿@using OnlineCoaching.Domain.Dtos
-@model FoodDto
+﻿@model OnlineCoaching.Domain.Dtos.FoodDto
 
 @{
     ViewData["Title"] = "Edit Food";
 }
 
-<form asp-action="Edit" method="post">
+<div class="container py-5" style="max-width: 700px;">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Edit Food</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
 
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label asp-for="Gram" class="form-label"></label>
-        <input asp-for="Gram" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label asp-for="Calories" class="form-label"></label>
-        <input asp-for="Calories" class="form-control" />
-    </div>
+                <div class="row mb-4">
+                    <div class="col-md-7">
+                        <label asp-for="Name" class="form-label fw-bold"></label>
+                        <input asp-for="Name" class="form-control form-control-lg" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-5">
+                        <label asp-for="Gram" class="form-label fw-bold"></label>
+                        <div class="input-group input-group-lg">
+                            <input asp-for="Gram" class="form-control" />
+                            <span class="input-group-text">g</span>
+                        </div>
+                        <span asp-validation-for="Gram" class="text-danger small"></span>
+                    </div>
+                </div>
 
-    <div class="mb-3">
-        <label asp-for="Protein" class="form-label"></label>
-        <input asp-for="Protein" class="form-control" />
-    </div>
+                <div class="mb-4">
+                    <label asp-for="Calories" class="form-label fw-bold"></label>
+                    <div class="input-group input-group-lg">
+                        <input asp-for="Calories" class="form-control" />
+                        <span class="input-group-text">kcal</span>
+                    </div>
+                    <span asp-validation-for="Calories" class="text-danger small"></span>
+                </div>
 
-    <div class="mb-3">
-        <label asp-for="Carbs" class="form-label"></label>
-        <input asp-for="Carbs" class="form-control" />
-    </div>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label asp-for="Protein" class="form-label fw-bold"></label>
+                        <div class="input-group input-group-lg">
+                            <input asp-for="Protein" class="form-control" />
+                            <span class="input-group-text">g</span>
+                        </div>
+                        <span asp-validation-for="Protein" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Carbs" class="form-label fw-bold"></label>
+                        <div class="input-group input-group-lg">
+                            <input asp-for="Carbs" class="form-control" />
+                            <span class="input-group-text">g</span>
+                        </div>
+                        <span asp-validation-for="Carbs" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Fats" class="form-label fw-bold"></label>
+                        <div class="input-group input-group-lg">
+                            <input asp-for="Fats" class="form-control" />
+                            <span class="input-group-text">g</span>
+                        </div>
+                        <span asp-validation-for="Fats" class="text-danger small"></span>
+                    </div>
+                </div>
 
-    <div class="mb-3">
-        <label asp-for="Fats" class="form-label"></label>
-        <input asp-for="Fats" class="form-control" />
-    </div>
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-bold"></label>
+                    <textarea asp-for="Description" class="form-control form-control-lg" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <button type="submit" class="btn btn-warning">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

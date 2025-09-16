@@ -1,0 +1,81 @@
+﻿@model OnlineCoaching.Domain.Entities.Client
+
+<style>
+    header, .footer-area, .slider-area2 {
+        display: none !important;
+    }
+</style>
+
+<!-- Background overlay -->
+<div class="position-fixed top-0 start-0 w-100 h-100"
+     style="z-index:1040;background-color:rgba(0,0,0,0.8);"></div>
+
+<!-- Modal -->
+<div id="profilePopup" class="modal fade show d-block"
+     tabindex="-1" style="z-index:1050;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content shadow-lg border-0"
+             style="border-radius: 15px;">
+            <form asp-action="CompleteProfile" asp-controller="Clients" method="post" novalidate>
+                <input type="hidden" asp-for="UserId" value="@User.FindFirst("sub")?.Value" />
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-danger fw-bold">
+                        💪 Complete Your Profile
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label fw-semibold"></label>
+                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" required />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+                    <!-- Birth Date -->
+                    <div class="mb-3">
+                        <label asp-for="BirthDate" class="form-label fw-semibold"></label>
+                        <input asp-for="BirthDate" type="date" class="form-control" required />
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- WhatsApp Number -->
+                    <div class="mb-3">
+                        <label asp-for="WhatsUpNumber" class="form-label fw-semibold"></label>
+                        <input asp-for="WhatsUpNumber" type="tel" maxlength="11" class="form-control" placeholder="01XXXXXXXXX" />
+                        <span asp-validation-for="WhatsUpNumber" class="text-danger"></span>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label fw-semibold"></label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter your address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <!-- National ID -->
+                    <div class="mb-3">
+                        <label asp-for="NationalId" class="form-label fw-semibold"></label>
+                        <input asp-for="NationalId" type="text" maxlength="14" class="form-control" placeholder="Enter 14-digit ID" />
+                        <span asp-validation-for="NationalId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-danger px-4 fw-semibold">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

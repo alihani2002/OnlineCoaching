@@ -2,10 +2,8 @@
 {
     public class AssignFoodDto :BaseEntity
     {
-        [Required(ErrorMessage = "Food ID is required.")]
         public int FoodId { get; set; }
 
-        [Required(ErrorMessage = "Food name is required.")]
         [StringLength(100, ErrorMessage = "Food name cannot exceed 100 characters.")]
         public string? FoodName { get; set; }
 
@@ -18,10 +16,8 @@
         [StringLength(500, ErrorMessage = "Notes cannot exceed 500 characters.")]
         public string? Notes { get; set; }
 
-        [Required]
         public DayOfWeekEnum DayOfWeek { get; set; }
 
-        [Required]
         public MealsNum MealNumber { get; set; }
 
         public string DayOfWeekName { get; set; } = string.Empty;

@@ -61,7 +61,7 @@ namespace OnlineCoaching.Web
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.Name = "OnlineCoaching.Auth";
 
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
                 options.SlidingExpiration = true;
 
                 options.LoginPath = "/Identity/Account/Login";
@@ -87,8 +87,8 @@ namespace OnlineCoaching.Web
                         partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
                         factory: _ => new FixedWindowRateLimiterOptions
                         {
-                            PermitLimit = 5,
-                            Window = TimeSpan.FromMinutes(15),
+                            PermitLimit = 6,
+                            Window = TimeSpan.FromMinutes(1),
                             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                             QueueLimit = 0
                         }));

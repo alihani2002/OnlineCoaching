@@ -60,7 +60,7 @@ namespace OnlineCoaching.Application.Services
 
                 question.Options = distinctOptions;
             }
-
+            question.CreatedOn = DateTime.Now;
             _unitOfWork.Questions.Add(question);
             _unitOfWork.Complete();
 

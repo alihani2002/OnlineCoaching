@@ -4,25 +4,28 @@
     ViewData["Title"] = "Exercises";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-    
-        <a asp-action="Create" class="btn btn-success shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> New Exercise
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">Exercises</h2>
+        <a asp-action="Create" class="btn btn-primary shadow">
+            <i class="bi bi-plus-circle-fill me-2"></i> Add New Exercise
         </a>
     </div>
 
-    <div class="card shadow-lg rounded-3">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <div class="card shadow-lg rounded-4">
         <div class="card-body p-0">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark text-center">
+            <table id="exercisesTable" class="display table table-hover align-middle mb-0" style="width:100%">
+                <thead class="bg-light text-center">
                     <tr>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Muscle</th>
-                        <th>Video</th>
-                        <th>Links</th>
-                        <th>Actions</th>
+                        <th class="text-secondary fw-semibold">Name</th>
+                        <th class="text-secondary fw-semibold">Image</th>
+                        <th class="text-secondary fw-semibold">Muscle</th>
+                        <th class="text-secondary fw-semibold">Video</th>
+                        <th class="text-secondary fw-semibold">Links</th>
+                        <th class="text-secondary fw-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,7 +67,7 @@
                                     {
                                         <div>
                                             <a href="@link" target="_blank" class="text-decoration-none text-info">
-                                                <i class="bi bi-link-45deg"></i> @link
+                                                <i class="bi bi-link-45deg"></i> Link
                                             </a>
                                         </div>
                                     }
@@ -75,15 +78,17 @@
                                 }
                             </td>
                             <td class="text-center">
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">
-                                    Details
-                                </a>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">
-                                    Edit
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-                                    Delete
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                                        <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-info-circle me-2"></i>Details</a></li>
+                                        <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square me-2"></i>Edit</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash-fill me-2"></i>Delete</a></li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     }
@@ -92,3 +97,18 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#exercisesTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50, 100],
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+}

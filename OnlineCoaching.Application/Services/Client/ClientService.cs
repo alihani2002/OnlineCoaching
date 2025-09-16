@@ -37,8 +37,9 @@
                     UserId = userId,
                     FullName = client.FullName,
                     BirthDate = client.BirthDate,
-                    PhoneNumber = client.PhoneNumber,
+                    WhatsUpNumber = client.WhatsUpNumber,
                     Address = client.Address,
+                    NationalId = client.NationalId,
                     CreatedOn = DateTime.UtcNow,
                 };
                 _unitOfWork.Clients.Add(existingClient);
@@ -56,13 +57,15 @@
             {
                 existingClient.FullName = client.FullName;
                 existingClient.BirthDate = client.BirthDate;
-                existingClient.PhoneNumber = client.PhoneNumber;
+                existingClient.WhatsUpNumber = client.WhatsUpNumber;
                 existingClient.Address = client.Address;
+                existingClient.NationalId = client.NationalId;
                 existingClient.LastUpdatedOn = DateTime.UtcNow;
             }
 
             _unitOfWork.Complete();
         }
+
 
 
 
