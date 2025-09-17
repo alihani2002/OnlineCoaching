@@ -1,177 +1,235 @@
-/* Custom Dashboard Styles */
+/* --- Global Variables and Base Styles --- */
+:root {
+    --primary-color: #3b82f6;      /* A clean, vibrant blue for branding */
+    --secondary-color: #6b7280;    /* Muted gray for secondary elements */
+    --accent-color: #ef4444;       /* A bold accent for alerts or warnings */
+    --background-color: #f3f4f6;   /* A soft, professional off-white background */
+    --card-background: #ffffff;    /* White background for cards and containers */
+    --text-color: #374151;         /* A dark gray for body text, ensuring high readability */
+    --border-color: #e5e7eb;       /* Light gray for borders and dividers */
+    --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04); /* Subtle shadow for depth */
+}
 
-/* Body & Typography */
+/* Base Body Styles */
 body {
-    font-family: 'Oswald', sans-serif;
-    background-color: #f4f5f7; /* Soft gray background */
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
 }
 
-/* Sidebar */
-.dashboard-sidebar {
-    background-color: #ffffff; /* White sidebar */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-    position: sticky;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    overflow-y: auto;
+/* Utility Classes */
+.text-primary-brand {
+    color: var(--primary-color);
 }
 
-.sidebar-content {
-    height: 100%;
+/* --- Dashboard Container Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
 }
 
-.sidebar-logo {
-    height: 60px;
-    width: 80%;
-    object-fit: contain;
-}
-
-.logo-text {
-    font-family: 'Anton', sans-serif;
-    font-size: 28px;
-    color: #333; /* Darker text */
-    text-decoration: none;
-}
-
-.sidebar-divider {
-    border-top: 1px solid #e9ecef; /* Lighter divider */
-}
-
-.nav-link {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-    color: #555; /* Slightly muted text color */
-    transition: all 0.2s ease-in-out;
-    border-radius: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-    .nav-link:hover {
-        background-color: #f1f2f4; /* Subtle hover effect */
-        color: #007bff; /* Bootstrap blue */
-    }
-
-    .nav-link.active {
-        background-color: #007bff;
-        color: #fff;
-        font-weight: 500;
-    }
-
-    .nav-link i {
-        margin-right: 0.75rem;
-        width: 1.25rem;
-        text-align: center;
-    }
-
-/* User Dropdown */
-.user-dropdown-container .user-info {
-    color: #333;
-    transition: color 0.2s;
-}
-
-    .user-dropdown-container .user-info:hover {
-        color: #007bff;
-    }
-
-/* Main Content */
 #mainContent {
-    padding: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .dashboard-body {
-    padding: 1.5rem;
+    flex-grow: 1;
+    padding: 2rem;
 }
 
-/* Dashboard Header */
-.dashboard-header {
-    background-color: #fff;
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid #e9ecef;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
+/* --- Sidebar Styling --- */
+.dashboard-sidebar {
+    width: 280px;
+    background-color: var(--card-background);
+    box-shadow: var(--box-shadow-sm);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
     z-index: 1000;
 }
 
-.dashboard-title {
-    font-size: 1.75rem;
+.sidebar-content {
+    padding: 1.5rem;
+}
+
+.sidebar-logo-link {
+    display: block;
+    text-align: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--text-color);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.sidebar-nav .nav-link {
+    font-size: 1rem;
     font-weight: 500;
-    color: #333;
+    color: var(--secondary-color);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+.sidebar-nav .nav-link.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -1px rgba(59, 130, 246, 0.1);
+}
+
+.sidebar-nav .nav-link i {
+    font-size: 1.25rem;
+    margin-right: 1rem;
+}
+
+/* --- Header Styling --- */
+.dashboard-header {
+    background-color: var(--card-background);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow-sm);
+    z-index: 999;
+}
+
+.dashboard-header .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.dashboard-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
     margin: 0;
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+}
+
 .search-bar {
-    max-width: 300px;
+    width: 250px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Soft inner shadow */
 }
 
-.header-icon-link {
-    color: #777;
-    font-size: 1.25rem;
-    transition: color 0.2s;
+.search-bar .form-control {
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    background-color: var(--background-color);
+    padding-right: 3rem; /* Make space for the icon */
 }
 
-    .header-icon-link:hover {
-        color: #007bff;
-    }
+.search-bar .btn {
+    border-radius: 50px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: var(--secondary-color);
+    padding: 0.5rem;
+}
 
-/* Footer */
+/* User Dropdown Styling */
+.user-dropdown-container .user-info {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.user-dropdown-container .user-info:hover {
+    background-color: var(--background-color);
+}
+
+.user-dropdown-container img {
+    border: 2px solid var(--border-color);
+}
+
+.dropdown-menu {
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item i {
+    margin-right: 0.75rem;
+    color: var(--secondary-color);
+}
+
+/* --- Footer Styling --- */
 .dashboard-footer {
-    background-color: #fff; /* White background */
-    padding: 2rem 1.5rem;
-    border-top: 1px solid #e9ecef;
-    margin-top: 2rem;
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-top: 1px solid var(--border-color);
     text-align: center;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: auto; /* Pushes the footer to the bottom */
 }
 
-    .dashboard-footer .footer-logo-img {
-        height: 50px;
-        width: auto;
-        object-fit: contain;
-    }
+.dashboard-footer .footer-social a {
+    color: var(--secondary-color);
+    margin: 0 12px;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
 
-    .dashboard-footer .footer-social a {
-        color: #555;
-        margin: 0 15px;
-        font-size: 1.2rem;
-        transition: color 0.3s;
-    }
+.dashboard-footer .footer-social a:hover {
+    color: var(--primary-color);
+}
 
-        .dashboard-footer .footer-social a:hover {
-            color: #007bff;
-        }
-
-    .dashboard-footer p {
-        color: #777;
-        margin-top: 1rem;
-        font-size: 0.9rem;
-    }
-
-/* Responsive styles for mobile */
+/* --- Responsive Design --- */
 @media (max-width: 767.98px) {
+    .dashboard-wrapper {
+        flex-direction: column;
+    }
+
     .dashboard-sidebar {
-        position: static;
-        height: auto;
-        box-shadow: none;
-        border-bottom: 1px solid #e9ecef;
+        position: fixed;
+        left: -280px; /* Hide sidebar off-screen */
+        height: 100vh;
+    }
+
+    .dashboard-sidebar.show {
+        transform: translateX(280px); /* Slide in */
     }
 
     .sidebar-toggle-btn {
-        margin: 1rem;
+        display: block !important;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1001;
     }
 
     .dashboard-header {
-        flex-wrap: wrap;
         padding: 1rem;
     }
 
-    .search-bar {
-        width: 100%;
-        margin-top: 1rem;
-    }
-
-    .header-right {
-        margin-top: 1rem;
-        justify-content: flex-end;
+    .dashboard-body {
+        padding: 1rem;
     }
 }

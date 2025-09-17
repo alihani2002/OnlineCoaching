@@ -1,0 +1,58 @@
+﻿/* Section Titles and Dividers */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+}
+
+.section-divider {
+    border: 0;
+    border-top: 2px solid #e9ecef;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+}
+
+/* Dashboard Cards (General) */
+.dashboard-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+.icon-box {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(52, 116, 224, 0.1);
+    margin: 0 auto 1.5rem auto;
+}
+
+    .icon-box i {
+        font-size: 2rem;
+        color: var(--primary-color); /* Will use your defined primary color */
+    }
+
+/* Specific button styles for visual consistency */
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-outline-info,
+.btn-outline-warning,
+.btn-outline-dark,
+.btn-outline-danger,
+.btn-outline-success {
+    font-weight: 500;
+    border-width: 2px;
+}

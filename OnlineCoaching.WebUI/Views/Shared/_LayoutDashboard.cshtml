@@ -34,62 +34,34 @@
 				<button class="btn d-md-none sidebar-toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
 					<i class="fa-solid fa-bars"></i>
 				</button>
+				<partial name="_DashboardSidebar" />
+			</div>
 
-				<div class="collapse d-md-block" id="sidebarMenu">
-					<div class="d-flex flex-column flex-shrink-0 p-3 sidebar-content">
-						<a href="/" class="d-flex align-items-center mb-3 text-decoration-none sidebar-logo-link">
-							<div class="footer-logo mb-3">
-								<a asp-controller="Home" asp-action="Index" class="logo-text"> Dashboard </a>
-							</div>
-						</a>
-						<hr class="sidebar-divider">
-						<ul class="nav nav-pills flex-column mb-auto">
-							<li class="nav-item"><a asp-controller="CoachingPackageRequests" asp-action="Index" class="nav-link link-dark"><i class="fas fa-inbox"></i> Requests of Coaching</a></li>
-							<li class="nav-item"><a asp-controller="Cooking" asp-action="Index" class="nav-link link-dark"><i class="fas fa-utensils"></i> Cooking</a></li>
-							<li class="nav-item"><a asp-controller="Gallery" asp-action="Index" class="nav-link link-dark"><i class="fas fa-images"></i> Images</a></li>
-							<li class="nav-item"><a asp-controller="Transformation" asp-action="Index" class="nav-link link-dark"><i class="fas fa-dumbbell"></i> Transformation</a></li>
-							<li class="nav-item"><a asp-controller="Clients" asp-action="Index" class="nav-link link-dark"><i class="fas fa-users"></i> User Table</a></li>
-							<li class="nav-item"><a asp-controller="CoachingPackages" asp-action="Index" class="nav-link link-dark"><i class="fas fa-box"></i> Add Coaching Package</a></li>
-							<li class="nav-item"><a asp-controller="Exercises" asp-action="Index" class="nav-link link-dark"><i class="fas fa-running"></i> Add Exercises</a></li>
-							<li class="nav-item"><a asp-controller="Muscles" asp-action="Index" class="nav-link link-dark"><i class="fas fa-fire-alt"></i> Add Muscles</a></li>
-							<li class="nav-item"><a asp-controller="Food" asp-action="Index" class="nav-link link-dark"><i class="fas fa-carrot"></i> Add Food</a></li>
-							<li class="nav-item"><a asp-controller="Question" asp-action="Index" class="nav-link link-dark"><i class="fas fa-question-circle"></i> Add Question</a></li>
-							<li class="nav-item"><a asp-controller="User" asp-action="AdminRegister" class="nav-link link-dark"><i class="fas fa-user-plus"></i> Add Admin</a></li>
-						</ul>
-						<div class="dropdown mt-auto user-dropdown-container">
-							<a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle user-info" data-bs-toggle="dropdown">
+			<div class="col-md-10" id="mainContent">
+				<header class="dashboard-header">
+					<div class="d-flex justify-content-between align-items-center w-100">
+						<h3 class="dashboard-title">@ViewData["Title"]</h3>
+						
+						<div class="d-flex align-items-center header-right">
+							<div class="dropdown mt-auto user-dropdown-container">
+							<a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle user-info" data-bs-toggle="dropdown" aria-expanded="false">
 								<img src="~/assets/img/logo/noimage.jpg" alt="User" width="32" height="32" class="rounded-circle me-2">
-								<strong>
-									@UserManager.GetUserName(User)
-								</strong>
+								<strong class="text-truncate">@UserManager.GetUserName(User)</strong>
 							</a>
 							<ul class="dropdown-menu shadow">
-								<li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">⚙ Settings</a></li>
+								<li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-cog me-2"></i> Settings</a></li>
 								<li><hr class="dropdown-divider"></li>
 								<li>
-									<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
-										<button type="submit" class="dropdown-item">🚪 Logout</button>
+									<form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+										<button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> Logout</button>
 									</form>
 								</li>
 							</ul>
 						</div>
-						<hr class="sidebar-divider">
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-10" id="mainContent">
-
-				<header class="dashboard-header">
-					<div class="d-flex justify-content-between align-items-center w-100">
-						<h3 class="dashboard-title">@ViewData["Title"]</h3>
-						<div class="d-flex align-items-center header-right">
 							<div class="input-group search-bar">
 								<input type="text" class="form-control" placeholder="Search...">
 								<button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
 							</div>
-							<a href="#" class="header-icon-link ms-3"><i class="fas fa-bell"></i></a>
-							<a href="#" class="header-icon-link ms-3"><i class="fas fa-envelope"></i></a>
 						</div>
 					</div>
 				</header>
@@ -101,8 +73,8 @@
 				<footer class="dashboard-footer">
 					<div class="container-fluid text-center">
 						<div class="footer-logo mb-3">
-							<a asp-controller="Clients" asp-action="Index" class="logo-text">
-								<img src="~/assets/img/logo/logobadr.JPG" alt="Logo" class="footer-logo-img">
+							<a asp-controller="Home" asp-action="Index" class="logo-text">
+								<img width="100px"  src="~/assets/img/logo/logobadr.JPG" alt="Logo" class="footer-logo-img">
 							</a>
 						</div>
 						<div class="footer-social mb-3">

@@ -7,7 +7,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@if (User.IsInRole(AppRoles.Client))
+@if (!User.IsInRole(AppRoles.Admin))
 {
 <main>
     <!--? slider Area Start-->
@@ -515,6 +515,11 @@
             </div>
         </div>
     </section>
-</main>
+    </main>
+
+}
+@if (User.IsInRole(AppRoles.Admin))
+{
+    <partial name="_AdminHomeDashboard" />
 
 }

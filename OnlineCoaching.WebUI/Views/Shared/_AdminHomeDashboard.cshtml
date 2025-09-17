@@ -1,0 +1,208 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OnlineCoaching.Infrastructure.Persistence
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/_AdminDashboard.css" />
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card card-welcome shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <h2 class="fw-bold">Welcome, @UserManager.GetUserName(User)! 👋</h2>
+                    <h5 class="mb-0 italic">This is your centralized admin dashboard. Use the sections below to manage all aspects of your coaching platform.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row section-container mt-4">
+        <div class="col-12">
+            <h5 class="section-title">User & Account Management</h5>
+            <hr class="section-divider">
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-primary mb-3">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">User Accounts</h5>
+                        <p class="card-text text-muted small">Manage all user accounts, roles, and permissions.</p>
+                    </div>
+                    <a asp-controller="Clients" asp-action="Index" class="btn btn-primary mt-3">View Users <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-dark mb-3">
+                            <i class="fas fa-user-plus fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Add Admin</h5>
+                        <p class="card-text text-muted small">Create new administrator accounts for dashboard access.</p>
+                    </div>
+                    <a asp-controller="User" asp-action="AdminRegister" class="btn btn-dark mt-3">Create Admin <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row section-container mt-4">
+        <div class="col-12">
+            <h5 class="section-title">Coaching & Content Management</h5>
+            <hr class="section-divider">
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-info mb-3">
+                            <i class="fas fa-inbox fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Coaching Requests</h5>
+                        <p class="card-text text-muted small">Review and manage all incoming coaching requests.</p>
+                    </div>
+                    <a asp-controller="CoachingPackageRequests" asp-action="Index" class="btn btn-info mt-3">View Requests <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-warning mb-3">
+                            <i class="fas fa-box fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Coaching Packages</h5>
+                        <p class="card-text text-muted small">Create, edit, and manage various coaching packages.</p>
+                    </div>
+                    <a asp-controller="CoachingPackages" asp-action="Index" class="btn btn-warning mt-3">Manage Packages <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row section-container mt-4">
+        <div class="col-12">
+            <h5 class="section-title">Media & Database</h5>
+            <hr class="section-divider">
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-primary mb-3">
+                            <i class="fas fa-images fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Image Gallery</h5>
+                        <p class="card-text text-muted small">Manage client transformation photos and gallery content.</p>
+                    </div>
+                    <a asp-controller="Gallery" asp-action="Index" class="btn btn-primary mt-3">Go to Images <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-success mb-3">
+                            <i class="fas fa-dumbbell fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Transformations</h5>
+                        <p class="card-text text-muted small">Manage transformation stories and client progress.</p>
+                    </div>
+                    <a asp-controller="Transformation" asp-action="Index" class="btn btn-success mt-3">Manage <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-danger mb-3">
+                            <i class="fas fa-utensils fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Cooking Recipes</h5>
+                        <p class="card-text text-muted small">Manage the cooking recipes database for client meal plans.</p>
+                    </div>
+                    <a asp-controller="Cooking" asp-action="Index" class="btn btn-danger mt-3">Manage <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-info mb-3">
+                            <i class="fas fa-running fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Exercises</h5>
+                        <p class="card-text text-muted small">Manage the database of exercises for workout plans.</p>
+                    </div>
+                    <a asp-controller="Exercises" asp-action="Index" class="btn btn-info mt-3">Go to Exercises <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-warning mb-3">
+                            <i class="fas fa-fire-alt fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Muscles</h5>
+                        <p class="card-text text-muted small">Categorize and manage different muscle groups.</p>
+                    </div>
+                    <a asp-controller="Muscles" asp-action="Index" class="btn btn-warning mt-3">Go to Muscles <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-success mb-3">
+                            <i class="fas fa-carrot fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Food Database</h5>
+                        <p class="card-text text-muted small">Manage the food database for client meal plans.</p>
+                    </div>
+                    <a asp-controller="Food" asp-action="Index" class="btn btn-success mt-3">Go to Food <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
+                        <div class="icon-box icon-box-dark mb-3">
+                            <i class="fas fa-question-circle fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Client Questions</h5>
+                        <p class="card-text text-muted small">Create and manage questions for client forms.</p>
+                    </div>
+                    <a asp-controller="Question" asp-action="Index" class="btn btn-dark mt-3">Go to Questions <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

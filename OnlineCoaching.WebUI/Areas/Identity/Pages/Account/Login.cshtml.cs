@@ -127,15 +127,6 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        return LocalRedirect(Url.Action("Index", "CoachingPackageRequests"));
-                    }
-                    else if (await _userManager.IsInRoleAsync(user, "Client") || await _userManager.IsInRoleAsync(user, "Coach"))
-                    {
-                        return LocalRedirect(Url.Action("Index", "Home"));
-                    }
-
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
