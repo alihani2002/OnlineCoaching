@@ -6,6 +6,7 @@ namespace OnlineCoaching.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<IExerciseAlternativeService, ExerciseAlternativeService>();
             services.AddScoped<ICookingServices, CookingServices>();
             services.AddScoped<IGalleryServices, GalleryServices>();
             services.AddScoped<IAssignmentService, AssignmentService>();

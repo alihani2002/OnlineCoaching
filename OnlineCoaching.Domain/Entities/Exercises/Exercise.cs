@@ -4,7 +4,6 @@
     {
         [Required, MaxLength(150)]
         public string? Name { get; set; }
-      //  public string Day { get; set; } = null!;
         public string? Description { get; set; }
         public string ImageUrl { get; set; } = null!;
         public string? VideoUrl { get; set; }
@@ -14,7 +13,11 @@
         public Muscle? Muscle { get; set; }
 
         public ICollection<AssignExercise>? AssignedExercises { get; set; }
-        public ICollection<ExerciseSheetLog>? ExerciseLogs { get; set; }  
+        public ICollection<ExerciseSheetLog>? ExerciseLogs { get; set; }
+
+        public ICollection<ExerciseAlternative> Alternatives { get; set; } = [];   // التمارين اللي ليها بدائل
+        public ICollection<ExerciseAlternative> AlternativeTo { get; set; } = []; // التمارين اللي أنا بديل ليها
+
 
     }
 }

@@ -49,6 +49,8 @@ namespace OnlineCoaching.Infrastructure.Persistence
         public IBaseRepository<HomeGallary> Images => new BaseRepository<HomeGallary>(_context);
 
         public IBaseRepository<Cooking> Cookings => new BaseRepository<Cooking>(_context);
+        public IBaseRepository<ExerciseAlternative> ExerciseAlternatives => new BaseRepository<ExerciseAlternative>(_context);
+
 
         public int Complete()
         {

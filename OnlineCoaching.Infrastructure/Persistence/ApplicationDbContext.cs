@@ -1,4 +1,5 @@
-﻿using OnlineCoaching.Domain.Entities.Gallery;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineCoaching.Domain.Entities.Gallery;
 
 namespace OnlineCoaching.Infrastructure.Persistence
 {
@@ -34,6 +35,7 @@ namespace OnlineCoaching.Infrastructure.Persistence
         public DbSet<ClientAnswerOption> ClientAnswerOptions { get; set; }
         public DbSet<HomeGallary> Images { get; set; }
         public DbSet<Cooking> Cookings { get; set; }
+        public DbSet<ExerciseAlternative> ExerciseAlternatives { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,6 +47,21 @@ namespace OnlineCoaching.Infrastructure.Persistence
             var cascadeFKs = builder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetForeignKeys())
                 .Where(fk => fk.DeleteBehavior == DeleteBehavior.Cascade && !fk.IsOwnership);
+
+            builder.Entity<ExerciseAlternative>()
+           .HasKey(ea => new { ea.ExerciseId, ea.AlternativeExerciseId });
+
+            builder.Entity<ExerciseAlternative>()
+                .HasOne(ea => ea.Exercise)
+                .WithMany(e => e.Alternatives)
+                .HasForeignKey(ea => ea.ExerciseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ExerciseAlternative>()
+                .HasOne(ea => ea.AlternativeExercise)
+                .WithMany(e => e.AlternativeTo)
+                .HasForeignKey(ea => ea.AlternativeExerciseId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             foreach (var fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;

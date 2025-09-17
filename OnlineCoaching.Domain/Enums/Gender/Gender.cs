@@ -1,4 +1,5 @@
-﻿namespace OnlineCoaching.Domain.Enums
+﻿
+namespace OnlineCoaching.Domain.Enums
 {
     public enum Gender
     {

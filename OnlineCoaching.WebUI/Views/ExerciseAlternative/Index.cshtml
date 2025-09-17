@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Exercise>
+
+@* Add a reference to an icon library like Font Awesome in your _Layout.cshtml if you haven't already:
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /> *@
+
+<h2>Exercises and Alternatives</h2>
+
+<div class="mb-4">
+    <input type="text" id="exerciseSearchInput" class="form-control" placeholder="Type to filter exercises in real-time..." />
+</div>
+
+<div id="noResultsMessage" class="alert alert-info" role="alert" style="display: none;">
+    No exercises found matching your search.
+</div>
+
+
+@foreach (var exercise in Model)
+{
+    <div class="card mb-3 shadow-sm exercise-card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">@exercise.Name</h5>
+        </div>
+        <div class="card-body">
+            @if (exercise.Alternatives != null && exercise.Alternatives.Any())
+            {
+                <h6 class="card-subtitle mb-2 text-muted">Alternatives:</h6>
+                <ul class="list-group list-group-flush">
+                    @foreach (var alt in exercise.Alternatives)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>
+                                @alt.AlternativeExercise?.Name
+                            </span>
+
+                            <form asp-action="Delete" asp-controller="ExerciseAlternative" method="post" class="d-inline">
+                                <input type="hidden" name="exerciseId" value="@exercise.Id" />
+                                <input type="hidden" name="alternativeExerciseId" value="@alt.AlternativeExerciseId" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Alternative"
+                                        onclick="return confirm('Are you sure you want to delete this alternative? This action cannot be undone.');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted fst-italic">No alternatives have been defined for this exercise.</p>
+            }
+        </div>
+        <div class="card-footer bg-light text-end">
+            <a asp-action="CreateAlternative" asp-controller="Exercise" asp-route-exerciseId="@exercise.Id" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add Alternative
+            </a>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Wait until the DOM is fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Get the search input element, all the exercise cards, and the "no results" message
+            const searchInput = document.getElementById('exerciseSearchInput');
+            const exerciseCards = document.querySelectorAll('.exercise-card');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+
+            // Add an 'input' event listener to the search box.
+            // This will fire every time the user types, deletes, or pastes text.
+            searchInput.addEventListener('input', function () {
+                const searchTerm = searchInput.value.toLowerCase();
+                let visibleCardCount = 0;
+
+                // Loop through each exercise card
+                exerciseCards.forEach(function (card) {
+                    // Get all the text content from the card and convert to lower case
+                    // This includes the main exercise name and all alternative names
+                    const cardText = card.textContent.toLowerCase();
+
+                    // Check if the card's text includes the search term
+                    if (cardText.includes(searchTerm)) {
+                        // If it matches, make sure the card is visible
+                        card.style.display = '';
+                        visibleCardCount++;
+                    } else {
+                        // If it doesn't match, hide the card
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Show or hide the "No results" message based on how many cards are visible
+                if (visibleCardCount === 0) {
+                    noResultsMessage.style.display = 'block';
+                } else {
+                    noResultsMessage.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

@@ -4,24 +4,31 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <div class="dashboard-sidebar collapse d-md-block" id="sidebarMenu">
-    <div class="d-flex flex-column p-3 sidebar-content">
-        <a href="/" class="d-flex align-items-center mb-3 text-decoration-none sidebar-logo-link">
-            <h5 class="logo-text fw-bold"> Dashboard</h5>
-        </a>
-        <hr class="sidebar-divider">
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item"><a asp-controller="CoachingPackageRequests" asp-action="Index" class="nav-link link-dark"><i class="fas fa-inbox"></i> Requests of Coaching</a></li>
-            <li class="nav-item"><a asp-controller="Cooking" asp-action="Index" class="nav-link link-dark"><i class="fas fa-utensils"></i> Cooking</a></li>
-            <li class="nav-item"><a asp-controller="Gallery" asp-action="Index" class="nav-link link-dark"><i class="fas fa-images"></i> Images</a></li>
-            <li class="nav-item"><a asp-controller="Transformation" asp-action="Index" class="nav-link link-dark"><i class="fas fa-dumbbell"></i> Transformation</a></li>
-            <li class="nav-item"><a asp-controller="Clients" asp-action="Index" class="nav-link link-dark"><i class="fas fa-users"></i> User Table</a></li>
-            <li class="nav-item"><a asp-controller="CoachingPackages" asp-action="Index" class="nav-link link-dark"><i class="fas fa-box"></i> Add Coaching Package</a></li>
-            <li class="nav-item"><a asp-controller="Exercises" asp-action="Index" class="nav-link link-dark"><i class="fas fa-running"></i> Add Exercises</a></li>
-            <li class="nav-item"><a asp-controller="Muscles" asp-action="Index" class="nav-link link-dark"><i class="fas fa-fire-alt"></i> Add Muscles</a></li>
-            <li class="nav-item"><a asp-controller="Food" asp-action="Index" class="nav-link link-dark"><i class="fas fa-carrot"></i> Add Food</a></li>
-            <li class="nav-item"><a asp-controller="Question" asp-action="Index" class="nav-link link-dark"><i class="fas fa-question-circle"></i> Add Question</a></li>
-            <li class="nav-item"><a asp-controller="User" asp-action="AdminRegister" class="nav-link link-dark"><i class="fas fa-user-plus"></i> Add Admin</a></li>
-        </ul>
-       
-    </div>
+	<div class="d-flex flex-column p-3 sidebar-content">
+		<a href="/" class="d-flex align-items-center mb-3 text-decoration-none sidebar-logo-link">
+			<h5 class="logo-text fw-bold"> Dashboard</h5>
+			<h5 class="logo-text fw-bold"> Home</h5>
+		</a>
+		<hr class="sidebar-divider">
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item"><a asp-controller="CoachingPackageRequests" asp-action="Index" class="nav-link link-dark"><i class="fas fa-inbox"></i> Requests of Coaching</a></li>
+			<li class="nav-item"><a asp-controller="Cooking" asp-action="Index" class="nav-link link-dark"><i class="fas fa-utensils"></i> Cooking</a></li>
+			<li class="nav-item"><a asp-controller="Gallery" asp-action="Index" class="nav-link link-dark"><i class="fas fa-images"></i> Images</a></li>
+			<li class="nav-item"><a asp-controller="Transformation" asp-action="Index" class="nav-link link-dark"><i class="fas fa-dumbbell"></i> Transformation</a></li>
+			<li class="nav-item"><a asp-controller="Clients" asp-action="Index" class="nav-link link-dark"><i class="fas fa-users"></i> User Table</a></li>
+			<li class="nav-item">
+				<a asp-controller="ExerciseAlternative" asp-action="Index" class="nav-link link-dark">
+					<i class="fas fa-exchange-alt"></i> Exercise Alternatives
+				</a>
+			</li>
+
+			<li class="nav-item"><a asp-controller="CoachingPackages" asp-action="Index" class="nav-link link-dark"><i class="fas fa-box"></i> Add Coaching Package</a></li>
+			<li class="nav-item"><a asp-controller="Exercises" asp-action="Index" class="nav-link link-dark"><i class="fas fa-running"></i> Add Exercises</a></li>
+			<li class="nav-item"><a asp-controller="Muscles" asp-action="Index" class="nav-link link-dark"><i class="fas fa-fire-alt"></i> Add Muscles</a></li>
+			<li class="nav-item"><a asp-controller="Food" asp-action="Index" class="nav-link link-dark"><i class="fas fa-carrot"></i> Add Food</a></li>
+			<li class="nav-item"><a asp-controller="Question" asp-action="Index" class="nav-link link-dark"><i class="fas fa-question-circle"></i> Add Question</a></li>
+			<li class="nav-item"><a asp-controller="User" asp-action="AdminRegister" class="nav-link link-dark"><i class="fas fa-user-plus"></i> Add Admin</a></li>
+		</ul>
+
+	</div>
 </div>

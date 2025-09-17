@@ -1,0 +1,18 @@
+﻿@model OnlineCoaching.Domain.Dtos.CreateExerciseAlternativeDto
+
+<h2>Add Alternative for @ViewBag.ExerciseName</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="ExerciseId" />
+
+    <div class="form-group">
+        <label>Select Alternative Exercise</label>
+        <select asp-for="AlternativeExerciseId" class="form-control"
+                asp-items="@(new SelectList(ViewBag.AllExercises, "Id", "Name"))">
+            <option value="">-- Select --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" asp-route-exerciseId="@ViewBag.ExerciseId" class="btn btn-secondary">Cancel</a>
+</form>
