@@ -7,7 +7,7 @@
 
 <div class="container py-5">
     <h2 class="text-center text-white mb-4">🏋 Exercise Alternatives</h2>
-    <p class="text-center  small d-block d-sm-none">
+    <p class="text-center text-white small d-block d-sm-none">
         📱 للحصول على عرض أفضل، يرجى تدوير الهاتف للوضع الأفقي
     </p>
     @foreach (var exercise in Model)
@@ -38,9 +38,7 @@
                     <!-- Arrow + Alternatives -->
                     @if (exercise.Alternatives != null && exercise.Alternatives.Any())
                     {
-                        <div class="col-auto d-flex align-items-center">
-                            <i class="fas fa-arrow-right fa-2x text-danger"></i>
-                        </div>
+                      
 
                         @foreach (var alt in exercise.Alternatives)
                         {
@@ -62,12 +60,8 @@
                                 </div>
                             </div>
 
-                            @if (alt != exercise.Alternatives.Last())
-                            {
-                                <div class="col-auto d-flex align-items-center">
-                                    <i class="fas fa-arrow-right fa-2x text-danger"></i>
-                                </div>
-                            }
+                          
+                            
                         }
                     }
                     else
