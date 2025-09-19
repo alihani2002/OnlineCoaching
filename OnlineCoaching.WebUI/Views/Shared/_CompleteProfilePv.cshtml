@@ -16,7 +16,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content shadow-lg border-0"
              style="border-radius: 15px;">
-            <form asp-action="CompleteProfile" asp-controller="Clients" method="post" novalidate>
+            <form asp-action="CompleteProfile" asp-controller="Clients" method="post" >
                 <input type="hidden" asp-for="UserId" value="@User.FindFirst("sub")?.Value" />
 
                 <div class="modal-header border-0">
@@ -52,14 +52,14 @@
                     <!-- Address -->
                     <div class="mb-3">
                         <label asp-for="Address" class="form-label fw-semibold"></label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter your address" />
+                        <input asp-for="Address" class="form-control" placeholder="Enter your address" required />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
 
                     <!-- National ID -->
                     <div class="mb-3">
                         <label asp-for="NationalId" class="form-label fw-semibold"></label>
-                        <input asp-for="NationalId" type="text" maxlength="14" class="form-control" placeholder="Enter 14-digit ID" />
+                        <input asp-for="NationalId" type="text" maxlength="14" class="form-control" placeholder="Enter 14-digit ID" required />
                         <span asp-validation-for="NationalId" class="text-danger"></span>
                     </div>
                 </div>
