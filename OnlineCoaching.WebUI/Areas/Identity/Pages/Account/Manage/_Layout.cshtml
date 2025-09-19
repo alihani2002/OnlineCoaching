@@ -1,11 +1,15 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null && User.IsInRole(AppRoles.Client))
     {
         Layout = parentLayout.ToString();
     }
-    else
+    else if(User.IsInRole(AppRoles.Client))
     {
         Layout = "/Views/Shared/_Layout.cshtml";
+    }
+    else if (User.IsInRole(AppRoles.Admin))
+    {
+        Layout = "/Views/Shared/_LayoutDashboard.cshtml";
     }
 }
 
