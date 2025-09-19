@@ -10,18 +10,42 @@
 
 <!-- ================== PROFILE SECTION ================== -->
 <div class="container py-5">
-    @if (Model != null)
+    @if (Model != null && User.IsInRole(AppRoles.Client))
     {
-        <div class="custom-card">
-            <h3 class="text-center text-danger mb-4">👤 Your Profile</h3>
-            <table class="table-custom">
-                <tr><th>Full Name</th><td>@Model.Client.FullName</td></tr>
-                <tr><th>Birth Date</th><td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td></tr>
-                <tr><th>Phone Number</th><td>@Model.Client.WhatsUpNumber</td></tr>
-                <tr><th>Address</th><td>@Model.Client.Address</td></tr>
-                <tr><th>NationalId</th><td>@Model.Client.NationalId</td></tr>
+        <div class="profile-card shadow-lg">
+            <!-- Profile Header -->
+            <div class="profile-header text-center">
+                <img src="~/assets/img/logo/unknown.png" alt="Profile Picture" class="profile-avatar" />
+                <h3 class="mt-3">@Model.Client.FullName</h3>
+                <p class="text-muted">👤 Client Profile</p>
 
-            </table>
+            </div>
+
+            <!-- Profile Details -->
+            <div class="profile-details mt-4">
+                <table class="table-profile">
+                    <tr>
+                        <th><i class="fas fa-user"></i> Full Name</th>
+                        <td>@Model.Client.FullName</td>
+                    </tr>
+                    <tr>
+                        <th><i class="fas fa-birthday-cake"></i> Birth Date</th>
+                        <td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                    <tr>
+                        <th><i class="fas fa-phone"></i> Phone</th>
+                        <td>@Model.Client.WhatsUpNumber</td>
+                    </tr>
+                    <tr>
+                        <th><i class="fas fa-map-marker-alt"></i> Address</th>
+                        <td>@Model.Client.Address</td>
+                    </tr>
+                    <tr>
+                        <th><i class="fas fa-id-card"></i> National ID</th>
+                        <td>@Model.Client.NationalId</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     }
     else if (User.IsInRole(AppRoles.Admin))
@@ -85,11 +109,16 @@
 </div>
 
 <div class="container text-center my-5">
-    <a asp-controller="Cooking" asp-action="CookingDesh" class="btn btn-lg btn-danger shadow">
+    <a asp-controller="Cooking" asp-action="CookingDesh" class="btn btn-lg m-1 btn-danger shadow">
         🍳 Go to Cooking
     </a>
-    <a asp-controller="ExerciseAlternative" asp-action="ExerciseAlternativeProfile" class="btn btn-lg btn-danger shadow">
-        🍳 Go to ExerciseAlternative
+    <a asp-controller="ExerciseAlternative" asp-action="ExerciseAlternativeProfile" class="btn btn-lg m-1 btn-danger shadow">
+        🍳 Go to Alternative
+    </a>
+
+    <a asp-controller="Clients" asp-action="Edit" asp-route-id="@Model.Client.Id"
+       class="btn btn-lg m-1 btn-danger shadow">
+        ✏️ Edit Profile
     </a>
 </div>
 

@@ -266,3 +266,67 @@ h5 {
     font-weight: bold;
     cursor: pointer;
 }
+
+/* -------- Profile Card -------- */
+.profile-card {
+    background: linear-gradient(145deg, #161616, #0d0d0d);
+    border-radius: 15px;
+    padding: 2rem;
+    color: #fff;
+    border: 1px solid #333;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+}
+
+.profile-header {
+    border-bottom: 1px solid #444;
+    padding-bottom: 1rem;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #ff3d3d;
+    object-fit: cover;
+}
+
+.profile-details {
+    margin-top: 1.5rem;
+}
+
+.table-profile {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table-profile th {
+        width: 220px;
+        color: #ffc107;
+        font-weight: 600;
+        padding: 12px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #333;
+    }
+
+    .table-profile td {
+        padding: 12px;
+        color: #eee;
+        border-bottom: 1px solid #333;
+    }
+
+    .table-profile tr:hover {
+        background-color: #1f1f1f;
+    }
+
+/* -------- Buttons -------- */
+.btn-outline-warning {
+    border: 1px solid #ffc107;
+    color: #ffc107;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+    .btn-outline-warning:hover {
+        background: #ffc107;
+        color: #000;
+    }

@@ -6,143 +6,241 @@
 }
 
 <div class="container py-5">
-    <h2 class="text-center text-white mb-4">🏋 Exercise Alternatives</h2>
-    <p class="text-center text-white small d-block d-sm-none">
-        📱 للحصول على عرض أفضل، يرجى تدوير الهاتف للوضع الأفقي
+    <h2 class="text-center page-title mb-4">🏋️ Exercise Alternatives</h2>
+    <p class="text-center text-white-50 small d-block d-sm-none">
+        📱 For a better view, please rotate your phone to landscape mode.
     </p>
+
     @foreach (var exercise in Model)
     {
-        <div class="card shadow-sm mb-5 border-0">
-            <div class="card-body">
-                <div class="row align-items-center justify-content-center flex-nowrap overflow-auto g-3">
+        <div class="alternative-group-card shadow-sm mb-5">
+            <div class="card-body p-lg-4">
+                <div class="row align-items-center position-relative">
 
-                    <!-- Main Exercise -->
-                    <div class="card text-center border-0 exercise-card">
-                        <div class="card-header bg-white border-0">
-                            <h5 class="fw-bold text-dark">@exercise.Name</h5>
-                        </div>
-                        <div class="card-body p-2">
-                            @if (!string.IsNullOrEmpty(exercise.ImageUrl))
-                            {
-                                <a href="javascript:void(0);" onclick="openVideo('@exercise.VideoUrl')">
-                                    <img src="@exercise.ImageUrl" class="img-fluid rounded main-img" alt="@exercise.Name" />
-                                </a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">No Image</span>
-                            }
+                    <div class="col-lg-5 main-exercise-col">
+                        <div class="exercise-card primary-exercise text-center">
+                            <div class="card-header">
+                                <span class="badge bg-primary-accent">Primary Exercise</span>
+                                <h4 class="fw-bold mt-2">@exercise.Name</h4>
+                            </div>
+                            <div class="card-body p-2">
+                                @if (!string.IsNullOrEmpty(exercise.ImageUrl))
+                                {
+                                    <a href="javascript:void(0);" onclick="openVideo('@exercise.VideoUrl')">
+                                        <img src="@exercise.ImageUrl" class="img-fluid rounded" alt="@exercise.Name" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div class="no-image-placeholder"><span>No Image</span></div>
+                                }
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Arrow + Alternatives -->
-                    @if (exercise.Alternatives != null && exercise.Alternatives.Any())
-                    {
-                      
+                    <div class="col-lg-1 d-none d-lg-flex justify-content-center">
+                        <i class="fas fa-arrow-right-long fa-3x text-primary-accent connector-arrow"></i>
+                    </div>
 
-                        @foreach (var alt in exercise.Alternatives)
+                    <div class="col-lg-6 alternatives-col">
+                        @if (exercise.Alternatives != null && exercise.Alternatives.Any())
                         {
-                            <div class="card text-center border-0 mx-1 exercise-card">
-                                <div class="card-header bg-white border-0">
-                                    <h6 class="fw-bold text-secondary">@alt.AlternativeExercise?.Name</h6>
-                                </div>
-                                <div class="card-body p-2">
-                                    @if (!string.IsNullOrEmpty(alt.AlternativeExercise?.ImageUrl))
+                            <h6 class="text-secondary fw-bold mb-3">SUGGESTED ALTERNATIVES</h6>
+                            <div class="alternatives-grid">
+                                @foreach (var alt in exercise.Alternatives)
+                                {
+                                    @if (alt.AlternativeExercise != null)
                                     {
-                                        <a href="javascript:void(0);" onclick="openVideo('@alt.AlternativeExercise?.VideoUrl')">
-                                            <img src="@alt.AlternativeExercise?.ImageUrl" class="img-fluid rounded main-img" alt="@alt.AlternativeExercise?.Name" />
-                                        </a>
+                                        <div class="exercise-card alt-exercise-card text-center">
+                                            <div class="card-header">
+                                                <h6 class="fw-bold" style="color:aliceblue;">@alt.AlternativeExercise.Name</h6>
+                                            </div>
+                                            <div class="card-body p-2">
+                                                @if (!string.IsNullOrEmpty(alt.AlternativeExercise.ImageUrl))
+                                                {
+                                                    <a href="javascript:void(0);" onclick="openVideo('@alt.AlternativeExercise.VideoUrl')">
+                                                        <img src="@alt.AlternativeExercise.ImageUrl" class="img-fluid rounded" alt="@alt.AlternativeExercise.Name" />
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="no-image-placeholder small-placeholder"><span>No Image</span></div>
+                                                }
+                                            </div>
+                                        </div>
                                     }
-                                    else
-                                    {
-                                        <span class="text-muted">No Image</span>
-                                    }
-                                </div>
+                                }
                             </div>
-
-                          
-                            
                         }
-                    }
-                    else
-                    {
-                        <div class="col-auto text-muted fw-bold">
-                            ⚠ No alternatives available
-                        </div>
-                    }
+                        else
+                        {
+                            <div class="text-muted fw-bold ps-3">
+                                ⚠️ No alternatives available
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     }
 </div>
 
-<!-- Video Modal -->
 <div id="videoModal" class="video-modal">
     <div class="video-modal-content">
-        <span class="video-close" onclick="closeVideo()">&times;</span>
-        <iframe id="videoFrame" width="100%" height="400" frameborder="0"
-                allow="autoplay; encrypted-media" allowfullscreen style="display:none"></iframe>
-        <video id="videoTag" width="100%" height="400" controls style="display:none"></video>
+        <button type="button" class="video-close" onclick="closeVideo()" aria-label="Close video player">&times;</button>
+        <div class="ratio ratio-16x9">
+            <iframe id="videoFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <video id="videoTag" controls style="display:none"></video>
+        </div>
     </div>
 </div>
 
-
 <script src="~/assets/js/profile.js" asp-append-version="true"></script>
 
-<!-- New CSS Block -->
-<style>
+
+    <style >
+    :root {
+        --bg-color: #000000;
+        --card-bg: #0d0f14;
+        --border-color: #3e4451;
+        --text-primary: #ffffff;
+        --text-secondary: #a0aec0;
+        --primary-accent: #38bdf8;
+    }
+
     body {
-        overflow-x: hidden; /* keep horizontal scroll disabled */
-        overflow-y: auto; /* allow vertical scrolling */
-        height: auto; /* don’t force fixed height */
+        background-color: var(--bg-color);
     }
 
-    /* Make sure container adapts on mobile */
-    .container {
+    .page-title {
+        color: var(--text-primary);
+    }
+
+    .alternative-group-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+    }
+
+    /* Main Exercise Card Styling */
+    .primary-exercise {
         padding: 1rem;
-        margin: 0 auto;
-        width: 100%;
     }
 
-    /* Fix exercise card layout on mobile */
-    .custom-card {
-        width: 80%;
-        margin-bottom: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        background: #fff;
-    }
-
-    /* Prevent cards from being clipped by top margin */
-    .container > :first-child {
-        margin-top: 1rem; /* small safe spacing */
-    }
-    .exercise-card {
-        width: 200px;
-        min-width: 200px;
-        transition: transform 0.2s ease-in-out;
-        border-radius: 12px;
-    }
-
-        .exercise-card:hover {
-            transform: scale(1.05);
+        .primary-exercise .badge {
+            font-size: 0.8rem;
+            padding: 0.5em 1em;
+            background-color: var(--primary-accent) !important;
+            color: var(--bg-color);
         }
 
-        .exercise-card img {
-            height: 160px;
+        .primary-exercise h4 {
+            color: var(--text-primary);
+        }
+
+        .primary-exercise img {
+            height: 250px;
+            width: 100%;
             object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
         }
 
-        .exercise-card h5,
-        .exercise-card h6 {
+        .primary-exercise .no-image-placeholder {
+            height: 250px;
+        }
+
+    /* Connector Arrow */
+    .connector-arrow {
+        opacity: 0.6;
+    }
+
+    /* Alternatives Column & Grid */
+    .alternatives-col {
+        border-left: 1px solid var(--border-color);
+        padding-left: 2rem;
+        margin-top: 2rem;
+    }
+
+    .alternatives-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Shared Card Styles */
+    .exercise-card {
+        background-color: transparent;
+        border: none;
+    }
+
+        .exercise-card .card-header {
+            background-color: transparent;
+            border: none;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .exercise-card h4, .exercise-card h6 {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin: 0;
         }
 
-    /* Fullscreen overlay */
+    /* Individual Alternative Card */
+    .alt-exercise-card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .alt-exercise-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .alt-exercise-card img {
+            height: 120px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            transition: border-color 0.2s ease;
+        }
+
+        .alt-exercise-card a:hover img {
+            border-color: var(--primary-accent);
+        }
+
+        .alt-exercise-card .no-image-placeholder {
+            height: 120px;
+        }
+
+    .no-image-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0,0,0,0.2);
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        color: var(--text-secondary);
+    }
+
+    /* Responsive adjustments for mobile */
+    @@media (max-width: 991.98px) {
+        .alternatives-col {
+            border-left: none;
+            border-top: 1px solid var(--border-color);
+            padding-left: 0;
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        .main-exercise-col {
+            padding-bottom: 0;
+        }
+    }
+
+
+    /* Video Modal */
     .video-modal {
         display: none;
         position: fixed;
@@ -151,105 +249,59 @@
         top: 0;
         width: 100%;
         height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.7);
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
         justify-content: center;
         align-items: center;
     }
 
     .video-modal-content {
-        background: #fff;
-        margin: auto;
-        padding: 20px;
+        background: var(--card-bg);
+        padding: 1rem;
         border-radius: 12px;
         width: 90%;
         max-width: 800px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         position: relative;
     }
 
     .video-close {
-        color: #333;
         position: absolute;
-        top: 10px;
-        right: 20px;
-        font-size: 30px;
+        top: -15px;
+        right: -15px;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: var(--primary-accent);
+        color: var(--bg-color);
+        border: none;
+        font-size: 24px;
         font-weight: bold;
         cursor: pointer;
-        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        transition: transform 0.2s ease;
     }
 
         .video-close:hover {
-            color: red;
+            transform: scale(1.1);
         }
 
-    /* 📱 Responsive Tweaks */
-    @@media (max-width: 992px) { /* Tablets */
-        .exercise-card
-
-    {
-        width: 180px;
-        min-width: 180px;
-        margin: 0 6px; /* reduce side margin */
+    #videoFrame, #videoTag {
+        border-radius: 8px;
+        border: none;
     }
 
-    .exercise-card img {
-        height: 130px; /* slightly smaller */
-    }
-
-    .exercise-card h5,
-    .exercise-card h6 {
-        font-size: 0.9rem;
-    }
-
-    }
-
-    @@media (max-width: 768px) { /* Mobile landscape */
-        .exercise-card
-
-    {
-        width: 140px;
-        min-width: 140px;
-        margin: 0 5px; /* tighter margins */
-    }
-
-    .exercise-card img {
-        height: 110px;
-    }
-
-    .exercise-card h5,
-    .exercise-card h6 {
-        font-size: 0.85rem;
-    }
-
-    }
-
-    @@media (max-width: 576px) { /* Mobile portrait */
-        .exercise-card
-
-    {
-            width: 98px;
-            min-width: 96px;
-            margin: 0 4px;
-    }
-
-    .exercise-card img {
-        height: 90px;
-    }
-
-    .exercise-card h5,
-    .exercise-card h6 {
-        font-size: 0.75rem;
-    }
-
-    .video-modal-content {
-        width: 95%;
-        padding: 8px;
-    }
-
-        .video-modal-content iframe,
-        .video-modal-content video {
-            height: 200px; /* smaller video on mobile */
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .exercise-card {
+            width: 160px;
+            min-width: 160px;
         }
 
-    }</style>
+            .exercise-card img, .no-image-placeholder {
+                height: 130px;
+            }
+    }
+</style>

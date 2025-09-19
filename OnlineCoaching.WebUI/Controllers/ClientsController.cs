@@ -115,7 +115,6 @@ namespace OnlineCoaching.WebUI.Controllers
         #endregion
 
         #region Profile of client for admin
-
         public async Task<IActionResult> ProfileDashboard(int id)
         {
             Client? client = null;
@@ -237,7 +236,42 @@ namespace OnlineCoaching.WebUI.Controllers
 
             TempData["Success"] = "Client status updated successfully.";
             return RedirectToAction(nameof(Index));
+
         }
+        #region Edit Client (Admin/Coach)
+        [Authorize(Roles = AppRoles.Admin + "," + AppRoles.Client)]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Invalid client id.");
+
+            var client = await _clientService.GetClientByIdAsync(id);
+            if (client == null)
+                return NotFound();
+
+            return View(client); // return to a Razor view with client data
+        }
+
+        [HttpPost]
+        [Authorize(Roles = AppRoles.Admin + "," + AppRoles.Client)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Client client)
+        {
+            if (id != client.Id)
+                return BadRequest("Client ID mismatch.");
+
+            if (!ModelState.IsValid)
+                return View(client);
+
+            var updated = await _clientService.UpdateClientAsync(client);
+            if (!updated)
+                return NotFound();
+
+            TempData["Success"] = "Client updated successfully.";
+            return RedirectToAction(nameof(Profile));
+        }
+        #endregion
+
 
     }
 }

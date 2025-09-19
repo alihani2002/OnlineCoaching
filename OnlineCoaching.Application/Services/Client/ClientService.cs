@@ -82,5 +82,30 @@
 
             return true;
         }
+
+        public async Task<Client?> GetClientByIdAsync(int clientId)
+        {
+            return await _unitOfWork.Clients
+                .GetQueryable()
+                .Include(c => c.User!)
+                .FirstOrDefaultAsync(c => c.Id == clientId);
+        }
+
+        public async Task<bool> UpdateClientAsync(Client client)
+        {
+            var existingClient = await _unitOfWork.Clients.GetByIdAsync(client.Id);
+            if (existingClient == null)
+                return false;
+
+            existingClient.FullName = client.FullName;
+            existingClient.BirthDate = client.BirthDate;
+            existingClient.WhatsUpNumber = client.WhatsUpNumber;
+            existingClient.Address = client.Address;
+            existingClient.NationalId = client.NationalId;
+            existingClient.LastUpdatedOn = DateTime.UtcNow;
+
+            _unitOfWork.Complete();
+            return true;
+        }
     }
 }

@@ -7,6 +7,8 @@
         IEnumerable<Client?> GetAllClients();
         Task CompleteClientData(Client client , string userId);
         Task<bool> ToggleDeleteAsync(int clientId);
+        Task<Client?> GetClientByIdAsync(int userId); 
+        Task<bool> UpdateClientAsync(Client client); 
 
 
     }
