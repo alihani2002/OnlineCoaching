@@ -39,9 +39,10 @@
         public async Task<IEnumerable<Exercise>> GetAllExercisesWithAlternativesAsync()
         {
             return await _unitOfWork.Exercises.GetQueryable()
-                .Include(e => e.Alternatives)
-                    .ThenInclude(a => a.AlternativeExercise).Where(e=> !e.IsDeleted) // navigation to the alternative exercise
-                .ToListAsync();
+        .Include(e => e.Alternatives)
+            .ThenInclude(a => a.AlternativeExercise)
+        .Where(e => !e.IsDeleted && e.Alternatives.Any()) // ✅ only exercises with alternatives
+        .ToListAsync();
         }
 
         // ✅ جلب كل البدائل لتمرين معين
