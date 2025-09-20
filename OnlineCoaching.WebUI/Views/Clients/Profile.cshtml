@@ -17,7 +17,7 @@
             <div class="profile-header text-center">
                 <img src="~/assets/img/logo/unknown.png" alt="Profile Picture" class="profile-avatar" />
                 <h3 class="mt-3">@Model.Client.FullName</h3>
-                <p class="text-muted">👤 Client Profile</p>
+                <p class="text-white">👤 Client Profile</p>
 
             </div>
 
@@ -62,38 +62,71 @@
     }
 </div>
 
-<!-- ================== EXERCISES & FOODS ================== -->
-<div class="container">
-    <div class="slider-area2">
-        <div class="slider-height2 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap hero-cap2 pt-70">
-                            <h2>Exercises</h2>
+<!-- ================== EXERCISES ================== -->
+@if (Model!.AssignedExercises != null && Model.AssignedExercises.Any())
+{
+    <div class="container">
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-70">
+                                <h2>Exercises</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="exercise-container"></div>
+        <div id="exercise-container"></div>
 
-    <div class="slider-area2">
-        <div class="slider-height2 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap hero-cap2 pt-70">
-                            <h2>Nutrition Plan</h2>
+        <a asp-controller="ExerciseAlternative" asp-action="ExerciseAlternativeProfile" class="btn btn-lg m-1 btn-danger shadow">
+            🍳 Go to Alternative
+        </a>
+    </div>
+}
+else
+{
+    <div class="container text-center my-4">
+        <div class="alert alert-warning shadow-sm">
+            ⚠️ No exercise program assigned until now.
+        </div>
+    </div>
+}
+
+<!-- ================== NUTRITION PLAN ================== -->
+@if (Model.AssignedFoods != null && Model.AssignedFoods.Any())
+{
+    <div class="container">
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-70">
+                                <h2>Nutrition Plan</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="food-container"></div>
+        <a asp-controller="Cooking" asp-action="CookingDesh" class="btn  text-center btn-lg m-1 btn-danger shadow">
+            🍳 Go to Cooking
+        </a>
     </div>
-    <div id="food-container"></div>
-</div>
+}
+else
+{
+    <div class="container text-center my-4">
+        <div class="alert alert-warning shadow-sm">
+            ⚠️ No nutrition program assigned until now.
+        </div>
+    </div>
+}
+
 
 <div id="videoModal" class="video-modal">
     <div class="video-modal-content">
@@ -109,14 +142,9 @@
 </div>
 
 <div class="container text-center my-5">
-    <a asp-controller="Cooking" asp-action="CookingDesh" class="btn btn-lg m-1 btn-danger shadow">
-        🍳 Go to Cooking
-    </a>
-    <a asp-controller="ExerciseAlternative" asp-action="ExerciseAlternativeProfile" class="btn btn-lg m-1 btn-danger shadow">
-        🍳 Go to Alternative
-    </a>
+ 
 
-    <a asp-controller="Clients" asp-action="Edit" asp-route-id="@Model.Client.Id"
+    <a asp-controller="Clients" asp-action="Edit" asp-route-id="@Model!.Client.Id"
        class="btn btn-lg m-1 btn-danger shadow">
         ✏️ Edit Profile
     </a>

@@ -43,16 +43,33 @@ namespace OnlineCoaching.WebUI.Controllers
         {
             Client? client = null;
 
-            if (id > 0) client = _clientService.GetClientById(id);
+            // Get current logged-in user
+            var userId = User.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
 
+            var loggedInClient = await _clientService.GetClientAsync(userId);
+
+            // If user is in Admin/Coach role, allow viewing any client
+            if (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Coach))
+            {
+                if (id > 0)
+                    client = _clientService.GetClientById(id);
+                else
+                    client = loggedInClient;
+            }
             else
             {
-                var userId = User.GetUserId();
-                if (string.IsNullOrEmpty(userId))
-                    return RedirectToAction("Login", "Account");
+                // If normal Client, force them to only see their own profile
+                if (id > 0 && id != loggedInClient?.Id)
+                    return Forbid(); // or RedirectToAction("AccessDenied", "Account")
 
-                client = await _clientService.GetClientAsync(userId);
+                client = loggedInClient;
             }
+
+            if (client == null)
+                return NotFound();
+
 
             // Check if client has an active approved request
             var activeRequest = _requestService.GetActiveOrPendingRequest(client!.Id);
