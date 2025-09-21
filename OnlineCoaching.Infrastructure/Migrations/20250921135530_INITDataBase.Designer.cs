@@ -12,8 +12,8 @@ using OnlineCoaching.Infrastructure.Persistence;
 namespace OnlineCoaching.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250819175058_UpdateQuestionTablesAndAddJunctionTable")]
-    partial class UpdateQuestionTablesAndAddJunctionTable
+    [Migration("20250921135530_INITDataBase")]
+    partial class INITDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,11 +274,17 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CoachingPackageRequestId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
 
                     b.Property<int>("ExerciseId")
                         .HasColumnType("int");
@@ -308,6 +314,8 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("CoachingPackageRequestId");
+
                     b.HasIndex("ExerciseId");
 
                     b.ToTable("AssignExercises");
@@ -327,11 +335,17 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CoachingPackageRequestId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
 
                     b.Property<int>("FoodId")
                         .HasColumnType("int");
@@ -345,8 +359,17 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<DateTime?>("LastUpdatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("MealId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MealNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfServings")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -355,7 +378,11 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("CoachingPackageRequestId");
+
                     b.HasIndex("FoodId");
+
+                    b.HasIndex("MealId");
 
                     b.ToTable("AssignFoods");
                 });
@@ -497,12 +524,16 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<DateTime?>("LastUpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<string>("NationalId")
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("WhatsUpNumber")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.HasKey("Id");
 
@@ -542,17 +573,12 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<DateTime?>("LastUpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OptionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("OptionId");
 
                     b.HasIndex("QuestionId");
 
@@ -594,7 +620,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("ClientAnswerOption");
+                    b.ToTable("ClientAnswerOptions");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.CoachFeedback", b =>
@@ -732,6 +758,52 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.HasIndex("PackageId");
 
                     b.ToTable("CoachingPackageRequests");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.Cooking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastUpdatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastUpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cookings");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Course", b =>
@@ -886,6 +958,10 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -894,6 +970,10 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.Property<DateTime?>("LastUpdatedOn")
                         .HasColumnType("datetime2");
+
+                    b.PrimitiveCollection<string>("LinkUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MuscleId")
                         .HasColumnType("int");
@@ -911,6 +991,74 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.HasIndex("MuscleId");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.ExerciseAlternative", b =>
+                {
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AlternativeExerciseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExerciseId", "AlternativeExerciseId");
+
+                    b.HasIndex("AlternativeExerciseId");
+
+                    b.ToTable("ExerciseAlternatives");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.ExerciseSheetLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FifthSet")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FirstSet")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FourthSet")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastUpdatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastUpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SecondSet")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ThirdSet")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("ExerciseSheetLogs");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Food", b =>
@@ -939,6 +1087,9 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Property<int>("Fats")
                         .HasColumnType("int");
 
+                    b.Property<int>("Gram")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -959,6 +1110,84 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Foods");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.Gallery.HomeGallary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CoachImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastUpdatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastUpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.Meal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachingPackageRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastUpdatedById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastUpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MealNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CoachingPackageRequestId");
+
+                    b.ToTable("Meals");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Muscle", b =>
@@ -1071,6 +1300,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1110,7 +1340,9 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -1227,6 +1459,12 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("OnlineCoaching.Domain.Entities.CoachingPackageRequest", "CoachingPackageRequest")
+                        .WithMany("AssignExercises")
+                        .HasForeignKey("CoachingPackageRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("OnlineCoaching.Domain.Entities.Exercise", "Exercise")
                         .WithMany("AssignedExercises")
                         .HasForeignKey("ExerciseId")
@@ -1234,6 +1472,8 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
+
+                    b.Navigation("CoachingPackageRequest");
 
                     b.Navigation("Exercise");
                 });
@@ -1246,15 +1486,29 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("OnlineCoaching.Domain.Entities.CoachingPackageRequest", "CoachingPackageRequest")
+                        .WithMany("AssignFoods")
+                        .HasForeignKey("CoachingPackageRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("OnlineCoaching.Domain.Entities.Food", "Food")
                         .WithMany("AssignedFoods")
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("OnlineCoaching.Domain.Entities.Meal", "Meal")
+                        .WithMany("Foods")
+                        .HasForeignKey("MealId");
+
                     b.Navigation("Client");
 
+                    b.Navigation("CoachingPackageRequest");
+
                     b.Navigation("Food");
+
+                    b.Navigation("Meal");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.BookRequest", b =>
@@ -1288,14 +1542,10 @@ namespace OnlineCoaching.Infrastructure.Migrations
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.ClientAnswer", b =>
                 {
                     b.HasOne("OnlineCoaching.Domain.Entities.Client", "Client")
-                        .WithMany()
+                        .WithMany("Answers")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("OnlineCoaching.Domain.Entities.Option", "Option")
-                        .WithMany("ClientAnswers")
-                        .HasForeignKey("OptionId");
 
                     b.HasOne("OnlineCoaching.Domain.Entities.Question", "Question")
                         .WithMany("ClientAnswers")
@@ -1304,8 +1554,6 @@ namespace OnlineCoaching.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
-
-                    b.Navigation("Option");
 
                     b.Navigation("Question");
                 });
@@ -1400,6 +1648,63 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Navigation("Muscle");
                 });
 
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.ExerciseAlternative", b =>
+                {
+                    b.HasOne("OnlineCoaching.Domain.Entities.Exercise", "AlternativeExercise")
+                        .WithMany("AlternativeTo")
+                        .HasForeignKey("AlternativeExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCoaching.Domain.Entities.Exercise", "Exercise")
+                        .WithMany("Alternatives")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AlternativeExercise");
+
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.ExerciseSheetLog", b =>
+                {
+                    b.HasOne("OnlineCoaching.Domain.Entities.Client", "Client")
+                        .WithMany("ExerciseSheetLogs")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCoaching.Domain.Entities.Exercise", "Exercise")
+                        .WithMany("ExerciseLogs")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.Meal", b =>
+                {
+                    b.HasOne("OnlineCoaching.Domain.Entities.Client", "Client")
+                        .WithMany("Meals")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCoaching.Domain.Entities.CoachingPackageRequest", "CoachingPackageRequest")
+                        .WithMany("Meals")
+                        .HasForeignKey("CoachingPackageRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CoachingPackageRequest");
+                });
+
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("OnlineCoaching.Domain.Entities.Client", "Client")
@@ -1446,6 +1751,8 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Client", b =>
                 {
+                    b.Navigation("Answers");
+
                     b.Navigation("AssignedExercises");
 
                     b.Navigation("AssignedFoods");
@@ -1458,6 +1765,10 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     b.Navigation("CourseEnrollments");
 
+                    b.Navigation("ExerciseSheetLogs");
+
+                    b.Navigation("Meals");
+
                     b.Navigation("Transformations");
                 });
 
@@ -1466,14 +1777,34 @@ namespace OnlineCoaching.Infrastructure.Migrations
                     b.Navigation("SelectedOptions");
                 });
 
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.CoachingPackageRequest", b =>
+                {
+                    b.Navigation("AssignExercises");
+
+                    b.Navigation("AssignFoods");
+
+                    b.Navigation("Meals");
+                });
+
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Exercise", b =>
                 {
+                    b.Navigation("AlternativeTo");
+
+                    b.Navigation("Alternatives");
+
                     b.Navigation("AssignedExercises");
+
+                    b.Navigation("ExerciseLogs");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Food", b =>
                 {
                     b.Navigation("AssignedFoods");
+                });
+
+            modelBuilder.Entity("OnlineCoaching.Domain.Entities.Meal", b =>
+                {
+                    b.Navigation("Foods");
                 });
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Muscle", b =>
@@ -1483,8 +1814,6 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.Option", b =>
                 {
-                    b.Navigation("ClientAnswers");
-
                     b.Navigation("SelectedOptions");
                 });
 
