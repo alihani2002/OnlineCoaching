@@ -12,6 +12,9 @@ namespace OnlineCoaching.WebUI.Core.ViewModels.Food
         public FoodDto? SelectedFood { get; set; }
         public FoodDto? TargetFood { get; set; }
 
+        public double SelectedFoodCalories { get; set; }
+        public double TargetFoodCalories { get; set; }
+
         public double RequiredTargetGrams { get; set; }
 
         // dropdowns

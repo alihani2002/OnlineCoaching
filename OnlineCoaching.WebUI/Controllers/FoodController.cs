@@ -65,13 +65,20 @@ namespace OnlineCoaching.WebUI.Controllers
             var proteinPerGramTarget = targetFood.Protein / (double)targetFood.Gram;
             var requiredGrams = proteinSelected / proteinPerGramTarget;
 
+            // Calories calculation
+            var caloriesSelected = (selectedFood.Calories / (double)selectedFood.Gram) * model.Grams;
+            var caloriesTarget = (targetFood.Calories / (double)targetFood.Gram) * requiredGrams;
+
             model.SelectedFood = selectedFood;
             model.TargetFood = targetFood;
             model.RequiredTargetGrams = requiredGrams;
+            model.SelectedFoodCalories = caloriesSelected;
+            model.TargetFoodCalories = caloriesTarget;
             model.AllFoods = _foodService.GetFoodsAsync().ToList();
 
             return View(model);
         }
+
 
         [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Details(int id)
