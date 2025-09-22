@@ -3,6 +3,8 @@
     ViewData["Title"] = "Coaching Packages";
 }
 
+
+
 <section class="pricing-area section-padding40 fix">
     <div class="container">
         <div class="row">
@@ -21,13 +23,27 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay="@($"{delay}s")">
                             <div class="properties__card">
-                                <div class="about-icon">
-                                    <img src="~/assets/img/icon/price.svg" alt="Price Icon">
-                                </div>
-                                <div class="properties__caption">
+
+                                <!-- Package Image -->
+                                @if (!string.IsNullOrEmpty(package.ImageUrl))
+                                {
+                                    <div class="mb-3">
+                                        <img src="@package.ImageUrl"
+                                             alt="@package.Title"
+                                             class="img-fluid rounded shadow-sm"
+                                             style="max-height:250px; object-fit:cover; width:100%;" />
+                                    </div>
+                                }
+
+                              
+                                <div class="properties__caption text-center">
+                                    <h5 class="fw-bold text-white">@package.Title</h5>
                                     <span class="month">@package.DurationInMonths month@(package.DurationInMonths > 1 ? "s" : "")</span>
-                                    <p class="mb-25">L.E @package.Price/m <span>(Single class)</span></p>
-                                    <div class="single-features">
+                                    <p class="mb-25 fs-5 fw-bold text-warning">
+                                        L.E @package.Price <span class="text-muted">/ month</span>
+                                    </p>
+
+                                    <div class="single-features text-start">
                                         <div class="features-icon">
                                             <img src="~/assets/img/icon/check.svg" alt="">
                                         </div>
@@ -37,15 +53,7 @@
                                     </div>
 
                                     <!-- Trigger Modal -->
-                                    <a href="javascript:void(0)"
-                                       class="border-btn border-btn2"
-                                       data-toggle="modal"
-                                       data-target="#confirmModal"
-                                       data-id="@package.Id"
-                                       data-name="@package.Description"
-                                       data-price="@package.Price">
-                                        Join Now
-                                    </a>
+                                    <a asp-controller="CoachingPackageRequests" asp-action="ConfirmRequestView" asp-route-id="@package.Id" class="border-btn border-btn2"> Join Now </a>
                                 </div>
                             </div>
                         </div>
@@ -63,42 +71,6 @@
     </div>
 </section>
 
-<!-- Confirmation Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form id="confirmRequestForm">
-                @Html.AntiForgeryToken()
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirm Package Request</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="modal-text">Are you sure you want to join this package?</p>
-                    <input type="hidden" id="PackageId" name="PackageId" />
-                    <input type="hidden" id="ClientId" name="ClientId" value="@ViewBag.Client" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content text-center p-4">
-            <h3 class="text-success">✅ Request Done</h3>
-            <p>Your coaching package request has been submitted successfully.</p>
-            <button type="button" id="successOkBtn" class="btn btn-success mt-3">OK</button>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
     <script>

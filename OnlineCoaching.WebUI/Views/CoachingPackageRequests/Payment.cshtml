@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Payment Checkout";
+    var whatsappNumber = "+201027929673";
+}
+
+<section class="section-padding40" style="background-color: #f4f6f9; min-height: 90vh;">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-6 col-md-8 mt-5">
+                <div class="card shadow-lg border-0 rounded-4 p-4 text-center bg-white">
+                    <h2 class="mb-3 text-dark">💳 Step 1: Complete Your Payment</h2>
+                    <p class="text-muted">Scan the QR code below using Instapay to complete your payment.</p>
+
+                    <div class="my-4">
+                        <img src="~/assets/img/logo/instapay.jpeg"
+                             alt="Instapay QR Code"
+                             class="img-fluid rounded shadow"
+                             style="max-width: 280px;" />
+                    </div>
+
+                    <ul class="list-unstyled text-muted mb-4">
+                        <li>✔ Scan QR with your Instapay app</li>
+                        <li>✔ Send payment screenshot on WhatsApp</li>
+                        <li>✔ Package activates within 24 hours</li>
+                    </ul>
+
+                    <h3 class="mb-3 text-dark">📲 Step 2: Send Proof on WhatsApp</h3>
+                    <a href="https://wa.me/@whatsappNumber?text=Hello%20I%20have%20completed%20my%20payment%20via%20Instapay.%20Here%20is%20the%20screenshot."
+                       target="_blank"
+                       class="btn btn-success mb-3">
+                        Send Payment Whatsapp
+                    </a>
+
+                    <br />
+                    <a asp-controller="CoachingPackages" asp-action="GetCoachingPackage" class="btn btn-secondary">
+                        ⬅ Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -104,31 +104,35 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmRequest(ConfirmRequestViewModel model)
+        [Authorize(Roles = AppRoles.Client)]
+        [HttpGet]
+        public async Task<IActionResult> ConfirmRequestView(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new { message = "Invalid request" });
-            }
-
-            // Fetch package details again
-            var package = await _coachingPackageServices.GetCoachingPackageByIdAsync(model.PackageId);
+            var package = await _coachingPackageServices.GetCoachingPackageByIdAsync(id);
             if (package == null) return NotFound();
 
-            // Get current user (CreatedById)
+            return View(package); 
+        }
+
+        [Authorize(Roles = AppRoles.Client)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmRequest(int packageId)
+        {
             var sessionId = User.GetUserId();
             var client = await _clientService.GetClientAsync(sessionId);
             if (client == null) return NotFound();
 
-            // Create request using actual data
-            await _requestService.CreateRequestAsync(package.Id, client.Id);
+            await _requestService.CreateRequestAsync(packageId, client.Id);
 
-            return Json(new { message = "Request created successfully" });
+            TempData["Success"] = "Request created successfully!";
+            return RedirectToAction("GetCoachingPackage", "CoachingPackages");
         }
 
-
+      
+        public IActionResult Payment()
+        {
+           return View();
+        }
     }
 }

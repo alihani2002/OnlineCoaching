@@ -36,14 +36,34 @@
                 {
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="properties mb-30">
-                            <div class="properties__card shadow-lg">
-                                <!-- Top Icon -->
-                                <div class="about-icon">
-                                    <img src="~/assets/img/icon/price.svg" alt="icon" />
-                                </div>
+                            <div class="properties__card shadow-lg p-3 rounded-4">
+
+                                <!-- Package Image -->
+                                @if (!string.IsNullOrEmpty(package.ImageUrl))
+                                {
+                                    <div class="mb-3">
+                                        <img src="@package.ImageUrl"
+                                             alt="@package.Title"
+                                             class="img-fluid rounded shadow-sm"
+                                             style="max-height:250px; object-fit:cover; width:100%;" />
+                                    </div>
+                                }
+
+                                <!-- Package Video Button -->
+                                @if (!string.IsNullOrEmpty(package.VedioUrl) && User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Coach))
+                                {
+                                    <div class="mb-3 text-center">
+                                        <a href="@package.VedioUrl" target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-play-circle me-1"></i> Watch Video
+                                        </a>
+                                    </div>
+                                }
+
+
 
                                 <!-- Caption -->
                                 <div class="properties__caption text-center">
+                                    <h5 class="fw-bold text-white">@package.Title</h5>
                                     <span class="month">@package.DurationInMonths month@(package.DurationInMonths > 1 ? "s" : "")</span>
                                     <p class="mb-25 fs-4 fw-bold text-warning">
                                         L.E @package.Price <span class="text-muted">(per month)</span>
@@ -56,12 +76,12 @@
                                         foreach (var item in descriptionItems)
                                         {
                                             if (string.IsNullOrWhiteSpace(item)) { continue; }
-                                            <div class="single-features">
-                                                <div class="features-icon">
+                                            <div class="single-features d-flex align-items-start mb-2">
+                                                <div class="features-icon me-2">
                                                     <img src="~/assets/img/icon/check.svg" alt="check" />
                                                 </div>
-                                                <div class="features-caption">
-                                                    <p>@item</p>
+                                                <div class="features-caption text-start">
+                                                    <p class="mb-0">@item</p>
                                                 </div>
                                             </div>
                                         }

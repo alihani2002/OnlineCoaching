@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
+using OnlineCoaching.WebUI.Helper;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineCoaching.WebUI.Controllers
@@ -11,12 +12,14 @@ namespace OnlineCoaching.WebUI.Controllers
         private readonly IClientService _clientService;
         private readonly ICoachingPackageServices _packageService;
         private readonly ICoachingPackageRequestService _requestServices;
+        private readonly ImageHelper _imageHelper;
 
-        public CoachingPackagesController(ICoachingPackageServices packageServic , ICoachingPackageRequestService requestService ,IClientService clientService )
+        public CoachingPackagesController(ICoachingPackageServices packageServic , ICoachingPackageRequestService requestService ,IClientService clientService , ImageHelper image )
         {
             _packageService = packageServic;
             _requestServices = requestService;
             _clientService = clientService;
+            _imageHelper = image;
         }
 
 
@@ -43,7 +46,7 @@ namespace OnlineCoaching.WebUI.Controllers
             var existingRequest = _requestServices.GetActiveOrPendingRequest(client!.Id);
             if (existingRequest != null)
             {
-                if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == Domain.Enums.ClientStatus.Active)
+                if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == ClientStatus.Active)
                 {
                     return RedirectToAction("CompleteQuestion", "Clients", new { id = existingRequest.Id });
                 }
@@ -86,12 +89,21 @@ namespace OnlineCoaching.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> Create(CreateCoachingPackageDto dto)
+        public async Task<IActionResult> Create(CreateCoachingPackageDto dto, IFormFile? ImageUrl)
         {
             if (!ModelState.IsValid) return View(dto);
 
             try
             {
+                if (ImageUrl != null)
+                    dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "CoachPackage") ?? string.Empty;
+               
+                else
+                {
+                    ModelState.AddModelError("", "Image is required.");
+                    return View(dto);
+                }
+                dto.CreatedById = User.GetUserId();
                 await _packageService.AddCoachingPackageAsync(dto);
                 return RedirectToAction(nameof(Index));
             }
@@ -114,19 +126,40 @@ namespace OnlineCoaching.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> Edit(CoachingPackageDto dto)
+        public async Task<IActionResult> Edit(CoachingPackageDto dto, IFormFile? ImageUrl)
         {
             if (!ModelState.IsValid) return View(dto);
 
-            var updated = await _packageService.UpdateCoachingPackageAsync(dto);
-            if (updated == null)
+            var existing = await _packageService.GetCoachingPackageByIdAsync(dto.Id);
+            if (existing == null) return NotFound();
+
+            try
             {
-                ModelState.AddModelError("", "Unable to update package.");
+                if (ImageUrl != null)
+                {
+                    dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "CoachPackage") ?? existing.ImageUrl;
+                }
+                else
+                {
+                    dto.ImageUrl = existing.ImageUrl;
+                }
+
+                var updated = await _packageService.UpdateCoachingPackageAsync(dto);
+                if (updated == null)
+                {
+                    ModelState.AddModelError("", "Unable to update package.");
+                    return View(dto);
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
                 return View(dto);
             }
-
-            return RedirectToAction(nameof(Index));
         }
+
 
         [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
@@ -152,3 +185,5 @@ namespace OnlineCoaching.WebUI.Controllers
         }
     }
 }
+
+

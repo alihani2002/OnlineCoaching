@@ -68,7 +68,7 @@ namespace OnlineCoaching.Application.Services
                 Status = ClientStatus.Pending,
                 Price = package.Price,
                 IsAnswerQuestion = false,
-                CreatedOn = DateTime.UtcNow,
+                CreatedOn = DateTime.Now,
                 CreatedById = package.CreatedById,
             };
 
@@ -117,9 +117,9 @@ namespace OnlineCoaching.Application.Services
             existing.Status = newStatus;
             if (existing.Status == ClientStatus.Active)
             {
-                existing.StartDate = DateTime.UtcNow;
+                existing.StartDate = DateTime.Now;
             }
-            existing.LastUpdatedOn = DateTime.UtcNow;
+            existing.LastUpdatedOn = DateTime.Now;
 
             _unitOfWork.CoachingPackageRequests.Update(existing);
             _unitOfWork.Complete();

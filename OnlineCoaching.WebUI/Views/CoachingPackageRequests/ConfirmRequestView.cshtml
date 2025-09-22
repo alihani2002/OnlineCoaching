@@ -1,0 +1,156 @@
+﻿@using System.Text.RegularExpressions
+@model OnlineCoaching.Domain.Dtos.CoachingPackageDto
+
+@{
+    ViewData["Title"] = "Confirm Coaching Package";
+
+    var raw = Model?.VedioUrl ?? string.Empty;
+    string resolvedUrl = string.Empty;
+
+    if (!string.IsNullOrWhiteSpace(raw))
+    {
+        resolvedUrl = raw.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+            ? raw
+            : Url.Content(raw);
+    }
+
+    // Detect YouTube / Shorts / youtu.be
+    bool isYouTube = false;
+    string youTubeEmbed = string.Empty;
+    if (!string.IsNullOrWhiteSpace(resolvedUrl))
+    {
+        var m = Regex.Match(resolvedUrl,
+            @"(?:youtube\.com/(?:watch\?v=|embed/|shorts/)|youtu\.be/)([A-Za-z0-9_\-]{11})");
+
+        if (m.Success)
+        {
+            isYouTube = true;
+            youTubeEmbed = $"https://www.youtube.com/embed/{m.Groups[1].Value}?rel=0&autoplay=1&loop=1&playlist={m.Groups[1].Value}";
+        }
+    }
+}
+
+<!-- VIDEO SECTION -->
+@if (!string.IsNullOrEmpty(resolvedUrl))
+{
+    if (isYouTube)
+    {
+        <!-- YouTube or Shorts -->
+        <div class="video-reel mb-4">
+            <iframe src="@youTubeEmbed"
+                    title="Package video"
+                    frameborder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    }
+    else
+    {
+        <!-- Direct MP4 / WebM -->
+        <div class="video-reel mb-4">
+            <video autoplay loop playsinline preload="auto" controls style="object-fit:cover;">
+                <source src="@resolvedUrl" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    }
+}
+
+<!-- CONFIRMATION CARD -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4">
+                <div class="card-body text-center">
+                    <h3 class="fw-bold">@Model!.Title</h3>
+                    <p class="text-muted">@Model.Description</p>
+                    <h4 class="text-warning">L.E @Model.Price / month</h4>
+                    <p>@Model.DurationInMonths month@(Model.DurationInMonths > 1 ? "s" : "")</p>
+
+                    <form id="confirmForm" asp-action="ConfirmRequest" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="packageId" value="@Model.Id" />
+
+                        <button type="submit" class="btn btn-primary mt-3">
+                            ✅ Confirm
+                        </button>
+                        <a asp-controller="CoachingPackages"
+                           asp-action="GetCoachingPackage"
+                           class="btn btn-secondary btn-lg mt-3">
+                            ❌ Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .video-reel {
+        position: relative;
+        width: 100%;
+        max-width: 400px; /* like reels */
+        margin: 30px auto; /* center horizontally with top margin */
+        aspect-ratio: 9/16;
+        overflow: hidden;
+        border-radius: 16px;
+        background: black;
+    }
+
+        .video-reel iframe,
+        .video-reel video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section Scripts {
+    <script>
+        document.getElementById("confirmForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            fetch(this.action, {
+                method: "POST",
+                body: new FormData(this),
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(res => {
+                if (res.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Confirmed!',
+                        text: 'Your coaching package has been successfully confirmed.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Redirect after user clicks OK
+                        window.location.href = '@Url.Action("GetCoachingPackage", "CoachingPackages")';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Something went wrong. Please try again.'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unexpected error occurred.'
+                });
+            });
+        });
+    </script>
+}

@@ -10,7 +10,7 @@
             <h3 class="fw-bold mb-0">Edit Coaching Package</h3>
         </div>
         <div class="card-body p-4">
-            <form asp-action="Edit" method="post">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Id" />
 
                 <div class="row">
@@ -43,6 +43,28 @@
                             <label asp-for="Price">Price</label>
                             <span asp-validation-for="Price" class="text-danger small"></span>
                         </div>
+                    </div>
+
+                    <!-- Video URL -->
+                    <div class="col-md-12 mb-4">
+                        <div class="form-floating">
+                            <input asp-for="VedioUrl" class="form-control" placeholder="Video URL (YouTube or MP4)" />
+                            <label asp-for="VedioUrl">Video URL</label>
+                            <span asp-validation-for="VedioUrl" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-bold">Upload New Image</label>
+                        <input type="file" name="ImageUrl" class="form-control" accept="image/*" />
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="mt-2">
+                                <p class="small text-muted">Current Image:</p>
+                                <img src="@Url.Content(Model.ImageUrl)" alt="Current Package Image" class="img-fluid rounded shadow-sm" style="max-height:200px;" />
+                            </div>
+                        }
                     </div>
                 </div>
 

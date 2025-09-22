@@ -1,5 +1,4 @@
-﻿
-namespace OnlineCoaching.Domain.Entities
+﻿namespace OnlineCoaching.Domain.Entities
 {
     public class ExerciseSheetLog : BaseEntity
     {

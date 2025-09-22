@@ -9,12 +9,12 @@
         font-weight: 600;
         font-size: 14px;
     }
-    @@media (max-width: 991px) {
-        .username-text
+    @@media (max-width: 988px) {
+    a.btn.btn-outline-dark.btn-sm
     {
-        color: #000 !important;
+        padding: inherit;
+        color:white;
     }
-
     }
     </style>
 <header>
@@ -71,8 +71,8 @@
                                 }
                                 else
                                 {
-                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-danger btn-lg">Login</a>
-                                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-danger btn-lg">Register</a>
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-dark btn-sm">Login</a>
+                                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-dark btn-sm">Register</a>
                                 }
                             </ul>
                         </nav>

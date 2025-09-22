@@ -1,56 +1,160 @@
 ﻿@model OnlineCoaching.Domain.Dtos.CoachingPackageRequestDto
-
 @{
     ViewData["Title"] = "Request Coaching Packages";
+    var whatsappNumber = "+201027929673";
+
+    // --- Logic for Status Badge ---
+    var statusBadgeClass = "";
+    var statusText = Model.Status.ToString();
+    switch (Model.Status)
+    {
+        case OnlineCoaching.Domain.Enums.ClientStatus.Pending:
+            statusBadgeClass = "bg-warning text-dark";
+            break;
+        case OnlineCoaching.Domain.Enums.ClientStatus.Active:
+            statusBadgeClass = "bg-success text-white";
+            break;
+        default:
+            statusBadgeClass = "bg-secondary text-white";
+            statusText = "Not Found";
+            break;
+    }
+
+    // --- Logic for Progress Steps ---
+    bool isPending = Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending;
+    bool isActive = Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active;
+
+    string step1Class = "completed"; // Request is always sent if we are on this page
+    string line1Class = (isPending || isActive) ? "active" : "";
+    string step2Class = isActive ? "completed" : (isPending ? "active" : "");
+    string line2Class = isActive ? "active" : "";
+    string step3Class = isActive ? "active" : "";
 }
 
-<section class="section-padding40 fix" style="background-color: #f9f9f9; min-height: 80vh;">
+<section class="section-padding40" style="background-color:#f4f6f9; min-height:85vh;">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-                <div class="card shadow-lg rounded-3 border-0" style="background: #ffffff;">
-                    <div class="card-body text-center p-5">
+            <div class="col-lg-9 col-md-11">
+                <div class="card shadow-lg mt-5 mb-5 rounded-4 border-0">
+                    <div class="card-body p-4 p-md-5">
+                        <h2 class="text-center mb-4 text-dark fw-bold">
+                            <i class="fas fa-box-open me-2 text-primary"></i> Your Coaching Package Request
+                        </h2>
 
-                        <h2 class="mb-4 text-dark">Your Coaching Package Request</h2>
+                        <div class="progress-steps mb-5">
+                            <div class="step @step1Class">
+                                <span>1</span>
+                                <p class="mt-2">Request Sent</p>
+                            </div>
+                            <div class="line @line1Class"></div>
+                            <div class="step @step2Class">
+                                <span>2</span>
+                                <p class="mt-2">Pending Payment</p>
+                            </div>
+                            <div class="line @line2Class"></div>
+                            <div class="step @step3Class">
+                                <span>3</span>
+                                <p class="mt-2">Activated</p>
+                            </div>
+                        </div>
 
-                        <p class="fs-5">
-                            <strong class="text-dark">Status:</strong>
-                            <span class="badge
-                                @(Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending ? "bg-warning text-dark" :
-                                                                    Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active ? "bg-success" : "bg-secondary")">
-                                @Model.Status
+                        <div class="text-center mb-4">
+                            <span class="badge fs-6 px-3 py-2 rounded-pill @statusBadgeClass">
+                                @statusText
                             </span>
-                        </p>
+                        </div>
 
-                        @if (Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Pending)
+                        @if (isPending)
                         {
-                            <p class="text-warning fs-6">⏳ Your request is pending. Please wait for coach approval.</p>
+                            <div class="alert alert-warning text-center mt-4 border-0" role="alert">
+                                <i class="fas fa-hourglass-half me-2"></i>
+                                <strong>Your request is pending.</strong> Please complete the payment to activate your package.
+                            </div>
+
+                            <div class="row mt-4 gy-3">
+                                <div class="col-md-6">
+                                    <h5 class="fw-bold text-dark mb-3"><i class="fas fa-money-check-alt me-2 text-primary"></i> Payment Steps</h5>
+                                     <div class="d-grid gap-3">
+                                        <a asp-controller="CoachingPackageRequests" asp-action="Payment" class="btn btn-primary btn-lg rounded-pill shadow-sm d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-qrcode me-2"></i> Step 1: Show QR Code
+                                        </a>
+                                        <a href="https://wa.me/@whatsappNumber?text=Hello! I've requested the '@Model.Titles' package and I'm sending the payment screenshot."
+                                           target="_blank"
+                                           class="btn btn-success btn-lg rounded-pill shadow-sm d-flex align-items-center justify-content-center">
+                                            <i class="fab fa-whatsapp me-2"></i> Step 2: Send Screenshot
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                     <h5 class="fw-bold text-dark mb-3"><i class="fas fa-info-circle me-2 text-primary"></i> Instructions</h5>
+                                    <ul class="list-unstyled text-muted">
+                                        <li class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                                            <span>Scan the QR code with your Instapay app.</span>
+                                        </li>
+                                        <li class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                                            <span>Send the payment screenshot via WhatsApp.</span>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                                            <span>Your package will be activated within 24 hours.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         }
-                        else if (Model.Status == OnlineCoaching.Domain.Enums.ClientStatus.Active)
+                        else if (isActive)
                         {
-                            <p class="text-success fs-6">✅ Your package is active! Enjoy your coaching sessions.</p>
-                            <a asp-controller="Clients" asp-action="Profile" class="btn">Go to Your Packages</a>
-
+                            <div class="alert alert-success text-center mt-4 border-0" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>Congratulations!</strong> Your package is now active.
+                            </div>
+                            <div class="text-center mt-4">
+                                <a asp-controller="Clients" asp-action="Profile" class="btn btn-success px-5 py-2 rounded-pill shadow-sm">
+                                    Go to Your Profile <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
                         }
                         else
                         {
-                            <p class="text-muted">No active requests found.</p>
+                            <div class="alert alert-secondary text-center mt-4 border-0" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No active requests were found.
+                            </div>
                         }
 
                         <hr class="my-4" />
-
                         <div class="text-start">
-                            <p><strong>Package Title:</strong> @Model.Titles</p>
-                            <p><strong>Price:</strong> $@Model.Price</p>
-                            <p><strong>Requested On:</strong> @Model.CreatedOn.ToString("dd MMM yyyy")</p>
-                            @if (Model.StartDate.HasValue)
-                            {
-                                <p><strong>Start Date:</strong> @Model.StartDate.Value.ToString("dd MMM yyyy")</p>
-                            }
-                            @if (Model.EndDate.HasValue)
-                            {
-                                <p><strong>End Date:</strong> @Model.EndDate.Value.ToString("dd MMM yyyy")</p>
-                            }
+                            <h5 class="fw-bold text-dark mb-3"><i class="fas fa-file-alt me-2 text-primary"></i> Package Details</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span class="text-muted">Title:</span>
+                                    <span class="fw-semibold">@Model.Titles</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span class="text-muted">Price:</span>
+                                    <span class="fw-semibold text-success">L.E @Model.Price</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span class="text-muted">Requested On:</span>
+                                    <span class="fw-semibold">@Model.CreatedOn.ToString("dd MMM yyyy")</span>
+                                </li>
+                                @if (Model.StartDate.HasValue)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span class="text-muted">Start Date:</span>
+                                        <span class="fw-semibold">@Model.StartDate.Value.ToString("dd MMM yyyy")</span>
+                                    </li>
+                                }
+                                @if (Model.EndDate.HasValue)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span class="text-muted">End Date:</span>
+                                        <span class="fw-semibold">@Model.EndDate.Value.ToString("dd MMM yyyy")</span>
+                                    </li>
+                                }
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -58,3 +162,82 @@
         </div>
     </div>
 </section>
+
+<style>
+    /* Professional Progress Steps */
+    .progress-steps {
+        display: flex;
+        align-items: flex-start; /* Align items at the top */
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: 700px;
+        position: relative;
+    }
+
+    .progress-steps .step {
+        text-align: center;
+        flex: 0 0 80px; /* Give steps a fixed width */
+        position: relative;
+    }
+
+    .progress-steps .step span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        color: #757575;
+        font-weight: bold;
+        border: 3px solid #e0e0e0;
+        transition: all 0.4s ease;
+    }
+    
+    .progress-steps .step p {
+        font-size: 0.85rem;
+        color: #757575;
+        font-weight: 500;
+    }
+
+    /* Active Step */
+    .progress-steps .step.active span {
+        background-color: #fff;
+        border-color: #0d6efd;
+        color: #0d6efd;
+    }
+    .progress-steps .step.active p {
+        color: #0d6efd;
+    }
+
+    /* Completed Step */
+    .progress-steps .step.completed span {
+        background-color: #198754;
+        border-color: #198754;
+        color: #fff;
+        font-size: 1.2rem;
+    }
+     .progress-steps .step.completed span::before {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        content: "\f00c"; /* Font Awesome checkmark */
+    }
+    .progress-steps .step.completed p {
+        color: #198754;
+    }
+
+    /* Connecting Line */
+    .progress-steps .line {
+        flex: 1;
+        height: 5px;
+        background-color: #e0e0e0;
+        margin: 20px 0; /* Align with the center of the circles */
+        border-radius: 2px;
+        transition: background-color 0.4s ease;
+    }
+
+    .progress-steps .line.active {
+        background-color: #198754;
+    }
+</style>
