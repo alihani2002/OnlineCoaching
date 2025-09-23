@@ -1,0 +1,56 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.Notes.ExerciseNoteDto>
+@using OnlineCoaching.Domain.Common
+@{
+    ViewData["Title"] = "Exercise Notes";
+    var exerciseId = ViewBag.ExerciseId;
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0 text-white">
+            <i class="fas fa-sticky-note text-white me-2"></i> Notes for Exercise
+        </h3>
+        <a class="btn btn-primary shadow-sm" asp-action="Create" asp-route-exerciseId="@exerciseId">
+            <i class="fas fa-plus me-2"></i> Add Note
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm">
+            <i class="fas fa-info-circle me-2"></i> No notes have been added yet.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var note in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex flex-column">
+                            <p class="mb-3 text-muted">
+                                <i class="fas fa-quote-left text-secondary me-2"></i>
+                                @note.Note
+                            </p>
+                            <div class="mt-auto">
+                                <span class="badge bg-primary">
+                                    <i class="fas fa-user me-1"></i> @note.ClientName
+                                </span>
+                                <span class="badge bg-secondary ms-2">
+                                    <i class="fas fa-clock me-1"></i> @note.CreatedOn.ToString("g")
+                                </span>
+                            </div>
+                        </div>
+                            <div class="card-footer bg-transparent border-0 text-end">
+                                <a asp-action="Delete" asp-route-id="@note.Id"
+                                   class="btn btn-outline-danger btn-sm shadow-sm">
+                                    <i class="fas fa-trash-alt me-1"></i> 
+                                </a>
+                            </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

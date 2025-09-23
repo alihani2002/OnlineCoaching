@@ -34,6 +34,7 @@
 
         public virtual ICollection<ClientAnswer> Answers { get; set; } = [];
         public virtual ICollection<ExerciseSheetLog> ExerciseSheetLogs { get; set; } = [];
+        public virtual ICollection<ExerciseNotes> ExerciseNotes { get; set; } = [];
     }
 
 }

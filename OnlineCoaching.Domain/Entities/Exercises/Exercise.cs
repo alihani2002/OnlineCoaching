@@ -12,12 +12,13 @@
         public int MuscleId { get; set; }
         public Muscle? Muscle { get; set; }
 
+
         public ICollection<AssignExercise>? AssignedExercises { get; set; }
         public ICollection<ExerciseSheetLog>? ExerciseLogs { get; set; }
 
+
         public ICollection<ExerciseAlternative> Alternatives { get; set; } = [];   // التمارين اللي ليها بدائل
-        public ICollection<ExerciseAlternative> AlternativeTo { get; set; } = []; // التمارين اللي أنا بديل ليها
-
-
+        public ICollection<ExerciseAlternative> AlternativeTo { get; set; } = [];  // التمارين اللي أنا بديل ليها
+        public ICollection<ExerciseNotes>? ExerciseNotes { get; set; }
     }
 }

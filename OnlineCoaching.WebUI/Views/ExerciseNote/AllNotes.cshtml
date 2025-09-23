@@ -1,0 +1,38 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.Notes.ExerciseNoteDto>
+
+@{
+    ViewData["Title"] = "All Exercise Notes";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">📝 All Exercise Notes</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No notes found.</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Note</th>
+                    <th>Exercise</th>
+                    <th>Client</th>
+                    <th>Created On</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var note in Model)
+                {
+                    <tr>
+                        <td>@note.Note</td>
+                        <td>@note.ExerciseName</td>
+                        <td>@note.ClientName</td>
+                        <td>@note.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

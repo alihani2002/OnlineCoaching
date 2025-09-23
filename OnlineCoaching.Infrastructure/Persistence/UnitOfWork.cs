@@ -50,6 +50,7 @@ namespace OnlineCoaching.Infrastructure.Persistence
 
         public IBaseRepository<Cooking> Cookings => new BaseRepository<Cooking>(_context);
         public IBaseRepository<ExerciseAlternative> ExerciseAlternatives => new BaseRepository<ExerciseAlternative>(_context);
+        public IBaseRepository<ExerciseNotes> ExerciseNotes => new BaseRepository<ExerciseNotes>(_context);
 
 
         public int Complete()

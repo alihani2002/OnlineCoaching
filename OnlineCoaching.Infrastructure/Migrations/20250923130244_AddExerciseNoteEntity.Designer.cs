@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCoaching.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using OnlineCoaching.Infrastructure.Persistence;
 namespace OnlineCoaching.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250923130244_AddExerciseNoteEntity")]
+    partial class AddExerciseNoteEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1019,7 +1022,7 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClientId")
+                    b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedById")
@@ -1710,17 +1713,13 @@ namespace OnlineCoaching.Infrastructure.Migrations
 
             modelBuilder.Entity("OnlineCoaching.Domain.Entities.ExerciseNotes", b =>
                 {
-                    b.HasOne("OnlineCoaching.Domain.Entities.Client", "Client")
+                    b.HasOne("OnlineCoaching.Domain.Entities.Client", null)
                         .WithMany("ExerciseNotes")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("OnlineCoaching.Domain.Entities.Exercise", "Exercise")
                         .WithMany("ExerciseNotes")
                         .HasForeignKey("ExerciseId");
-
-                    b.Navigation("Client");
 
                     b.Navigation("Exercise");
                 });

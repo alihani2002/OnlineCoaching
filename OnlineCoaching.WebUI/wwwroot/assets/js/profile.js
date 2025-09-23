@@ -44,11 +44,18 @@ for (const [day, exercises] of Object.entries(exercisesByDay)) {
                         <div class="exercise-actions">
                             <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=${clientId}" class="btn btn-warning ">➕ Log</a>
                             <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=${clientId}" class="btn btn-info ">📊 Logs</a>
+                            <a href="/ExerciseNote/Create?exerciseId=${e.ExerciseId}" 
+                               class="btn btn-sm btn-primary mt-2">✏️ Add Note</a>
+                               <a href="/ExerciseNote/Index?exerciseId=${e.Id}" 
+                               class="btn btn-sm btn-info mt-2">
+                               📖 View Notes
+                            </a>
+
                         </div>
                     </div>
                     <div class="exercise-image">
                         ${e.ImageUrl
-                       ? `<a href="javascript:void(0);" onclick="openVideo('${e.VideoUrl ?? ''}')">
+                    ? `<a href="javascript:void(0);" onclick="openVideo('${e.VideoUrl ?? ''}')">
                        <img src="${e.ImageUrl}" class="main-img" alt="${e.NameOfExercise}" />
                        <img src="/assets/img/logo/youtube.png" class="youtube-overlay" alt="YouTube" />
                         </a>`

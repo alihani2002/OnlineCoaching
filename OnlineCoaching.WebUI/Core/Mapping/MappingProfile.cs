@@ -4,6 +4,8 @@ using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
 using OnlineCoaching.Domain.Dtos.Cooking;
 using OnlineCoaching.Domain.Dtos.ExerciseSheet;
 using OnlineCoaching.Domain.Dtos.Gallery;
+using OnlineCoaching.Domain.Dtos.Notes;
+using OnlineCoaching.Domain.Entities;
 using OnlineCoaching.Domain.Entities.Gallery;
 
 namespace OnlineCoaching.Web.Core.Mapping
@@ -119,6 +121,12 @@ namespace OnlineCoaching.Web.Core.Mapping
             #region Cooking
             CreateMap<Cooking, Cookingdto>().ReverseMap();
             CreateMap<Cooking, Cooking>().ReverseMap();
+            #endregion
+
+            #region ExerciseNote
+            CreateMap<ExerciseNotes, ExerciseNoteDto>().ReverseMap();
+            CreateMap<CreateExerciseNoteDto, ExerciseNotes>().ReverseMap();
+
             #endregion
         }
     }

@@ -36,6 +36,7 @@ namespace OnlineCoaching.Infrastructure.Persistence
         public DbSet<HomeGallary> Images { get; set; }
         public DbSet<Cooking> Cookings { get; set; }
         public DbSet<ExerciseAlternative> ExerciseAlternatives { get; set; }
+        public DbSet<ExerciseNotes> ExerciseNotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

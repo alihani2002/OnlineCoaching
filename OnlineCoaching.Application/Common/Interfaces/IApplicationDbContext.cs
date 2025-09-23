@@ -29,6 +29,7 @@ namespace OnlineCoaching.Application.Common.Interfaces
         public DbSet<HomeGallary> Images { get; set; }
         public DbSet<Cooking> Cookings { get; set; }
         public DbSet<ExerciseAlternative> ExerciseAlternatives { get; set; }
+        public DbSet<ExerciseNotes> ExerciseNotes { get; set; }
 
 
         int SaveChanges();

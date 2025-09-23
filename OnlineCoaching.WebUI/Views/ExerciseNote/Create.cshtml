@@ -1,0 +1,42 @@
+﻿@model OnlineCoaching.Domain.Dtos.Notes.CreateExerciseNoteDto
+@{
+    ViewData["Title"] = "Add Exercise Note";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header  text-white text-center">
+                    <h4 class="mb-0"><i class="fas fa-sticky-note me-2"></i> Add Exercise Note</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" asp-for="ExerciseId" />
+
+                        <div class="mb-4">
+                            <label asp-for="Note" class="form-label fw-bold">
+                                <i class="fas fa-pen me-2 text-secondary"></i> Write Your Note
+                            </label>
+                            <textarea asp-for="Note" class="form-control shadow-sm" rows="5" placeholder="Type your exercise note here..."></textarea>
+                            <span asp-validation-for="Note" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" asp-route-exerciseId="@Model.ExerciseId" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left me-2"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fas fa-save me-2"></i> Save Note
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
