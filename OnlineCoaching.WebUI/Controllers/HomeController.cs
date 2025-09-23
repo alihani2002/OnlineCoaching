@@ -59,4 +59,28 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+
+
+    [Route("Home/StatusCode")]
+    public IActionResult StatusCodeHandler(int code)
+    {
+        switch (code)
+        {
+            case 404:
+                return View("FourHunderedFour"); // Views/Shared/FourHunderedFour.cshtml
+            case 403:
+                return View("Forbidden"); // optional
+            case 500:
+                return View("ServerError"); // optional
+            default:
+                return View("Error");
+        }
+    }
+
+
+    public IActionResult FourHunderedFour()
+    {
+        return View();
+    }
 }

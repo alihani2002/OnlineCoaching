@@ -49,13 +49,6 @@ namespace OnlineCoaching.Web
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.SlidingExpiration = true;
-                options.LoginPath = "/Identity/Account/Login";
-            });
-
-            services.ConfigureApplicationCookie(options =>
-            {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
@@ -68,7 +61,8 @@ namespace OnlineCoaching.Web
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
 
-       
+
+
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             options.ValidationInterval = TimeSpan.Zero);

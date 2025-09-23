@@ -81,8 +81,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseRateLimiter();
+
 
 // Hangfire Dashboard (optional)
 // =====================
