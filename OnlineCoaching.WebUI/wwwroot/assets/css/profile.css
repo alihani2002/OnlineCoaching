@@ -1,63 +1,173 @@
 ﻿body {
     background-color: #0b0b0b;
     color: #ffffff;
-    font-family: Arial, sans-serif;
-    font-size:12px;
+    font-family: 'Segoe UI', Arial, sans-serif; /* Changed font for a modern look */
+    font-size: 14px; /* Slightly increased base font size */
+    line-height: 1.6;
 }
 
-/* ---------- Q&A Cards ---------- */
-.qa-card {
-    display: flex;
-    background: #1a1a1a;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #333;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.qa-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.7);
-}
-
-/* السؤال (يسار) */
-.qa-question {
-    flex: 1;
-    border-right: 2px solid #444;
-    background: #222;
-    text-align: left;
-}
-
-.question-badge {
-    background: linear-gradient(90deg, #ff9800, #ff5722);
+/* ---------- Profile Card ---------- */
+.profile-card {
+    background: linear-gradient(145deg, #161616, #0d0d0d);
+    border-radius: 15px;
+    padding: 2.5rem; /* Increased padding */
     color: #fff;
-    width: 36px;
-    height: 36px;
+    border: 1px solid #333;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8); /* Stronger shadow */
+    margin-bottom: 3rem;
+}
+
+.profile-header {
+    border-bottom: 1px solid #444;
+    padding-bottom: 1.5rem; /* Increased padding */
+    margin-bottom: 1.5rem;
+}
+
+.profile-avatar {
+    width: 150px; /* Larger avatar */
+    height: 150px;
     border-radius: 50%;
+    border: 4px solid #ff3d3d; /* Thicker border */
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(255, 61, 61, 0.5); /* Glowing effect */
+}
+
+.profile-header h3 {
+    font-size: 2.2rem; /* Larger name */
+    margin-top: 1rem;
+    color: #f8f9fa;
+}
+
+.profile-header p {
+    font-size: 1.1rem;
+    color: #bbb;
+}
+
+.profile-details {
+    margin-top: 2rem;
+}
+
+.table-profile {
+    width: 100%;
+    border-collapse: separate; /* Use separate to allow border-spacing */
+    border-spacing: 0 10px; /* Space between rows */
+}
+
+    .table-profile th,
+    .table-profile td {
+        padding: 15px 20px; /* Increased padding */
+        text-align: left;
+        border-bottom: 1px solid #333; /* Lighter border */
+    }
+
+    .table-profile th {
+        width: 200px; /* Adjusted width */
+        color: #ffc107;
+        font-weight: 700; /* Bolder font */
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        background-color: #1a1a1a; /* Background for headers */
+        border-right: 1px solid #333;
+    }
+
+    .table-profile td {
+        color: #e0e0e0;
+        background-color: #121212; /* Background for data cells */
+    }
+
+    .table-profile tr:last-child th,
+    .table-profile tr:last-child td {
+        border-bottom: none; /* No border for the last row */
+    }
+
+    .table-profile tr:hover td {
+        background-color: #1f1f1f; /* Darker hover effect */
+    }
+
+.edit-profile-btn {
+    padding: 12px 30px; /* Larger button */
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background-color: #ff3d3d; /* Danger red */
+    border-color: #ff3d3d;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .edit-profile-btn:hover {
+        background-color: #e60000;
+        border-color: #e60000;
+        transform: translateY(-2px);
+    }
+
+/* ---------- Plans Container (New) ---------- */
+.plans-container {
+    background: linear-gradient(145deg, #161616, #0d0d0d);
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+    border: 1px solid #333;
+}
+
+.plan-tabs {
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #444;
 }
 
-/* الإجابة (يمين) */
-.qa-answer {
-    flex: 1;
-    background: #2a2a2a;
-    text-align: right;
+.plan-tab-btn {
+    background-color: transparent;
+    border: none;
+    color: #bbb;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    border-bottom: 3px solid transparent;
+    margin: 0 10px;
 }
 
-.answer-text {
-    color: #ddd;
-    font-size: 1rem;
+    .plan-tab-btn:hover {
+        color: #ffc107;
+    }
+
+    .plan-tab-btn.active {
+        color: #ff3d3d;
+        border-bottom: 3px solid #ff3d3d;
+    }
+
+.plan-content {
+    display: none;
+    padding-top: 1rem;
 }
-/* ---------- Shared Styles ---------- */
-h3, h4, h5 {
-    font-weight: bold;
-    color: #ffffff;
+
+    .plan-content.active {
+        display: block;
+    }
+
+
+/* ---------- Shared Styles for Plans ---------- */
+h2 {
+    font-size: 2rem;
+    color: #f8f9fa;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+    padding-bottom: 10px;
 }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: #ffc107;
+        border-radius: 2px;
+    }
 
 .custom-card {
     background-color: #1a1a1a;
@@ -71,262 +181,358 @@ h3, h4, h5 {
 .day-header {
     background-color: #000;
     color: #ffc107;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-size: 1.2rem;
+    padding: 12px 20px; /* Increased padding */
+    border-radius: 8px;
+    font-size: 1.3rem; /* Larger font */
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    border-left: 5px solid #ffc107; /* Accent border */
 }
 
 .muscle-header {
     background-color: #b30000;
     color: #fff;
-    padding: 8px 12px;
-    margin: 1.5rem 0 1rem 0;
+    padding: 10px 15px; /* Increased padding */
+    margin: 2rem 0 1.2rem 0;
     border-radius: 6px;
-    font-size: 1.1rem;
+    font-size: 1.2rem; /* Larger font */
     font-weight: bold;
+    border-left: 4px solid #ff3d3d;
 }
 
 .table-custom {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 8px;
     margin: 1.5rem 0;
 }
 
     .table-custom th,
     .table-custom td {
-        border: 1px solid #ffffff;
-        padding: 12px;
+        border: none; /* Removed internal borders */
+        padding: 12px 15px;
         text-align: left;
         vertical-align: middle;
         color: #ffffff;
+        background-color: #2a2a2a; /* Consistent background */
     }
 
     .table-custom th {
         background-color: #222;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        font-weight: 600;
+        color: #ffc107;
     }
 
-    .table-custom tr:nth-child(even) {
-        background-color: #2a2a2a;
+    .table-custom tr:nth-child(odd) td {
+        background-color: #1f1f1f; /* Alternating rows for readability */
     }
 
-    .table-custom tr:hover {
-        background-color: #333;
+    .table-custom tr:hover td {
+        background-color: #383838;
     }
 
-/* ---------- Exercise Cards ---------- */
+/* ---------- Exercise Cards (Adjusted for Smaller Size) ---------- */
 .exercise-card {
     display: flex;
     background-color: #121212;
-    border: 1px solid #fff;
-    border-radius: 0.5rem;
-    margin-bottom: 2rem;
+    border: 1px solid #333;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem; /* Reduced margin */
     overflow: hidden;
-    align-items: stretch;
-    max-height: 250px;
+    align-items: center; /* Align items vertically in center */
+    max-height: 180px; /* Significantly reduced max-height */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    transition: transform 0.2s ease;
+    font-size: 0.95rem; /* Slightly smaller base font for card */
 }
 
+    .exercise-card:hover {
+        transform: translateY(-3px); /* Less aggressive hover effect */
+    }
+
 .exercise-image {
-    flex: 1;
-    max-width: 50%;
+    flex-shrink: 0; /* Prevent image from shrinking */
+    width: 150px; /* Fixed width for image container */
+    height: 150px; /* Fixed height for image container */
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     position: relative;
+    background-color: #000;
+    padding: 0.5rem; /* Reduced padding */
+    border-right: 1px solid #333; /* Separator for image */
 }
 
     .exercise-image img.main-img {
         width: 100%;
-        height: auto;
-        max-height: 150px;
+        height: 100%; /* Fill the fixed height/width */
         object-fit: contain;
         display: block;
+        border-radius: 6px; /* Slightly smaller border-radius for image */
     }
 
-    .exercise-image img.youtube-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-        opacity: 0.85;
-        transition: opacity 0.3s;
+    .exercise-image a {
+        display: block;
+        position: relative;
+        text-decoration: none;
+        width: 100%; /* Ensure anchor fills parent */
+        height: 100%; /* Ensure anchor fills parent */
     }
 
-        .exercise-image img.youtube-overlay:hover {
-            opacity: 1;
+        .exercise-image a:after {
+            font-size: 2.2rem; /* Smaller play icon */
         }
 
 .exercise-details {
-    flex: 1;
-    padding: 1rem;
+    flex-grow: 1; /* Allow details to take remaining space */
+    padding: 1rem; /* Reduced padding */
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    color: #fff;
+    gap: 4px; /* Reduced gap */
+    color: #e0e0e0;
 }
 
+    .exercise-details strong {
+        font-size: 1.1rem; /* Smaller exercise name */
+        color: #f8f9fa;
+        margin-bottom: 0.25rem; /* Reduced margin */
+    }
+
+    .exercise-details div {
+        font-size: 0.9rem; /* Smaller detail text */
+    }
+
 .exercise-actions {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem; /* Reduced margin */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Reduced gap between buttons */
 }
 
     .exercise-actions .btn {
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin-right: 5px;
+        font-size: 0.75rem; /* Smaller button text */
+        padding: 6px 10px; /* Reduced button padding */
+        border-radius: 5px;
+    }
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #000;
+    border-color: #ffc107;
+}
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #e0a800;
+    }
+
+.btn-info {
+    background-color: #17a2b8;
+    color: #fff;
+    border-color: #17a2b8;
+}
+
+    .btn-info:hover {
+        background-color: #117a8b;
+        border-color: #117a8b;
+    }
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
     }
 
 /* ---------- Meals ---------- */
 .meal-block {
     margin: 2rem 0;
+    padding: 1.5rem;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    border: 1px solid #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-h5 {
-    margin: 1rem 0;
+.meal-block h5 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffc107;
+    text-align: center;
+    position: relative;
+    padding-bottom: 8px;
 }
 
-/* ---------- Buttons ---------- */
-.btn-custom {
-    padding: 10px 20px;
-    font-weight: bold;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-}
-
-.btn-warning {
-    background-color: #ffc107;
-    color: #000;
-}
-
-.btn-success {
-    background-color: #28a745;
-    color: #fff;
-}
-
-    .btn-warning:hover,
-    .btn-success:hover {
-        opacity: 0.85;
+    .meal-block h5::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background-color: #ffc107;
+        border-radius: 1px;
     }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 576px) {
-    .custom-card {
-        padding: 1rem;
-    }
-
-    .table-custom th,
-    .table-custom td {
-        padding: 8px;
-    }
-
-    h4, h5 {
-        font-size: 1rem;
-    }
-}
 /* ---------- Video Modal ---------- */
 .video-modal {
     display: none;
     position: fixed;
-    z-index: 9999;
+    z-index: 10000; /* Higher z-index */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.85); /* Darker overlay */
     justify-content: center;
     align-items: center;
 }
 
-.video-content {
-    background: #fff;
-    padding: 15px;
+.video-modal-content { /* Renamed from .video-content to avoid conflict */
+    background: #1a1a1a;
+    padding: 20px; /* Increased padding */
     border-radius: 12px;
-    max-width: 800px;
+    max-width: 900px; /* Wider modal */
     width: 90%;
     position: relative;
+    box-shadow: 0 0 30px rgba(255, 61, 61, 0.7); /* Red glow for video modal */
 }
 
-.close-btn {
+.video-close { /* Renamed from .close-btn */
     position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
+    top: 15px;
+    right: 20px;
+    font-size: 36px; /* Larger close button */
+    color: #fff;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-/* -------- Profile Card -------- */
-.profile-card {
-    background: linear-gradient(145deg, #161616, #0d0d0d);
-    border-radius: 15px;
-    padding: 2rem;
-    color: #fff;
-    border: 1px solid #333;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+    .video-close:hover {
+        color: #ff3d3d;
+    }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 992px) {
+    .exercise-card {
+        flex-direction: column; /* Stack image and details on smaller screens */
+        max-height: none; /* Remove max-height when stacked */
+        align-items: stretch; /* Stretch items when stacked */
+    }
+
+    .exercise-image {
+        width: 100%; /* Image takes full width */
+        height: 180px; /* Fixed height for stacked image */
+        border-right: none;
+        border-bottom: 1px solid #333; /* Separator for stacked image */
+    }
+
+    .exercise-image img.main-img {
+        max-height: 100%;
+    }
+
+    .exercise-actions {
+        flex-direction: row; /* Keep buttons in a row if space allows */
+        justify-content: center;
+    }
 }
 
-.profile-header {
-    border-bottom: 1px solid #444;
-    padding-bottom: 1rem;
-}
+@media (max-width: 768px) {
+    .profile-card, .plans-container {
+        padding: 1.5rem;
+    }
 
-.profile-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid #ff3d3d;
-    object-fit: cover;
-}
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+    }
 
-.profile-details {
-    margin-top: 1.5rem;
-}
+    .profile-header h3 {
+        font-size: 1.8rem;
+    }
 
-.table-profile {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .table-profile th,
+    .table-profile td {
+        padding: 10px;
+        display: block; /* Stack table cells */
+        width: 100%;
+    }
 
     .table-profile th {
-        width: 220px;
-        color: #ffc107;
-        font-weight: 600;
-        padding: 12px;
-        text-transform: uppercase;
+        border-right: none;
         border-bottom: 1px solid #333;
+        background-color: #222;
+        text-align: center;
     }
-
     .table-profile td {
-        padding: 12px;
-        color: #eee;
-        border-bottom: 1px solid #333;
+        text-align: center;
+        margin-bottom: 10px;
+        background-color: #121212;
+    }
+    .table-profile tr {
+        border-bottom: 1px solid #444; /* Separator for rows */
+        display: block;
+        margin-bottom: 15px;
     }
 
-    .table-profile tr:hover {
-        background-color: #1f1f1f;
+    .plan-tab-btn {
+        font-size: 1rem;
+        padding: 10px 15px;
     }
 
-/* -------- Buttons -------- */
-.btn-outline-warning {
-    border: 1px solid #ffc107;
-    color: #ffc107;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    .exercise-actions {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+        align-items: center;
+    }
+    .exercise-actions .btn {
+        width: 100%; /* Full width buttons */
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
 }
 
-    .btn-outline-warning:hover {
-        background: #ffc107;
-        color: #000;
+@media (max-width: 576px) {
+    body {
+        font-size: 13px;
     }
+    .profile-card, .plans-container {
+        padding: 1rem;
+    }
+    .profile-header h3 {
+        font-size: 1.5rem;
+    }
+    .day-header {
+        font-size: 1.1rem;
+    }
+    .muscle-header {
+        font-size: 1rem;
+    }
+    .exercise-details strong {
+        font-size: 1.1rem;
+    }
+    .exercise-details div {
+        font-size: 0.9rem;
+    }
+    .exercise-card {
+        max-height: none; /* No max height on smallest screens */
+    }
+    .exercise-image {
+        height: 150px; /* Keep image height reasonable */
+    }
+}
