@@ -30,6 +30,10 @@
     <Folder Include="wwwroot\templete\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Transformation\Gallery.cshtml" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>

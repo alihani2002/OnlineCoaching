@@ -1,0 +1,159 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Entities.Transformation>
+@using OnlineCoaching.WebUI.Helper
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+
+<div class="bbb_viewed">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="bbb_main_container shadow-sm">
+                    <div class="bbb_viewed_title_container d-flex align-items-center justify-content-between">
+                        <h3 class="bbb_viewed_title">Transformations Gallery</h3>
+                        <div class="bbb_viewed_nav_container">
+                            <div class="bbb_viewed_nav bbb_viewed_prev"><i class="fas fa-chevron-left"></i></div>
+                            <div class="bbb_viewed_nav bbb_viewed_next"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                    </div>
+                    <div class="bbb_viewed_slider_container">
+                        <div class="owl-carousel owl-theme bbb_viewed_slider">
+                            @foreach (var t in Model)
+                            {
+                                <div class="bbb_viewed_item d-flex flex-column align-items-center justify-content-center text-center">
+                                    <div class="bbb_viewed_image">
+                                        <img src="@t.ImageUrl" alt="Transformation" />
+                                    </div>
+                                    <div class="bbb_viewed_content text-center">
+                                        <div class="bbb_viewed_name">
+                                            <span>@t.Titles</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (User.IsInRole(AppRoles.Admin))
+                {
+                    <a href="@Url.Action("Create", "Transformation")" class="fab-add-transformation shadow-lg">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
+<script>
+    $(document).ready(function () {
+        if ($('.bbb_viewed_slider').length) {
+            var viewedSlider = $('.bbb_viewed_slider');
+
+            viewedSlider.owlCarousel({
+                loop: true,
+                margin: 20,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                nav: false,
+                dots: false,
+                responsive: {
+                    0: { items: 1 },
+                    575: { items: 2 },
+                    768: { items: 3 },
+                    991: { items: 4 },
+                    1199: { items: 5 }
+                }
+            });
+
+            $('.bbb_viewed_prev').click(function () {
+                viewedSlider.trigger('prev.owl.carousel');
+            });
+
+            $('.bbb_viewed_next').click(function () {
+                viewedSlider.trigger('next.owl.carousel');
+            });
+        }
+    });
+</script>
+
+<style>
+    .bbb_viewed {
+        padding: 60px 0;
+        background: #f7f9fc;
+    }
+
+    .bbb_main_container {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    .bbb_viewed_title_container {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .bbb_viewed_title {
+        font-weight: 600;
+        font-size: 22px;
+        color: #333;
+        margin: 0;
+    }
+
+    .bbb_viewed_nav_container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .bbb_viewed_nav {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+        .bbb_viewed_nav:hover {
+            background: #0e8ce4;
+            color: #fff;
+        }
+
+    .bbb_viewed_image {
+        width: 220px;
+        height: 220px;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+        .bbb_viewed_image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+            .bbb_viewed_image img:hover {
+                transform: scale(1.05);
+            }
+
+    .bbb_viewed_content {
+        margin-top: 12px;
+    }
+
+    .bbb_viewed_name span {
+        font-size: 16px;
+        font-weight: 500;
+        color: #444;
+    }
+</style>

@@ -5,10 +5,9 @@
 }
 <link href="~/css/transformations.css" rel="stylesheet" />
 
-
 <!-- ===== Main Content ===== -->
 <div class="container mt-5">
-    @if (User.IsInRole(AppRoles.Admin) )
+    @if (User.IsInRole(AppRoles.Admin))
     {
         <div class="d-flex justify-content-end mb-4">
             <a href="@Url.Action("Create", "Transformation")" class="btn primary-btn btn-normal appoinment-btn">
@@ -18,39 +17,24 @@
     }
 
     <div class="transformations-gallery">
-
         <div class="transformations-slider-wrapper position-relative">
             <button class="slider-arrow left" onclick="moveSlide(-1)">&#10094;</button>
+
             <div class="transformations-slider">
                 @foreach (var t in Model)
                 {
-                    <div class="transformation-slide">
-                        <h2 class="text-center">@t.Titles</h2>
-                        <p class="text-center text-muted">@t.Client?.FullName</p>
+                    <div class="transformation-slide text-center">
+                        <h2>@t.Titles</h2>
+                        <p class="text-muted">@t.Client?.FullName</p>
 
-                        <div class="transformation-image-wrapper-row">
-                            <div class="image-button-group">
-                                <div class="label">Before</div>
-                                <img src="@t.BeforeImageUrl" alt="Before Image" class="transformation-photo" />
-                                <button type="button" class="btn btn-outline" onclick="openImageModal('@t.BeforeImageUrl')">
-                                    <i class="fas fa-expand"></i> View Before
-                                </button>
-                            </div>
-
-                            <div class="vs-logo">
-                                <h2 class="bold text-white" style="background-color:red; padding:10px; border-radius:38px">VS</h2>
-                            </div>
-
-                            <div class="image-button-group">
-                                <div class="label">After</div>
-                                <img src="@t.AfterImageUrl" alt="After Image" class="transformation-photo" />
-                                <button type="button" class="btn btn-outline" onclick="openImageModal('@t.AfterImageUrl')">
-                                    <i class="fas fa-expand"></i> View After
-                                </button>
-                            </div>
+                        <div class="transformation-image-wrapper">
+                            <img src="@t.ImageUrl" alt="Transformation" class="transformation-photo" />
+                            <button type="button" class="btn btn-outline mt-2" onclick="openImageModal('@t.ImageUrl')">
+                                <i class="fas fa-expand"></i> View Image
+                            </button>
                         </div>
 
-                        @if (User.IsInRole(AppRoles.Admin) )
+                        @if (User.IsInRole(AppRoles.Admin))
                         {
                             <div class="d-flex justify-content-center mt-3">
                                 <a href="@Url.Action("Edit", "Transformation", new { id = t.Id })" class="btn btn-warning me-2">
@@ -67,6 +51,7 @@
                     </div>
                 }
             </div>
+
             <button class="slider-arrow right" onclick="moveSlide(1)">&#10095;</button>
         </div>
     </div>

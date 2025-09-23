@@ -10,12 +10,12 @@ namespace OnlineCoaching.WebUI.Controllers
         private readonly ImageHelper _imageHelper;
         private readonly ITransformationService _transformationService;
         private readonly IClientService _clientService;
-        public TransformationController(ImageHelper imageHelper, ITransformationService transformationService , IClientService clientService)
+
+        public TransformationController(ImageHelper imageHelper, ITransformationService transformationService, IClientService clientService)
         {
             _imageHelper = imageHelper;
             _transformationService = transformationService;
             _clientService = clientService;
-        
         }
 
         public IActionResult Index()
@@ -24,7 +24,7 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(transformations);
         }
 
-        public IActionResult BeforeAndAfter()
+        public IActionResult ImageGallery()
         {
             var transformations = _transformationService.GetAll();
             return View(transformations);
@@ -36,13 +36,12 @@ namespace OnlineCoaching.WebUI.Controllers
             var clients = _clientService.GetAllClients();
             ViewBag.Clients = clients ?? new List<Client>();
 
-            var model = new Transformation(); 
-            return View(model); 
+            return View(new Transformation());
         }
 
         [HttpPost]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> Create(Transformation model, IFormFile? beforeImage, IFormFile? afterImage)
+        public async Task<IActionResult> Create(Transformation model, IFormFile? ImageUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -51,10 +50,12 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(model);
             }
 
-            model.BeforeImageUrl = await _imageHelper.UploadImageAsync(beforeImage, "Transformations");
-            model.AfterImageUrl = await _imageHelper.UploadImageAsync(afterImage, "Transformations");
+            if (ImageUrl != null)
+                model.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Transformations");
+
             model.CreatedOn = DateTime.Now;
             await _transformationService.CreateAsync(model);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -70,20 +71,27 @@ namespace OnlineCoaching.WebUI.Controllers
             return View(transformation);
         }
 
-
         [HttpPost]
         [Authorize(Roles = AppRoles.Admin)]
-        public async Task<IActionResult> Edit(int id, Transformation model, IFormFile? beforeImage, IFormFile? afterImage)
+        public async Task<IActionResult> Edit(int id, Transformation model, IFormFile? ImageUrl)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                var clients = _clientService.GetAllClients();
+                ViewBag.Clients = clients ?? new List<Client>();
+                return View(model);
+            }
 
             var existing = _transformationService.GetById(id);
             if (existing == null) return NotFound();
 
             existing.Titles = model.Titles;
             existing.Notes = model.Notes;
-            existing.BeforeImageUrl = await _imageHelper.UpdateImageAsync(beforeImage, existing.BeforeImageUrl, "Transformations");
-            existing.AfterImageUrl = await _imageHelper.UpdateImageAsync(afterImage, existing.AfterImageUrl, "Transformations");
+            existing.ClientId = model.ClientId;
+
+            if (ImageUrl != null)
+                existing.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Transformations");
+
             existing.LastUpdatedOn = DateTime.Now;
 
             _transformationService.Update(existing);
@@ -98,5 +106,3 @@ namespace OnlineCoaching.WebUI.Controllers
         }
     }
 }
-    
-
