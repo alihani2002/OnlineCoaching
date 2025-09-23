@@ -8,9 +8,9 @@ namespace OnlineCoaching.WebUI.Controllers
     public class CookingController : Controller
     {
         private readonly ICookingServices _cookingServices;
-        private readonly ImageHelper _imageHelper;
+        private readonly IImageService _imageHelper;
 
-        public CookingController(ICookingServices cookingServices, ImageHelper imageHelper)
+        public CookingController(ICookingServices cookingServices, IImageService imageHelper)
         {
             _cookingServices = cookingServices;
             _imageHelper = imageHelper;

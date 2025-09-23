@@ -1,4 +1,6 @@
-﻿using OnlineCoaching.Web.Core.Mapping;
+﻿using CloudinaryDotNet;
+using OnlineCoaching.Web.Core.Mapping;
+using OnlineCoaching.WebUI;
 using OnlineCoaching.WebUI.Helper;
 using System.Threading.RateLimiting;
 using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
@@ -67,11 +69,11 @@ namespace OnlineCoaching.Web
             services.Configure<SecurityStampValidatorOptions>(options =>
             options.ValidationInterval = TimeSpan.Zero);
 
-            builder.Services.AddScoped<ImageHelper>(provider =>
-            {
-                var env = provider.GetRequiredService<IWebHostEnvironment>();
-                return new ImageHelper(env, "uploads"); 
-            });
+            //builder.Services.AddScoped<ImageHelper>(provider =>
+            //{
+            //    var env = provider.GetRequiredService<IWebHostEnvironment>();
+            //    return new ImageHelper(env, "uploads"); 
+            //});
 
 
             builder.Services.AddRateLimiter(options =>
@@ -93,6 +95,20 @@ namespace OnlineCoaching.Web
                     await Task.CompletedTask;
                 };
             });
+
+
+            // =====================
+            // Cloudinary Integration
+            // =====================
+            var cloudName = builder.Configuration["Cloudinary:CloudName"];
+            var apiKey = builder.Configuration["Cloudinary:ApiKey"];
+            var apiSecret = builder.Configuration["Cloudinary:ApiSecret"];
+
+            var account = new Account(cloudName, apiKey, apiSecret);
+            var cloudinary = new Cloudinary(account);
+
+            services.AddSingleton(cloudinary);
+            builder.Services.AddScoped<IImageService, ImageService>(); 
 
             // AutoMapper
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());

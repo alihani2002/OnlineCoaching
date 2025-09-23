@@ -67,7 +67,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteForm" asp-action="Delete" method="post" style="display:inline;">
+                <form id="deleteForm" asp-action="DeleteConfirmed" method="post" style="display:inline;">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" id="deleteImageId" />
                     <button type="submit" class="btn btn-danger">Delete</button>

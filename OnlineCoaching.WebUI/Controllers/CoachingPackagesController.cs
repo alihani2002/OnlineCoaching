@@ -12,14 +12,18 @@ namespace OnlineCoaching.WebUI.Controllers
         private readonly IClientService _clientService;
         private readonly ICoachingPackageServices _packageService;
         private readonly ICoachingPackageRequestService _requestServices;
-        private readonly ImageHelper _imageHelper;
+        private readonly IImageService _imageService;
 
-        public CoachingPackagesController(ICoachingPackageServices packageServic , ICoachingPackageRequestService requestService ,IClientService clientService , ImageHelper image )
+        public CoachingPackagesController(
+            ICoachingPackageServices packageService,
+            ICoachingPackageRequestService requestService,
+            IClientService clientService,
+            IImageService imageService)
         {
-            _packageService = packageServic;
+            _packageService = packageService;
             _requestServices = requestService;
             _clientService = clientService;
-            _imageHelper = image;
+            _imageService = imageService;
         }
 
 
@@ -96,8 +100,10 @@ namespace OnlineCoaching.WebUI.Controllers
             try
             {
                 if (ImageUrl != null)
-                    dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "CoachPackage") ?? string.Empty;
-               
+                {
+                    dto.ImageUrl = await _imageService.UploadImageAsync(ImageUrl, "CoachPackage") ?? string.Empty;
+                }
+
                 else
                 {
                     ModelState.AddModelError("", "Image is required.");
@@ -137,7 +143,7 @@ namespace OnlineCoaching.WebUI.Controllers
             {
                 if (ImageUrl != null)
                 {
-                    dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "CoachPackage") ?? existing.ImageUrl;
+                    dto.ImageUrl = await _imageService.UploadImageAsync(ImageUrl, "CoachPackage") ?? existing.ImageUrl;
                 }
                 else
                 {

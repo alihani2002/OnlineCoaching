@@ -14,14 +14,14 @@ namespace OnlineCoaching.WebUI.Controllers
     {
         private readonly IExerciseServices _exerciseService;
         private readonly IMuscleServices _muscleServices;
-        private readonly ImageHelper _imageHelper;
+        private readonly IImageService _imageHelper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAssignmentService _assignmentService;
         private readonly ICoachingPackageRequestService _requestService;
 
         public ExercisesController(IExerciseServices exerciseService ,
             IMuscleServices muscleServices ,
-            ImageHelper imageHelper ,
+            IImageService imageHelper ,
             IUnitOfWork unitOfWork ,
             IAssignmentService assignmentService ,
             ICoachingPackageRequestService requestService

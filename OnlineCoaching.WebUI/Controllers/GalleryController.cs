@@ -2,17 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos.Gallery;
-using OnlineCoaching.WebUI.Helper;
-
 
 namespace OnlineCoaching.WebUI.Controllers
 {
     public class GalleryController : Controller
     {
         private readonly IGalleryServices _galleryServices;
-        private readonly ImageHelper _imageHelper;
+        private readonly IImageService _imageHelper;
 
-        public GalleryController(IGalleryServices galleryServices, ImageHelper imageHelper)
+        public GalleryController(IGalleryServices galleryServices, IImageService imageHelper)
         {
             _galleryServices = galleryServices;
             _imageHelper = imageHelper;

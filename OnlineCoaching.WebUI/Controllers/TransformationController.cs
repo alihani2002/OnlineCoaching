@@ -7,11 +7,11 @@ namespace OnlineCoaching.WebUI.Controllers
 {
     public class TransformationController : Controller
     {
-        private readonly ImageHelper _imageHelper;
+        private readonly IImageService _imageHelper;
         private readonly ITransformationService _transformationService;
         private readonly IClientService _clientService;
 
-        public TransformationController(ImageHelper imageHelper, ITransformationService transformationService, IClientService clientService)
+        public TransformationController(IImageService imageHelper, ITransformationService transformationService, IClientService clientService)
         {
             _imageHelper = imageHelper;
             _transformationService = transformationService;

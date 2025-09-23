@@ -57,7 +57,6 @@ for (const [day, exercises] of Object.entries(exercisesByDay)) {
                         ${e.ImageUrl
                     ? `<a href="javascript:void(0);" onclick="openVideo('${e.VideoUrl ?? ''}')">
                        <img src="${e.ImageUrl}" class="main-img" alt="${e.NameOfExercise}" />
-                       <img src="/assets/img/logo/youtube.png" class="youtube-overlay" alt="YouTube" />
                         </a>`
                     : `<span class="text-muted p-3">No Image</span>`}
                     </div>
