@@ -134,15 +134,15 @@ namespace OnlineCoaching.WebUI.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, AppRoles.Client);
                     }
 
-                    //// Redirect based on role
-                    //if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    //{
-                    //    return LocalRedirect(Url.Action("Index", "CoachingPackageRequests"));
-                    //}
-                    //else if (await _userManager.IsInRoleAsync(user, "Client") || await _userManager.IsInRoleAsync(user, "Coach"))
-                    //{
-                    //    return LocalRedirect(Url.Action("Pr", "Home"));
-                    //}
+                    // Redirect based on role
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return LocalRedirect(Url.Action("Index", "CoachingPackageRequests"));
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Client") || await _userManager.IsInRoleAsync(user, "Coach"))
+                    {
+                        return LocalRedirect(Url.Action("Index", "Home"));
+                    }
 
 
                     var userId = await _userManager.GetUserIdAsync(user);

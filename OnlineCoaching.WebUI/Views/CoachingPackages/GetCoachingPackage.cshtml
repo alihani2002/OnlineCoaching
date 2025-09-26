@@ -39,9 +39,15 @@
                                 <div class="properties__caption text-center">
                                     <h5 class="fw-bold text-white">@package.Title</h5>
                                     <span class="month">@package.DurationInMonths month@(package.DurationInMonths > 1 ? "s" : "")</span>
-                                    <p class="mb-25 fs-5 fw-bold text-warning">
-                                        L.E @package.Price <span class="text-muted">/ month</span>
-                                    </p>
+                                    @if (package.IsFreePlan)
+                                    {
+                                        <span class="text-success">FREE</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-warning">L.E @package.Price</span>
+                                        <span class="text-muted">(per month)</span>
+                                    }
 
                                     <div class="single-features text-start">
                                         <div class="features-icon">

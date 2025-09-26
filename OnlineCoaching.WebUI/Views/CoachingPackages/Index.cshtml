@@ -50,7 +50,7 @@
                                 }
 
                                 <!-- Package Video Button -->
-                                @if (!string.IsNullOrEmpty(package.VedioUrl) && User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Coach))
+                                @if ((!string.IsNullOrEmpty(package.VedioUrl)) && (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Coach)))
                                 {
                                     <div class="mb-3 text-center">
                                         <a href="@package.VedioUrl" target="_blank" class="btn btn-outline-primary btn-sm">
@@ -59,14 +59,22 @@
                                     </div>
                                 }
 
-
-
                                 <!-- Caption -->
                                 <div class="properties__caption text-center">
                                     <h5 class="fw-bold text-white">@package.Title</h5>
                                     <span class="month">@package.DurationInMonths month@(package.DurationInMonths > 1 ? "s" : "")</span>
-                                    <p class="mb-25 fs-4 fw-bold text-warning">
-                                        L.E @package.Price <span class="text-muted">(per month)</span>
+
+                                    <!-- Price or Free -->
+                                    <p class="mb-25 fs-4 fw-bold">
+                                        @if (package.IsFreePlan)
+                                        {
+                                            <span class="text-success">FREE</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-warning">L.E @package.Price</span>
+                                            <span class="text-muted">(per month)</span>
+                                        }
                                     </p>
 
                                     <!-- Description List -->
@@ -104,8 +112,20 @@
                                             <a class="btn btn-outline-info btn-sm" asp-action="Details" asp-route-id="@package.Id">Details</a>
                                             <a class="btn btn-outline-warning btn-sm" asp-action="Edit" asp-route-id="@package.Id">Edit</a>
                                             <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@package.Id">Delete</a>
+
+                                            @* ✅ Assign button only for free packages *@
+                                            @if (package.IsFreePlan)
+                                            {
+                                                <a asp-controller="CoachingAssignment"
+                                                   asp-action="Manage"
+                                                   asp-route-packageId="@package.Id"
+                                                   class="btn btn-outline-success btn-sm">
+                                                    <i class="bi bi-journal-plus me-1"></i> Assign Plan
+                                                </a>
+                                            }
                                         </div>
                                     }
+
                                 </div>
                             </div>
                         </div>

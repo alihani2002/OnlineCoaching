@@ -108,6 +108,7 @@ namespace OnlineCoaching.Web
             var cloudinary = new Cloudinary(account);
 
             services.AddSingleton(cloudinary);
+            builder.Services.AddScoped<IVideoService, VideoService>();
             builder.Services.AddScoped<IImageService, ImageService>(); 
 
             // AutoMapper

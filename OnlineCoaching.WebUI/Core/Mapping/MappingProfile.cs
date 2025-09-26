@@ -5,8 +5,8 @@ using OnlineCoaching.Domain.Dtos.Cooking;
 using OnlineCoaching.Domain.Dtos.ExerciseSheet;
 using OnlineCoaching.Domain.Dtos.Gallery;
 using OnlineCoaching.Domain.Dtos.Notes;
-using OnlineCoaching.Domain.Entities;
 using OnlineCoaching.Domain.Entities.Gallery;
+using OnlineCoaching.WebUI.Models.RequestPackage;
 
 namespace OnlineCoaching.Web.Core.Mapping
 {
@@ -15,45 +15,37 @@ namespace OnlineCoaching.Web.Core.Mapping
         public MappingProfile()
         {
             #region Food 
-
-            CreateMap<Food , FoodDto>().ReverseMap();
-            CreateMap<CreateFoodDto , Food>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore()) 
+            CreateMap<Food, FoodDto>().ReverseMap();
+            CreateMap<CreateFoodDto, Food>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
-                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore()).ReverseMap();
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+                .ReverseMap();
             #endregion
 
             #region Muscles
-            // Entity → DTO
             CreateMap<Muscle, MuscleDto>().ReverseMap();
-
-            // Create DTO → Entity
             CreateMap<CreateMuscleDto, Muscle>();
             #endregion
 
             #region Exercise 
-            // Entity -> DTO
             CreateMap<Exercise, ExerciseDto>()
                 .ForMember(dest => dest.MuscleName, opt => opt.MapFrom(src => src.Muscle != null ? src.Muscle.Name : string.Empty))
-                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
+                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls ?? new List<string>()));
 
-            // DTO -> Entity
             CreateMap<ExerciseDto, Exercise>()
-                .ForMember(dest => dest.Muscle, opt => opt.Ignore()) // Prevent overwriting navigation property
-                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
+                .ForMember(dest => dest.Muscle, opt => opt.Ignore())
+                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls ?? new List<string>()));
 
-            // Create DTO -> Entity
             CreateMap<CreateExerciseDto, Exercise>()
-                .ForMember(dest => dest.Muscle, opt => opt.Ignore()) // ignore navigation
-                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls != null ? src.LinkUrls : new List<string>()));
+                .ForMember(dest => dest.Muscle, opt => opt.Ignore())
+                .ForMember(dest => dest.LinkUrls, opt => opt.MapFrom(src => src.LinkUrls ?? new List<string>()));
             #endregion
 
-            #region coachingPackage
-            // Entity -> DTO
-            CreateMap<CoachingPackage, CoachingPackageDto>();
+            #region CoachingPackage
+            CreateMap<CoachingPackage, CoachingPackageDto>().ReverseMap();
 
-            // DTO -> Entity
             CreateMap<CreateCoachingPackageDto, CoachingPackage>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
@@ -68,8 +60,6 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedById, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore());
-
-            CreateMap<CoachingPackage, CoachingPackageDto>().ReverseMap();
             #endregion
 
             #region CoachingPackageRequest
@@ -78,17 +68,18 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Client!.WhatsUpNumber))
                 .ForMember(dest => dest.PackageTitle, opt => opt.MapFrom(src => src.Titles))
                 .ReverseMap()
-                .ForMember(dest => dest.Client, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Client, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
             #endregion
 
-            #region assign program
-
+            #region Assignment (Exercises & Foods)
             CreateMap<AssignExercise, AssignExerciseDto>().ReverseMap();
-            CreateMap<AssignFood, AssignFoodDto>().ReverseMap();
-
+            CreateMap<AssignFood, AssignFoodDto>()
+                .ForMember(dest => dest.DayOfWeekName, opt => opt.MapFrom(src => src.DayOfWeek.ToString()))
+                .ForMember(dest => dest.MealNumberName, opt => opt.MapFrom(src => src.MealNumber.ToString()))
+                .ReverseMap();
             #endregion
 
             #region ExerciseSheetLog
@@ -111,7 +102,7 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
             #endregion
 
-            #region gallery
+            #region Gallery
             CreateMap<HomeGallary, GalleryDto>().ReverseMap();
             CreateMap<GalleryDto, HomeGallary>().ReverseMap();
             CreateMap<CreateGalleryDto, HomeGallary>().ReverseMap();
@@ -120,13 +111,17 @@ namespace OnlineCoaching.Web.Core.Mapping
 
             #region Cooking
             CreateMap<Cooking, Cookingdto>().ReverseMap();
-            CreateMap<Cooking, Cooking>().ReverseMap();
             #endregion
 
             #region ExerciseNote
             CreateMap<ExerciseNotes, ExerciseNoteDto>().ReverseMap();
             CreateMap<CreateExerciseNoteDto, ExerciseNotes>().ReverseMap();
+            #endregion
 
+            #region Assigned Free Package
+            CreateMap<CoachingPackageRequest, AssignedFreePackVM>()
+                .ForMember(dest => dest.AssignedExercises, opt => opt.MapFrom(src => src.AssignExercises))
+                .ForMember(dest => dest.AssignedFoods, opt => opt.MapFrom(src => src.AssignFoods));
             #endregion
         }
     }

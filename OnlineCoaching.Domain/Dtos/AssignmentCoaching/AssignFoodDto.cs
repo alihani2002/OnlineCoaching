@@ -23,7 +23,7 @@
         public string DayOfWeekName { get; set; } = string.Empty;
         public string MealNumberName { get; set; } = string.Empty;
         // Relations
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public int? MealId { get; set; }
         public int CoachingPackageRequestId { get; set; }
 

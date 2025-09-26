@@ -12,7 +12,7 @@
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create" method="post">
-                        <input type="hidden" asp-for="ExerciseId" />
+                        <input type="hidden" asp-for="ExerciseId" value="@Model.ExerciseId" />
 
                         <div class="mb-4">
                             <label asp-for="Note" class="form-label fw-bold">

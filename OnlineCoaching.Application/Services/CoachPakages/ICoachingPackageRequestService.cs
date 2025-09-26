@@ -4,6 +4,7 @@ namespace OnlineCoaching.Application.Services
 {
     public interface ICoachingPackageRequestService
     {
+        Task<CoachingPackageRequest?> GetRequestByIdAsyncNoTracking(int id);
         Task<CoachingPackageRequestDto?> GetUserRequest(int clientId);
         CoachingPackageRequestDto? GetActiveOrPendingRequest(int clientId);
         Task<CoachingPackageRequest> CreateRequestAsync(int packageId, int clientId);

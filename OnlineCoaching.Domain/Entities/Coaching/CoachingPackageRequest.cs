@@ -13,7 +13,7 @@ namespace OnlineCoaching.Domain.Entities
 
         public int PackageId { get; set; }
         public CoachingPackage? Package { get; set; }
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public Client? Client { get; set; }
 
 

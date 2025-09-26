@@ -8,6 +8,8 @@
         public string? Description { get; set; }
         public int DurationInMonths { get; set; }
         public int Price { get; set; }
-   
+
+        public bool IsFreePlan { get; set; }
+
     }
 }

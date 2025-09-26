@@ -30,6 +30,7 @@ namespace OnlineCoaching.Application.Common.Interfaces
         public DbSet<Cooking> Cookings { get; set; }
         public DbSet<ExerciseAlternative> ExerciseAlternatives { get; set; }
         public DbSet<ExerciseNotes> ExerciseNotes { get; set; }
+        public DbSet<CoachVideo> CoachVideos { get; set; }
 
 
         int SaveChanges();

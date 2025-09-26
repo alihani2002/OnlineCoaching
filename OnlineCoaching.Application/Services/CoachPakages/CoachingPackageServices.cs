@@ -10,12 +10,21 @@
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
             }
-
-            public IEnumerable<CoachingPackageDto> GetCoachingPackages()
+        public List<CoachingPackage> GetPackageFree()
+        {
+            var entity = _unitOfWork.CoachingPackages
+               .GetQueryable()
+               .Include(r => r.AssignExercises!).ThenInclude(a => a.Exercise)
+               .Include(r => r.AssignFoods!).ThenInclude(a => a.Food)
+               .Where(C =>  C.IsFreePlan)
+               .ToList();
+            return entity;
+        }
+        public IEnumerable<CoachingPackageDto> GetCoachingPackages()
             {
                 var packages = _unitOfWork.CoachingPackages.GetQueryable()
-                                    .Where(p => !p.IsDeleted)
-                                    .ToList();
+               .Where(C => !C.IsFreePlan)
+                .ToList();
                 return _mapper.Map<IEnumerable<CoachingPackageDto>>(packages);
             }
 
@@ -33,7 +42,7 @@
                     throw new ValidationException("Package title is required.");
 
                 var package = _mapper.Map<CoachingPackage>(dto);
-                package.CreatedOn = DateTime.UtcNow;
+                package.CreatedOn = DateTime.Now;
 
                 var addedPackage = await _unitOfWork.CoachingPackages.AddAsync(package);
                 _unitOfWork.Complete();
@@ -68,5 +77,23 @@
 
                 return true;
             }
+
+        public async Task<bool> RestoreCoachingPackageAsync(int id)
+        {
+            var package = await _unitOfWork.CoachingPackages
+                .GetQueryable()
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsFreePlan);
+
+            if (package == null) return false;
+            if (!package.IsDeleted) return true; // Already restored/not deleted
+
+            package.IsDeleted = false;
+            package.LastUpdatedOn = DateTime.UtcNow;
+
+            _unitOfWork.CoachingPackages.Update(package);
+            _unitOfWork.Complete();
+
+            return true;
         }
+    }
     }

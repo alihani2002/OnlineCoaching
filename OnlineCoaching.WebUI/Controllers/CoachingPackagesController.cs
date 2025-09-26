@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
-using OnlineCoaching.WebUI.Helper;
+using OnlineCoaching.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineCoaching.WebUI.Controllers
@@ -13,20 +13,27 @@ namespace OnlineCoaching.WebUI.Controllers
         private readonly ICoachingPackageServices _packageService;
         private readonly ICoachingPackageRequestService _requestServices;
         private readonly IImageService _imageService;
+        private readonly IAssignmentService _assignmentService;
 
         public CoachingPackagesController(
             ICoachingPackageServices packageService,
             ICoachingPackageRequestService requestService,
             IClientService clientService,
-            IImageService imageService)
+            IImageService imageService,
+            IAssignmentService assignmentService)
         {
             _packageService = packageService;
             _requestServices = requestService;
             _clientService = clientService;
             _imageService = imageService;
+            _assignmentService = assignmentService;
         }
 
-
+        public IActionResult GetFreePackage()
+        {
+            var freePack = _packageService.GetPackageFree();
+            return View(freePack);
+        }
         public IActionResult Index()
         {
             var packages = _packageService.GetCoachingPackages();
@@ -51,13 +58,9 @@ namespace OnlineCoaching.WebUI.Controllers
             if (existingRequest != null)
             {
                 if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == ClientStatus.Active)
-                {
                     return RedirectToAction("CompleteQuestion", "Questions", new { id = existingRequest.Id });
-                }
                 else
-                {
                     return View("ClientRequest", existingRequest);
-                }
             }
 
             return View("GetCoachingPackage", packages);
@@ -71,25 +74,20 @@ namespace OnlineCoaching.WebUI.Controllers
             if (request == null) return NotFound();
             return View(request);  
         }
-
-
-
-        [Authorize(Roles = AppRoles.Admin)]
+  
         public async Task<IActionResult> Details(int id)
         {
             var package = await _packageService.GetCoachingPackageByIdAsync(id);
             if (package == null) return NotFound();
-
             return View(package);
+
         }
 
-        // GET: CoachingPackage/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CoachingPackage/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppRoles.Admin)]
@@ -100,9 +98,8 @@ namespace OnlineCoaching.WebUI.Controllers
             try
             {
                 if (ImageUrl != null)
-                {
                     dto.ImageUrl = await _imageService.UploadImageAsync(ImageUrl, "CoachPackage") ?? string.Empty;
-                }
+                
 
                 else
                 {
@@ -111,6 +108,9 @@ namespace OnlineCoaching.WebUI.Controllers
                 }
                 dto.CreatedById = User.GetUserId();
                 await _packageService.AddCoachingPackageAsync(dto);
+                if (dto.IsFreePlan)
+                    return RedirectToAction(nameof(GetFreePackage));
+                else
                 return RedirectToAction(nameof(Index));
             }
             catch (ValidationException ex)
@@ -157,7 +157,10 @@ namespace OnlineCoaching.WebUI.Controllers
                     return View(dto);
                 }
 
-                return RedirectToAction(nameof(Index));
+                if (dto.IsFreePlan)
+                    return RedirectToAction(nameof(GetFreePackage));
+                else
+                    return RedirectToAction(nameof(Index));
             }
             catch (ValidationException ex)
             {
@@ -187,7 +190,17 @@ namespace OnlineCoaching.WebUI.Controllers
                 return BadRequest("Unable to delete package.");
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("GetFreePackage", "CoachingPackages"); // Or your FreePackages view
+        }
+
+        [HttpPost]
+        [Authorize(Roles = AppRoles.Admin + "," + AppRoles.Coach)]
+        public async Task<IActionResult> Restore(int id)
+        {
+            var result = await _packageService.RestoreCoachingPackageAsync(id);
+            if (!result) return NotFound();
+
+            return RedirectToAction("GetFreePackage", "CoachingPackages"); // Or your FreePackages view
         }
     }
 }

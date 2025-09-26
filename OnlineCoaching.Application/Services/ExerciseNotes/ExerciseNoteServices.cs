@@ -13,11 +13,18 @@ namespace OnlineCoaching.Application.Services
             _mapper = mapper;
         }
 
-        // ✅ Add Note by Client
         public async Task<ExerciseNoteDto> AddAsync(CreateExerciseNoteDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Note))
                 throw new ValidationException("Note cannot be empty.");
+
+            // ✅ Check exercise existence
+            var exerciseExists = await _unitOfWork.Exercises
+                .GetQueryable()
+                .AnyAsync(e => e.Id == dto.ExerciseId);
+
+            if (!exerciseExists)
+                throw new ValidationException("Invalid ExerciseId. Exercise does not exist.");
 
             var note = _mapper.Map<ExerciseNotes>(dto);
             note.CreatedOn = DateTime.UtcNow;
@@ -27,6 +34,7 @@ namespace OnlineCoaching.Application.Services
 
             return _mapper.Map<ExerciseNoteDto>(addedNote);
         }
+
 
         // ✅ Get Note by Id
         public async Task<ExerciseNoteDto?> GetByIdAsync(int id)

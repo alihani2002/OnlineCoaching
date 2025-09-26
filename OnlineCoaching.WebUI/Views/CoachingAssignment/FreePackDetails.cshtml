@@ -1,0 +1,357 @@
+﻿@model OnlineCoaching.WebUI.Models.RequestPackage.AssignedFreePackVM
+@{
+        ViewData["Title"] = "Free Package Details - " + ViewBag.PackageTitle;
+}
+
+<style>
+    /* Custom CSS for a professional, cohesive look */
+    .card {
+        border-radius: 0.75rem; /* Slightly reduced border-radius */
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: 1px solid rgba(0, 0, 0, 0.05); /* Lighter border */
+    }
+
+        .card:hover {
+            transform: translateY(-3px); /* Less aggressive lift */
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1); /* Stronger but softer shadow */
+        }
+
+    .card-title {
+        color: #34495e; /* A slightly softer dark color */
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .badge-stat {
+        font-weight: 600;
+        padding: 0.5rem 0.7rem;
+        border-radius: 0.5rem;
+        display: block; /* Make badges fill their container */
+        text-align: center;
+        margin-top: 0.25rem;
+    }
+
+    .video-media-container {
+        position: relative;
+        height: 300px; /* Slightly shorter for better card proportions */
+        overflow: hidden;
+        background-color: #ecf0f1; /* Light grey background for media area */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top-left-radius: 0.75rem;
+        border-top-right-radius: 0.75rem;
+    }
+
+        .video-media-container .exercise-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4; /* Dim the image more for button contrast */
+            transition: opacity 0.3s;
+        }
+
+        .video-media-container:hover .exercise-image {
+            opacity: 0.6;
+        }
+
+    /* Centered button */
+    .play-video-btn {
+        position: relative;
+        z-index: 2;
+        font-size: 1.1rem;
+        padding: 0.6rem 1.8rem;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Modal centering using Flexbox */
+    .video-modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.85); /* Slightly darker background */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .video-modal-content {
+        position: relative;
+        padding: 20px;
+        width: 95%;
+        max-width: 900px; /* Wider modal for video */
+        z-index: 1051;
+    }
+
+    .video-frame-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+
+        .video-frame-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem;
+        }
+
+    .close-btn {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: bold;
+        position: absolute;
+        top: -40px;
+        right: 0px;
+        cursor: pointer;
+        z-index: 1052;
+        text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+
+</style>
+
+<div class="container py-5">
+    <h1 class="mb-5 text-center display-6 fw-bold text-white">
+        Free Package: <span class="text-primary">@ViewBag.PackageTitle</span>
+    </h1>
+
+    <div class="row g-5">
+        <div class="col-12">
+            <h3 class="mb-4 fw-semibold text-white text-center border-bottom pb-2">
+                🏋️ Exercises
+            </h3>
+
+            @if (Model.AssignedExercises == null || !Model.AssignedExercises.Any())
+            {
+                <div class="alert alert-light border text-center col-12 col-md-8 mx-auto">
+                    <p class="mb-0 text-muted">No exercises have been assigned to this free package yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="col-12 col-lg-10 mx-auto">
+                    <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+                        @foreach (var ex in Model.AssignedExercises)
+                        {
+                            <div class="col">
+                                <div class="card shadow-lg border-0">
+
+                                    <div class="video-media-container">
+                                        @{
+                                            bool hasVideo = !string.IsNullOrEmpty(ex.Exercise?.VideoUrl);
+                                            string imageUrl = ex.Exercise?.ImageUrl ?? "";
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                        {
+                                            <img src="@imageUrl" class="exercise-image" alt="Exercise image thumbnail" />
+                                        }
+
+                                        @if (hasVideo)
+                                        {
+                                            <button type="button" class="btn btn-primary btn-lg play-video-btn" data-video-url="@ex.Exercise!.VideoUrl">
+                                                ▶ Watch Video
+                                            </button>
+                                        }
+                                        else if (string.IsNullOrEmpty(imageUrl))
+                                        {
+                                            <div class="text-white fw-bold">
+                                                No Media Available
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title text-truncate">@ex.Exercise?.Name</h4>
+
+                                        <div class="row g-2 mb-3 border-bottom pb-3">
+                                            <div class="col-12 col-sm-4">
+                                                <small class="text-uppercase text-muted d-block text-center fw-bold">Muscle</small>
+                                                <span class="badge-stat bg-info text-white">@ex.Exercise?.Muscle?.Name</span>
+                                            </div>
+                                            <div class="col-6 col-sm-4">
+                                                <small class="text-uppercase text-muted d-block text-center fw-bold">Sets</small>
+                                                <span class="badge-stat bg-primary text-white">@ex.Sets</span>
+                                            </div>
+                                            <div class="col-6 col-sm-4">
+                                                <small class="text-uppercase text-muted d-block text-center fw-bold">Reps</small>
+                                                <span class="badge-stat bg-success text-white">@ex.Reps</span>
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted fw-bold">📅 Day:</span>
+                                                <span class="fw-semibold text-dark">@ex.DayOfWeek</span>
+                                            </li>
+                                            <li class="list-group-item px-0">
+                                                <span class="text-muted d-block mb-1 fw-bold">📝 Trainer Notes:   <p class="mb-0 small text-dark">@(!string.IsNullOrEmpty(ex.Notes) ? ex.Notes : "—")</p></span>
+                                              
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-12 mt-5">
+            <h3 class="mb-4 fw-semibold text-white text-center border-bottom pb-2">
+                🍽️ Foods
+            </h3>
+
+            @if (Model.AssignedFoods == null || !Model.AssignedFoods.Any())
+            {
+                <div class="alert alert-light border text-center col-12 col-md-8 mx-auto">
+                    <p class="mb-0 text-muted">No foods have been assigned to this free package yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="col-12 col-lg-10 mx-auto">
+                    <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+                        @foreach (var food in Model.AssignedFoods)
+                        {
+                            <div class="col">
+                                <div class="card shadow-lg border-0 h-100">
+                                    <div class="card-body">
+                                        <h4 class="card-title text-truncate">@food.Food?.Name</h4>
+
+                                        <div class="row g-2 mb-3 border-bottom pb-3">
+                                            <div class="col-6">
+                                                <small class="text-uppercase text-muted d-block text-center fw-bold">Quantity</small>
+                                                <span class="badge-stat bg-primary text-white">@food.Quantity</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <small class="text-uppercase text-muted d-block text-center fw-bold">Servings</small>
+                                                <span class="badge-stat bg-success text-white">@food.NumberOfServings</span>
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted fw-bold">📅 Day:</span>
+                                                <span class="fw-semibold text-dark">@food.DayOfWeek</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <span class="text-muted fw-bold">🕒 Meal Time:</span>
+                                                <span class="fw-semibold text-dark">@food.MealNumber</span>
+                                            </li>
+                                            <li class="list-group-item px-0">
+                                                <span class="text-muted d-block mb-1 fw-bold">📝 Notes:</span>
+                                                <p class="mb-0 small text-dark">@(!string.IsNullOrEmpty(food.Notes) ? food.Notes : "—")</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="mt-5 pt-3 text-center">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg rounded-pill px-5 shadow-sm">
+            ⬅ Back to Packages
+        </a>
+    </div>
+
+</div>
+
+<div id="videoModal" class="video-modal">
+    <div class="video-modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="video-frame-wrapper">
+            <iframe id="videoPlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // JavaScript to handle the video modal
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('videoPlayer'); // This is the <iframe>
+    const playButtons = document.querySelectorAll('.play-video-btn');
+
+  
+    function getEmbedUrl(url) {
+        if (!url) return '';
+        let videoId = '';
+
+        // 1. Check for standard YouTube watch URL: https://www.youtube.com/watch?v=XXXXXXXXX
+        if (url.includes('youtube.com/watch?v=')) {
+            videoId = url.split('v=')[1].split('&')[0];
+        }
+        // 2. Check for short YouTube share URL: https://youtu.be/XXXXXXXXX
+        else if (url.includes('youtu.be/')) {
+            videoId = url.split('youtu.be/')[1].split('?')[0];
+        }
+        // 3. Check for embed URL already (optional, but robust)
+        else if (url.includes('youtube.com/embed/')) {
+            return url;
+        }
+
+        if (videoId) {
+            // Force autoplay (autoplay=1) and prevent related videos (rel=0)
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        }
+
+        // Fallback for direct links or other iframe-compatible links
+        return url;
+    }
+
+  
+    function openModal(originalUrl) {
+        const embedUrl = getEmbedUrl(originalUrl);
+
+        // 1. Set the processed embed URL to the iframe's src, which starts the video.
+        videoPlayer.src = embedUrl;
+
+        // 2. Display the modal. (Using 'flex' as defined in the CSS for perfect centering)
+        videoModal.style.display = 'flex';
+    }
+
+    /**
+     * Closes the video modal and stops the video playback.
+     */
+    window.closeModal = function() {
+        // Crucial: Stop the video by resetting the iframe's src.
+        videoPlayer.src = '';
+
+        // Hide the modal
+        videoModal.style.display = 'none';
+    }
+
+    // Add event listeners to all video play buttons
+    playButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const videoUrl = event.currentTarget.getAttribute('data-video-url');
+            if (videoUrl) {
+                openModal(videoUrl);
+            }
+        });
+    });
+
+    // Close modal when clicking outside of the content (on the dark background)
+    window.onclick = function(event) {
+        if (event.target === videoModal) {
+            closeModal();
+        }
+    }
+</script>

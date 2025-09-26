@@ -8,7 +8,7 @@
         public string? Notes { get; set; }
         public DayOfWeekEnum DayOfWeek { get; set; }
 
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public Client? Client { get; set; }
 
         public int ExerciseId { get; set; }
@@ -16,6 +16,10 @@
 
         public int CoachingPackageRequestId { get; set; }
         public CoachingPackageRequest? CoachingPackageRequest { get; set; }
+
+        public int? CoachingPackageId { get; set; } 
+        public CoachingPackage? coachingPackage { get; set; }
+
         public DateTime AssignedOn { get; set; } = DateTime.Now;
       
     }

@@ -58,8 +58,8 @@ function renderExercises() {
                             <div class="exercise-actions">
                                 <a href="/ExerciseSheetLogs/Create?exerciseId=${e.ExerciseId}&clientId=${clientId}" class="btn btn-warning ">➕ Log</a>
                                 <a href="/ExerciseSheetLogs/ClientExerciseLogs?exerciseId=${e.ExerciseId}&clientId=${clientId}" class="btn btn-info ">📊 Logs</a>
-                                <a href="/ExerciseNote/Create?exerciseId=${e.Id}" class="btn btn-primary">✏️ Add Note</a>
-                                <a href="/ExerciseNote/Index?exerciseId=${e.Id}" class="btn btn-info">📖 View Notes</a>
+                                <a href="/ExerciseNote/Create?exerciseId=${e.ExerciseId}" class="btn btn-primary">✏️ Add Note</a>
+                                <a href="/ExerciseNote/Index?exerciseId=${e.ExerciseId}" class="btn btn-info">📖 View Notes</a>
                             </div>
                         </div>
                     </div>`;

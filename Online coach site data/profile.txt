@@ -1,0 +1,226 @@
+@model OnlineCoaching.Domain.Entities.Client
+
+<style>
+    /* Ensure the profile popup does not interfere with the main page structure */
+    header, .footer-area, .slider-area2 {
+        display: none !important;
+    }
+
+    /* Custom styles for a more professional look */
+    #profilePopup .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Stronger, professional shadow */
+    }
+
+    #profilePopup .form-control {
+        border-radius: 8px; /* Slightly more rounded inputs */
+        padding: 0.75rem 1rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    #profilePopup .form-control:focus {
+        border-color: #007bff; /* Bootstrap Primary blue focus */
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    }
+
+    #profilePopup .form-label {
+        color: #343a40; /* Darker label color */
+        font-size: 0.95rem;
+    }
+    
+    #profilePopup .btn-primary {
+        /* Enhance primary button visual */
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+</style>
+
+<!-- Background overlay -->
+<div class="position-fixed top-0 start-0 w-100 h-100"
+     style="z-index:1040;background-color:rgba(0,0,0,0.8);"></div>
+
+<!-- Modal -->
+<div id="profilePopup" class="modal fade show d-block"
+     tabindex="-1" style="z-index:1050;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"> <!-- Custom styling applies via CSS -->
+            <form asp-action="CompleteProfile" asp-controller="Clients" method="post" id="profileForm">
+                <!-- Assuming User.FindFirst("sub")?.Value contains the UserId -->
+                <input type="hidden" asp-for="UserId" value="@User.FindFirst("sub")?.Value" />
+
+                <div class="modal-header border-bottom border-light">
+                    <!-- Updated title with ID for dynamic step updates -->
+                    <h5 class="modal-title text-primary fw-bold" id="modalTitle"> 
+                        Client Profile Setup
+                    </h5>
+                </div>
+
+                <div class="modal-body pt-4">
+                    <p class="text-muted mb-4">
+                        Please provide the essential information below to complete your client profile and activate your coaching services.
+                    </p>
+                    
+                    <!-- Using alert styling for validation summary -->
+                    <!-- Validation Summary remains visible across all steps -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- ======================================= -->
+                    <!-- STEP 1: Full Name, Birth Date, WhatsApp -->
+                    <!-- ======================================= -->
+                    <div id="step1">
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-semibold"></label>
+                            <input asp-for="FullName" class="form-control" placeholder="E.g., John Smith" required />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Birth Date -->
+                        <div class="mb-3">
+                            <label asp-for="BirthDate" class="form-label fw-semibold"></label>
+                            <!-- 
+                                SET DEFAULT DATE: If BirthDate is the default DateTime.MinValue (meaning it hasn't been set yet), 
+                                we default the input value to the current date.
+                            -->
+                            <input asp-for="BirthDate" type="date" class="form-control" 
+                                   value="@(Model.BirthDate == DateTime.MinValue ? DateTime.Today.ToString("yyyy-MM-dd") : Model.BirthDate.ToString("yyyy-MM-dd"))"
+                                   required />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+
+                        <!-- WhatsApp Number -->
+                        <div class="mb-3">
+                            <label asp-for="WhatsUpNumber" class="form-label fw-semibold"></label>
+                            <!-- Using type="tel" for phone numbers is best practice and keeps the maxlength -->
+                            <input asp-for="WhatsUpNumber" type="tel" maxlength="11" class="form-control" placeholder="e.g., 01012345678" required />
+                            <span asp-validation-for="WhatsUpNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- ======================================= -->
+                    <!-- STEP 2: Address, National ID -->
+                    <!-- ======================================= -->
+                    <div id="step2" class="d-none">
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label fw-semibold"></label>
+                            <input asp-for="Address" class="form-control" placeholder="Street, City, Country" required />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <!-- National ID -->
+                        <div class="mb-3">
+                            <label asp-for="NationalId" class="form-label fw-semibold"></label>
+                            <input asp-for="NationalId" type="text" maxlength="14" class="form-control" placeholder="Enter your official 14-digit National ID" required />
+                            <span asp-validation-for="NationalId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top border-light pt-3 d-flex justify-content-between">
+                    
+                    <!-- Back Button (Step 2) -->
+                    <button type="button" id="backBtn" class="btn btn-outline-secondary px-4 d-none">
+                        <i class="fas fa-arrow-left me-2"></i> Back
+                    </button>
+                    
+                    <div class="ms-auto d-flex gap-2">
+                        <!-- Next Button (Step 1) -->
+                        <button type="button" id="nextBtn" class="btn btn-primary px-5 py-2 fw-semibold shadow-sm">
+                            Next <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                        
+                        <!-- Submit Button (Step 2) -->
+                        <button type="submit" id="submitBtn" class="btn btn-primary px-5 py-2 fw-semibold shadow-sm d-none">
+                            Complete Profile & Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- jQuery is required for the client-side validation and step navigation -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" crossorigin="anonymous"></script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            const form = $('#profileForm');
+            const step1 = $('#step1');
+            const step2 = $('#step2');
+            const nextBtn = $('#nextBtn');
+            const backBtn = $('#backBtn');
+            const submitBtn = $('#submitBtn');
+            const modalTitle = $('#modalTitle');
+
+            // Set initial title
+            modalTitle.text('Client Profile Setup (Step 1 of 2)');
+
+            /**
+             * Navigates from Step 1 to Step 2 after validating Step 1 fields.
+             */
+            nextBtn.on('click', function (e) {
+                e.preventDefault();
+                
+                // Get all required inputs in step 1
+                const step1Inputs = step1.find('input[required], select[required], textarea[required]').get();
+                let allStep1Valid = true;
+                
+                // Manually trigger validation for each required field in step 1.
+                // This ensures validation messages appear for only step 1 fields.
+                step1Inputs.forEach(input => {
+                    // form.validate().element(input) checks the validity of a single element
+                    if (!form.validate().element(input)) {
+                        allStep1Valid = false;
+                    }
+                });
+
+                if (allStep1Valid) {
+                    // Hide Step 1, Show Step 2
+                    step1.addClass('d-none');
+                    step2.removeClass('d-none');
+
+                    // Update Buttons
+                    nextBtn.addClass('d-none');
+                    backBtn.removeClass('d-none');
+                    submitBtn.removeClass('d-none');
+                    
+                    // Update title
+                    modalTitle.text('Client Profile Setup (Step 2 of 2)');
+                }
+            });
+
+            /**
+             * Navigates back from Step 2 to Step 1.
+             */
+            backBtn.on('click', function () {
+                // Hide Step 2, Show Step 1
+                step2.addClass('d-none');
+                step1.removeClass('d-none');
+
+                // Update Buttons
+                submitBtn.addClass('d-none');
+                backBtn.addClass('d-none');
+                nextBtn.removeClass('d-none');
+                
+                // Update title
+                modalTitle.text('Client Profile Setup (Step 1 of 2)');
+            });
+            
+            // Re-validate the entire form on submission of step 2
+            form.on('submit', function() {
+                // This ensures that all hidden fields (even if they were validated in step 1) 
+                // and the newly visible fields in step 2 are checked before POST.
+                return form.valid();
+            });
+        });
+    </script>
+}

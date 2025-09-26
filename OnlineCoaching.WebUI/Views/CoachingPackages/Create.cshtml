@@ -36,11 +36,18 @@
                             <span asp-validation-for="DurationInMonths" class="text-danger small"></span>
                         </div>
                     </div>
+
                     <div class="col-md-6 mb-4">
                         <div class="form-floating">
-                            <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Price" required />
+                            <input asp-for="Price" id="PriceInput" class="form-control" type="number" step="0.01" placeholder="Price" required />
                             <label asp-for="Price">Price</label>
                             <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" asp-for="IsFreePlan" id="IsFreeCheckbox" />
+                            <label class="form-check-label fw-bold" for="IsFreeCheckbox">
+                                This package is free
+                            </label>
                         </div>
                     </div>
 
@@ -78,4 +85,23 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        const freeCheckbox = document.getElementById("IsFreeCheckbox");
+        const priceInput = document.getElementById("PriceInput");
+
+        function togglePriceInput() {
+            if (freeCheckbox.checked) {
+                priceInput.value = 0;
+                priceInput.disabled = true;
+            } else {
+                priceInput.disabled = false;
+            }
+        }
+
+        freeCheckbox.addEventListener("change", togglePriceInput);
+
+        // Run on load
+        togglePriceInput();
+    </script>
 }

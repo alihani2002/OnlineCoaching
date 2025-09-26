@@ -1,8 +1,38 @@
 ﻿@model OnlineCoaching.Domain.Entities.Client
 
 <style>
+    /* Ensure the profile popup does not interfere with the main page structure */
     header, .footer-area, .slider-area2 {
         display: none !important;
+    }
+
+    /* Custom styles for a more professional look */
+    #profilePopup .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Stronger, professional shadow */
+    }
+
+    #profilePopup .form-control {
+        border-radius: 8px; /* Slightly more rounded inputs */
+        padding: 0.75rem 1rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+        #profilePopup .form-control:focus {
+            border-color: #007bff; /* Bootstrap Primary blue focus */
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+    #profilePopup .form-label {
+        color: #343a40; /* Darker label color */
+        font-size: 0.95rem;
+    }
+
+    #profilePopup .btn-primary {
+        /* Enhance primary button visual */
+        background-color: #007bff;
+        border-color: #007bff;
     }
 </style>
 
@@ -14,59 +44,74 @@
 <div id="profilePopup" class="modal fade show d-block"
      tabindex="-1" style="z-index:1050;">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content shadow-lg border-0"
-             style="border-radius: 15px;">
-            <form asp-action="CompleteProfile" asp-controller="Clients" method="post" >
+        <div class="modal-content">
+            <!-- Custom styling applies via CSS -->
+            <form asp-action="CompleteProfile" asp-controller="Clients" method="post">
+                <!-- Assuming User.FindFirst("sub")?.Value contains the UserId -->
                 <input type="hidden" asp-for="UserId" value="@User.FindFirst("sub")?.Value" />
 
-                <div class="modal-header border-0">
-                    <h5 class="modal-title text-danger fw-bold">
-                        💪 Complete Your Profile
+                <div class="modal-header border-bottom border-light">
+                    <!-- Updated title for professional tone -->
+                    <h5 class="modal-title text-primary fw-bold">
+                        Client Profile Setup
                     </h5>
                 </div>
 
-                <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="modal-body pt-4">
+                    <p class="text-muted mb-4">
+                        Please provide the essential information below to complete your client profile and activate your coaching services.
+                    </p>
+
+                    <!-- Using alert styling for validation summary -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                     <!-- Full Name -->
                     <div class="mb-3">
                         <label asp-for="FullName" class="form-label fw-semibold"></label>
-                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" required />
+                        <input asp-for="FullName" class="form-control" placeholder="E.g., John Smith" required />
                         <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
 
                     <!-- Birth Date -->
                     <div class="mb-3">
                         <label asp-for="BirthDate" class="form-label fw-semibold"></label>
-                        <input asp-for="BirthDate" type="date" class="form-control" required />
+                        <!--
+                            SET DEFAULT DATE: If BirthDate is the default DateTime.MinValue (meaning it hasn't been set yet),
+                            we default the input value to the current date.
+                        -->
+                        <input asp-for="BirthDate" type="date" class="form-control"
+                               value="@(Model.BirthDate == DateTime.MinValue ? DateTime.Today.ToString("yyyy-MM-dd") : Model.BirthDate.ToString("yyyy-MM-dd"))"
+                               required />
                         <span asp-validation-for="BirthDate" class="text-danger"></span>
                     </div>
 
                     <!-- WhatsApp Number -->
                     <div class="mb-3">
                         <label asp-for="WhatsUpNumber" class="form-label fw-semibold"></label>
-                        <input asp-for="WhatsUpNumber" type="n" maxlength="11" class="form-control" placeholder="01XXXXXXXXX" />
+                        <!-- Using type="tel" for phone numbers is best practice and keeps the maxlength -->
+                        <input asp-for="WhatsUpNumber" type="tel" maxlength="11" class="form-control" placeholder="e.g., 01012345678" />
                         <span asp-validation-for="WhatsUpNumber" class="text-danger"></span>
                     </div>
 
                     <!-- Address -->
                     <div class="mb-3">
                         <label asp-for="Address" class="form-label fw-semibold"></label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter your address" required />
+                        <input asp-for="Address" class="form-control" placeholder="Street, City, Country" required />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
 
                     <!-- National ID -->
                     <div class="mb-3">
                         <label asp-for="NationalId" class="form-label fw-semibold"></label>
-                        <input asp-for="NationalId" type="text" maxlength="14" class="form-control" placeholder="Enter 14-digit ID" required />
+                        <input asp-for="NationalId" type="text" maxlength="14" class="form-control" placeholder="Enter your official 14-digit National ID" required />
                         <span asp-validation-for="NationalId" class="text-danger"></span>
                     </div>
                 </div>
 
-                <div class="modal-footer border-0">
-                    <button type="submit" class="btn btn-danger px-4 fw-semibold">
-                        Save
+                <div class="modal-footer border-top border-light pt-3">
+                    <!-- Changed button style to primary/professional action color and enhanced padding/shadow -->
+                    <button type="submit" class="btn btn-primary fw-semibold shadow-sm">
+                        Complete Profile & Save
                     </button>
                 </div>
             </form>

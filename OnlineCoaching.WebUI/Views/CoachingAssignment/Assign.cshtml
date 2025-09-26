@@ -1,0 +1,151 @@
+﻿@using OnlineCoaching.WebUI.Models.RequestPackage
+@using OnlineCoaching.Domain.Enums
+@model AssignFreePackageViewModel
+
+@{
+    ViewData["Title"] = "Assign Free Package";
+}
+
+<h2 class="mb-4">Assign to Free Package: @ViewBag.PackageTitle</h2>
+
+<form asp-action="Assign" method="post">
+    <input type="hidden" asp-for="PackageId" />
+
+    <!-- Exercises Section -->
+    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
+        <h4 class="mb-3">Assign Exercises</h4>
+        <div id="exercise-container">
+            @for (int i = 0; i < Model.Exercises!.Count; i++)
+            {
+                <div class="exercise-item mb-3 p-3 border rounded bg-white">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3">
+                            <label class="form-label">Exercise</label>
+                            <select asp-for="Exercises[i].ExerciseId"
+                                    asp-items="@(new SelectList(Model.AvailableExercises, "Id", "Name"))"
+                                    class="form-select"></select>
+                        </div>
+                        <div class="col-md-2"><input asp-for="Exercises[i].Sets" class="form-control" placeholder="Sets" /></div>
+                        <div class="col-md-2"><input asp-for="Exercises[i].Reps" class="form-control" placeholder="Reps" /></div>
+                        <div class="col-md-2">
+                            <select asp-for="Exercises[i].DayOfWeek" asp-items="Html.GetEnumSelectList<DayOfWeekEnum>()" class="form-select">
+                                <option value="">-- Select Day --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2"><input asp-for="Exercises[i].Notes" class="form-control" placeholder="Notes" /></div>
+                        <div class="col-md-1 d-flex align-items-end"><button type="button" class="btn btn-danger remove-exercise">X</button></div>
+                    </div>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-exercise" class="btn btn-success">Add Exercise</button>
+    </div>
+
+    <!-- Foods Section -->
+    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
+        <h4 class="mb-3">Assign Foods</h4>
+        <div id="food-container">
+            @for (int i = 0; i < Model.Foods!.Count; i++)
+            {
+                <div class="food-item mb-3 p-3 border rounded bg-white">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3">
+                            <label class="form-label">Food</label>
+                            <select asp-for="Foods[i].FoodId"
+                                    asp-items="@(new SelectList(Model.AvailableFoods, "Id", "Name"))"
+                                    class="form-select"></select>
+                        </div>
+                        <div class="col-md-2"><input asp-for="Foods[i].Quantity" class="form-control" placeholder="Qty" /></div>
+                        <div class="col-md-2"><input asp-for="Foods[i].NumberOfServings" class="form-control" type="number" min="1" placeholder="Servings" /></div>
+                        <div class="col-md-2">
+                            <select asp-for="Foods[i].DayOfWeek" asp-items="Html.GetEnumSelectList<DayOfWeekEnum>()" class="form-select">
+                                <option value="">-- Select Day --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1"><input asp-for="Foods[i].MealNumber" class="form-control" type="number" min="1" placeholder="Meal #" /></div>
+                        <div class="col-md-2"><input asp-for="Foods[i].Notes" class="form-control" placeholder="Notes" /></div>
+                        <div class="col-md-1 d-flex align-items-end"><button type="button" class="btn btn-danger remove-food">X</button></div>
+                    </div>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-food" class="btn btn-success">Add Food</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg w-100">Save Assignments</button>
+</form>
+
+@section Scripts {
+    <script>
+        // Add Exercise
+        document.getElementById('add-exercise').addEventListener('click', function () {
+            let container = document.getElementById('exercise-container');
+            let index = container.children.length;
+            let template = `
+                <div class="exercise-item mb-3 p-3 border rounded bg-white">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3">
+                            <select name="Exercises[${index}].ExerciseId" class="form-select">
+                                @foreach (var ex in Model.AvailableExercises!)
+                                {
+                                        <option value="@ex.Id">@ex.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2"><input name="Exercises[${index}].Sets" class="form-control" placeholder="Sets" /></div>
+                        <div class="col-md-2"><input name="Exercises[${index}].Reps" class="form-control" placeholder="Reps" /></div>
+                        <div class="col-md-2">
+                            <select name="Exercises[${index}].DayOfWeek" class="form-select">
+                                @foreach (var d in Enum.GetValues(typeof(DayOfWeekEnum)))
+                                {
+                                        <option value="@((int)d)">@d</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2"><input name="Exercises[${index}].Notes" class="form-control" placeholder="Notes" /></div>
+                        <div class="col-md-1 d-flex align-items-end"><button type="button" class="btn btn-danger remove-exercise">X</button></div>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', template);
+        });
+
+        // Add Food
+        document.getElementById('add-food').addEventListener('click', function () {
+            let container = document.getElementById('food-container');
+            let index = container.children.length;
+            let template = `
+                <div class="food-item mb-3 p-3 border rounded bg-white">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3">
+                            <select name="Foods[${index}].FoodId" class="form-select">
+                                @foreach (var f in Model.AvailableFoods!)
+                                {
+                                        <option value="@f.Id">@f.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2"><input name="Foods[${index}].Quantity" class="form-control" placeholder="Qty" /></div>
+                        <div class="col-md-2"><input name="Foods[${index}].NumberOfServings" class="form-control" type="number" min="1" placeholder="Servings" /></div>
+                        <div class="col-md-2">
+                            <select name="Foods[${index}].DayOfWeek" class="form-select">
+                                @foreach (var d in Enum.GetValues(typeof(DayOfWeekEnum)))
+                                {
+                                        <option value="@((int)d)">@d</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-1"><input name="Foods[${index}].MealNumber" class="form-control" type="number" min="1" placeholder="Meal #" /></div>
+                        <div class="col-md-2"><input name="Foods[${index}].Notes" class="form-control" placeholder="Notes" /></div>
+                        <div class="col-md-1 d-flex align-items-end"><button type="button" class="btn btn-danger remove-food">X</button></div>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', template);
+        });
+
+        // Remove
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-exercise')) e.target.closest('.exercise-item').remove();
+            if (e.target.classList.contains('remove-food')) e.target.closest('.food-item').remove();
+        });
+    </script>
+}

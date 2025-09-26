@@ -104,6 +104,24 @@
             <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column justify-content-between text-center">
                     <div>
+                        <div class="icon-box icon-box-success mb-3">
+                            <i class="fas fa-gift fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Free Packages</h5>
+                        <p class="card-text text-muted small">Manage packages that are available for all clients for free.</p>
+                    </div>
+                    <a asp-controller="CoachingPackages" asp-action="GetFreePackage" class="btn btn-success mt-3">
+                        Manage Free Packages <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between text-center">
+                    <div>
                         <div class="icon-box icon-box-primary mb-3">
                             <i class="fas fa-sticky-note fa-2x"></i>
                         </div>

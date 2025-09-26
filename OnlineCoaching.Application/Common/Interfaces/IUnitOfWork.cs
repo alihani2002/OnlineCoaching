@@ -52,6 +52,7 @@ namespace OnlineCoaching.Application.Common.Interfaces
         IBaseRepository<ExerciseAlternative> ExerciseAlternatives { get; }
 
         IBaseRepository<ExerciseNotes> ExerciseNotes { get; }
+        IBaseRepository<CoachVideo> CoachVideos { get; }
 
         int Complete();
 

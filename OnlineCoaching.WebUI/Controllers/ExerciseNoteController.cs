@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos.Notes;
 using System.Security.Claims;
 
 namespace OnlineCoaching.WebUI.Controllers
     {
-        [Authorize]
         public class ExerciseNoteController : Controller
         {
             private readonly IExerciseNoteServices _noteService;
@@ -68,12 +66,6 @@ namespace OnlineCoaching.WebUI.Controllers
             {
                 var note = await _noteService.GetByIdAsync(id);
                 if (note == null) return NotFound();
-
-                // ✅ ensure only owner or admin can delete
-                var clientIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (note.ClientId.ToString() != clientIdClaim && !User.IsInRole("Admin"))
-                    return Forbid();
-
                 return View(note);
             }
 
@@ -85,6 +77,8 @@ namespace OnlineCoaching.WebUI.Controllers
                 await _noteService.DeleteAsync(id);
                 return RedirectToAction(nameof(Index), new { exerciseId });
             }
+
+
         }
     }
 

@@ -1,0 +1,128 @@
+﻿@model IEnumerable<CoachingPackage>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Free Coaching Package";
+}
+
+<section class="pricing-area section-padding40 fix">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section-tittle text-center mb-55">
+                    <h2>Free Coaching Packages</h2>
+                    <p class="text-muted">Start your journey with our free starter plans.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var package in Model)
+                {
+                    var cardClass = package.IsDeleted ? "opacity-50" : "shadow-lg"; // make deleted look disabled
+                                                                                    <div class="col-lg-4 col-md-6 col-sm-6">
+                                                                                        <div class="properties mb-30">
+                                                                                            <div class="properties__card p-3 rounded-4 @cardClass">
+
+                                <!-- Package Image -->
+                                @if (!string.IsNullOrEmpty(package.ImageUrl))
+                                {
+                                    <div class="mb-3">
+                                        <img src="@package.ImageUrl"
+                                             alt="@package.Title"
+                                             class="img-fluid rounded shadow-sm"
+                                             style="max-height:250px; object-fit:cover; width:100%;" />
+                                    </div>
+                                }
+
+                                <!-- Caption -->
+                                <div class="properties__caption text-center">
+                                    <h5 class="fw-bold text-white">@package.Title</h5>
+                                    <span class="month">@package.DurationInMonths month@(package.DurationInMonths > 1 ? "s" : "")</span>
+
+                                    <!-- Always FREE -->
+                                    <p class="mb-25 fs-4 fw-bold text-success">FREE</p>
+
+                                    <!-- Description List -->
+                                    @if (!string.IsNullOrEmpty(package.Description))
+                                    {
+                                        var descriptionItems = package.Description.Split('-').Select(s => s.Trim()).ToList();
+                                        foreach (var item in descriptionItems)
+                                        {
+                                            if (string.IsNullOrWhiteSpace(item)) { continue; }
+                                            <div class="single-features d-flex align-items-start mb-2">
+                                                <div class="features-icon me-2">
+                                                    <img src="~/assets/img/icon/check.svg" alt="check" />
+                                                </div>
+                                                <div class="features-caption text-start">
+                                                    <p class="mb-0">@item</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+                                    <!-- Join Now Button (disabled if deleted) -->
+                                    @if (!package.IsDeleted)
+                                    {
+                                        if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client))
+                                        {
+                                            <a href="@Url.Action("ConfirmRequest", "CoachingPackageRequests", new { packageId = package.Id })"
+                                               class="border-btn border-btn2">Join Free Plan</a>
+                                        }
+                                        else if (!User.Identity!.IsAuthenticated)
+                                        {
+                                            <a href="~/Identity/Account/Login" class="border-btn border-btn2">Join Free Plan</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Deleted</span>
+                                    }
+
+                                    <!-- Admin / Coach Controls -->
+                                    @if (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Coach))
+                                    {
+                                        <div class="d-flex justify-content-center gap-2 mt-3">
+                                            @if (!package.IsDeleted)
+                                            {
+                                                <a class="btn btn-outline-info btn-sm" asp-action="Details" asp-route-id="@package.Id">Details</a>
+                                                <a class="btn btn-outline-warning btn-sm" asp-action="Edit" asp-route-id="@package.Id">Edit</a>
+                                                <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-id="@package.Id">Delete</a>
+                                                <a asp-controller="CoachingAssignment"
+                                                   asp-action="Manage"
+                                                   asp-route-packageId="@package.Id"
+                                                   class="btn btn-outline-success btn-sm">
+                                                    <i class="bi bi-journal-plus me-1"></i> Assign Plan
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <form asp-action="Restore" asp-route-id="@package.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                        Restore
+                                                    </button>
+                                                </form>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h4 class="alert-heading">No free packages available!</h4>
+                        <p>Please check back later.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -37,7 +37,7 @@ namespace OnlineCoaching.Infrastructure.Persistence
         public DbSet<Cooking> Cookings { get; set; }
         public DbSet<ExerciseAlternative> ExerciseAlternatives { get; set; }
         public DbSet<ExerciseNotes> ExerciseNotes { get; set; }
-
+        public DbSet<CoachVideo> CoachVideos { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

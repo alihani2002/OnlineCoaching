@@ -154,6 +154,17 @@ namespace OnlineCoaching.Application.Services
             return _mapper.Map<CoachingPackageRequestDto?>(request);
         }
 
+        // Get Coaching package request by id without tracking (read-only)
+        public async Task<CoachingPackageRequest?> GetRequestByIdAsyncNoTracking(int id)
+        {
+            var request = await _unitOfWork.CoachingPackageRequests.GetQueryable()
+            .AsNoTracking()
+            .Include(r => r.Client)
+            .FirstOrDefaultAsync(r => r.ClientId == id && !r.IsDeleted && r.Status == ClientStatus.Active);
+            if (request == null || request.IsDeleted) return null;
+            return _mapper.Map<CoachingPackageRequest>(request);
+        }
+
 
 
         public void CheckExpiredSubscriptions()

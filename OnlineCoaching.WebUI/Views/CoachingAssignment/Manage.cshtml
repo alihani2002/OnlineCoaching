@@ -1,0 +1,61 @@
+﻿@model OnlineCoaching.WebUI.Models.RequestPackage.AssignedFreePackVM
+
+<h2>Manage Package: @ViewBag.PackageTitle</h2>
+
+<div class="row">
+    <!-- Assigned Exercises -->
+    <div class="col-md-6">
+        <h4>Assigned Exercises</h4>
+        @if (!Model.AssignedExercises.Any())
+        {
+            <p class="text-muted">No exercises assigned yet.</p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var ex in Model.AssignedExercises)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@ex.Exercise?.Name (@ex.Sets x @ex.Reps) - @ex.DayOfWeek</span>
+                        <form asp-action="DeleteExerciseFromPackage" method="post" class="mb-0">
+                            <input type="hidden" name="id" value="@ex.Id" />
+                            <input type="hidden" name="packageId" value="@Model.PackageId" />
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <!-- Assigned Foods -->
+    <div class="col-md-6">
+        <h4>Assigned Foods</h4>
+        @if (!Model.AssignedFoods.Any())
+        {
+            <p class="text-muted">No foods assigned yet.</p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var food in Model.AssignedFoods)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@food.Food?.Name (@food.Quantity x @food.NumberOfServings) - @food.DayOfWeek</span>
+                        <form asp-action="DeleteFoodFromPackage" method="post" class="mb-0">
+                            <input type="hidden" name="id" value="@food.Id" />
+                            <input type="hidden" name="packageId" value="@Model.PackageId" />
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Assign" asp-route-packageId="@Model.PackageId" class="btn btn-primary">+ Add More</a>
+
+
+</div>

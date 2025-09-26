@@ -4,37 +4,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineCoaching.Application.Services;
 using OnlineCoaching.Domain.Dtos;
 using OnlineCoaching.Domain.Dtos.AssignmentCoaching;
-using OnlineCoaching.WebUI.Helper;
 using OnlineCoaching.WebUI.Models.RequestPackage;
 
 namespace OnlineCoaching.WebUI.Controllers
 {
     [Authorize(Roles = AppRoles.Admin)]
-    public class ExercisesController : Controller
+    public class ExercisesController(IExerciseServices exerciseService,
+        IMuscleServices muscleServices,
+        IImageService imageHelper,
+        IUnitOfWork unitOfWork,
+        IAssignmentService assignmentService,
+        ICoachingPackageRequestService requestService) : Controller
     {
-        private readonly IExerciseServices _exerciseService;
-        private readonly IMuscleServices _muscleServices;
-        private readonly IImageService _imageHelper;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IAssignmentService _assignmentService;
-        private readonly ICoachingPackageRequestService _requestService;
+        private readonly IExerciseServices _exerciseService = exerciseService;
+        private readonly IMuscleServices _muscleServices = muscleServices;
+        private readonly IImageService _imageHelper = imageHelper;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IAssignmentService _assignmentService = assignmentService;
+        private readonly ICoachingPackageRequestService _requestService = requestService;
 
-        public ExercisesController(IExerciseServices exerciseService ,
-            IMuscleServices muscleServices ,
-            IImageService imageHelper ,
-            IUnitOfWork unitOfWork ,
-            IAssignmentService assignmentService ,
-            ICoachingPackageRequestService requestService
-            )
-        {   
-            _exerciseService = exerciseService;
-            _muscleServices = muscleServices;
-            _imageHelper = imageHelper;
-            _unitOfWork = unitOfWork;
-            _assignmentService = assignmentService;
-            _requestService = requestService;
 
-        }
+        #region  ------Exercises CRUD -------------------
 
         public IActionResult Index()
         {
@@ -45,35 +35,29 @@ namespace OnlineCoaching.WebUI.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var exercise = await _exerciseService.GetExerciseByIdAsync(id);
-            if (exercise == null) return NotFound();
-
-            return View(exercise);
+            return exercise == null ? NotFound() : View(exercise);
         }
 
         public IActionResult Create()
         {
-            var muscles = _muscleServices.GetMuscles();
-
-            ViewBag.Muscles = new SelectList(muscles, "Id", "Name");
-
+            PopulateMusclesDropdown();
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateExerciseDto dto ,IFormFile? ImageUrl)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateExerciseDto dto, IFormFile? imageUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Exercises");
-                await _exerciseService.AddExerciseAsync(dto);
-                return RedirectToAction(nameof(Index));
+                PopulateMusclesDropdown();
+                return View(dto);
             }
 
-            var muscles = _muscleServices.GetMuscles();
-            ViewBag.Muscles = new SelectList(muscles, "Id", "Name");
+            dto.ImageUrl = imageUrl != null ?
+                await _imageHelper.UploadImageAsync(imageUrl, "Exercises") : null;
 
-            return View(dto);
+            await _exerciseService.AddExerciseAsync(dto);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -81,45 +65,36 @@ namespace OnlineCoaching.WebUI.Controllers
             var exercise = await _exerciseService.GetExerciseByIdAsync(id);
             if (exercise == null) return NotFound();
 
-            ViewBag.Muscles = new SelectList(_muscleServices.GetMuscles(), "Id", "Name", exercise.MuscleId);
+            PopulateMusclesDropdown(exercise.MuscleId);
             return View(exercise);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ExerciseDto dto, IFormFile? ImageUrl)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ExerciseDto dto, IFormFile? imageUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (ImageUrl != null && ImageUrl.Length > 0)
-                {
-                    dto.ImageUrl = await _imageHelper.UploadImageAsync(ImageUrl, "Exercises");
-                }
-                else
-                {
-                    var existing = await _exerciseService.GetExerciseByIdAsync(dto.Id);
-                    dto.ImageUrl = existing?.ImageUrl;
-                }
-
-                dto.LastUpdatedOn = DateTime.Now;
-                await _exerciseService.UpdateExerciseAsync(dto);
-                return RedirectToAction(nameof(Index));
+                PopulateMusclesDropdown(dto.MuscleId);
+                return View(dto);
             }
 
-            ViewBag.Muscles = new SelectList(_muscleServices.GetMuscles(), "Id", "Name", dto.MuscleId);
-            return View(dto);
+            dto.ImageUrl = imageUrl != null && imageUrl.Length > 0
+                ? await _imageHelper.UploadImageAsync(imageUrl, "Exercises")
+                : (await _exerciseService.GetExerciseByIdAsync(dto.Id))?.ImageUrl;
+
+            dto.LastUpdatedOn = DateTime.Now;
+            await _exerciseService.UpdateExerciseAsync(dto);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             var exercise = await _exerciseService.GetExerciseByIdAsync(id);
-            if (exercise == null) return NotFound();
-
-            return View(exercise);
+            return exercise == null ? NotFound() : View(exercise);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _exerciseService.DeleteExerciseAsync(id);
@@ -127,8 +102,9 @@ namespace OnlineCoaching.WebUI.Controllers
         }
 
 
+        #endregion
 
-
+        #region -------------- Assign Exercises and Foods to Client ------------------
         public IActionResult Assign(int clientId)
         {
             var exercises = _unitOfWork.Exercises.GetQueryable();
@@ -166,69 +142,42 @@ namespace OnlineCoaching.WebUI.Controllers
 
 
         [HttpGet]
-        public IActionResult AssignedList(int clientId)
+        public async Task<IActionResult> AssignedList(int clientId)
         {
-            var assignedExercises = _unitOfWork.AssignExercises
-                .GetQueryable().Include(a => a.Exercise)
-                .Where(a => a.ClientId == clientId)
-                .ToList();
-
-            var assignedFoods = _unitOfWork.AssignFoods
-                .GetQueryable()
-                .Include(f => f.Food)
-                .Include(f => f.Meal)
-                .Where(f => f.ClientId == clientId)
-                .ToList();
-
             var model = new AssignedListViewModel
             {
                 ClientId = clientId,
-                AssignedExercises = assignedExercises,
-                AssignedFoods = assignedFoods
+                AssignedExercises = await _assignmentService.GetAssignedExercisesAsync(clientId),
+                AssignedFoods = await _assignmentService.GetAssignedFoodsAsync(clientId)
             };
 
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult EditAssigned(int clientId)
+        public async Task<IActionResult> EditAssigned(int clientId)
         {
-            var requestId = _unitOfWork.CoachingPackageRequests
-                .GetQueryable()
-                .Where(r => r.ClientId == clientId && r.Status == ClientStatus.Active) // or Pending
-                .Select(r => r.Id)
-                .FirstOrDefault();
+            var request = await _requestService.GetRequestByIdAsyncNoTracking(clientId);
 
-            if (requestId == 0)
+            if (request == null || request.Id == 0)
             {
                 TempData["Error"] = "This client has no active coaching package request.";
                 return RedirectToAction("Index");
             }
 
-            var assignedExercises = _unitOfWork.AssignExercises
-                .GetQueryable().Include(a => a.Exercise)
-                .Where(a => a.ClientId == clientId && a.CoachingPackageRequestId == requestId)
-                .ToList();
-
-            var assignedFoods = _unitOfWork.AssignFoods
-                .GetQueryable()
-                .Include(f => f.Food)
-                .Include(f => f.Meal)
-                .Where(f => f.ClientId == clientId && f.CoachingPackageRequestId == requestId)
-                .ToList();
-
             var model = new AssignedListViewModel
             {
                 ClientId = clientId,
-                RequestId = requestId,
-                AssignedExercises = assignedExercises,
-                AssignedFoods = assignedFoods,
+                RequestId = request.Id,
+                AssignedExercises = _assignmentService.GetAssignedExercise(clientId, request.Id),
+                AssignedFoods = _assignmentService.GetAssignedFood(clientId, request.Id),
                 AvailableExercises = _unitOfWork.Exercises.GetQueryable().ToList(),
                 AvailableFoods = _unitOfWork.Foods.GetQueryable().ToList()
             };
 
             return View(model);
         }
+
 
 
         [HttpPost]
@@ -343,7 +292,7 @@ namespace OnlineCoaching.WebUI.Controllers
                             CoachingPackageRequestId = model.RequestId,
                             DayOfWeek = f.DayOfWeek,
                             MealNumber = f.MealNumber,
-                            CreatedOn = DateTime.UtcNow
+                            CreatedOn = DateTime.UtcNow 
                         };
                         _unitOfWork.Meals.Add(meal);
                         _unitOfWork.Complete();
@@ -388,6 +337,13 @@ namespace OnlineCoaching.WebUI.Controllers
             await _assignmentService.DeleteAssignedFoodAsync(id);
             TempData["Success"] = "Food removed successfully.";
             return RedirectToAction("EditAssigned", new { clientId });
+        }
+        #endregion
+
+        private void PopulateMusclesDropdown(int? selectedMuscleId = null)
+        {
+            var muscles = _muscleServices.GetMuscles();
+            ViewBag.Muscles = new SelectList(muscles, "Id", "Name", selectedMuscleId);
         }
     }
 }

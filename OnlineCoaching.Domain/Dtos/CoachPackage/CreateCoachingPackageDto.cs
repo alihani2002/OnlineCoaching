@@ -16,6 +16,7 @@
         [Range(0, int.MaxValue, ErrorMessage = "Price must be non-negative.")]
         public int Price { get; set; }
         public string? CreatedById { get; set; }
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; } 
+        public bool IsFreePlan { get; set; } 
     }
 }

@@ -11,7 +11,7 @@ namespace OnlineCoaching.Domain.Entities
         public DayOfWeekEnum DayOfWeek { get; set; }
         public MealsNum MealNumber { get; set; }
 
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public Client? Client { get; set; }
 
         public int FoodId { get; set; }
@@ -19,6 +19,10 @@ namespace OnlineCoaching.Domain.Entities
 
         public int? MealId { get; set; }
         public Meal? Meal { get; set; }
+
+        public int? CoachingPackageId { get; set; }
+        public CoachingPackage? coachingPackage { get; set; }
+
 
         public int CoachingPackageRequestId { get; set; }
         public CoachingPackageRequest? CoachingPackageRequest { get; set; }

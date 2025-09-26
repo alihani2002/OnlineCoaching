@@ -2,6 +2,8 @@
 @using OnlineCoaching.Infrastructure.Persistence
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@model HomeIndexViewModel
+
 
 @{
     ViewData["Title"] = "Home Page";
@@ -51,7 +53,7 @@
 
         @if (ViewBag.ShowProfilePopup == true)
         {
-            @await Html.PartialAsync("_CompleteProfilePv")
+            @await Html.PartialAsync("_CompleteProfilePv", Model.Client)
         }
     
     
@@ -139,6 +141,58 @@
         </div>
     </section>
     <!-- Services End -->
+
+        <section class="pricing-area section-padding40 fix">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
+                            <h2>Free Packages</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model.CoachingPackages != null && Model.CoachingPackages!.Any())
+                    {
+                        foreach (var package in Model.CoachingPackages!)
+                        {
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                    <div class="properties__card">
+                                        <div class="about-icon">
+                                            <img src="assets/img/icon/price.svg" alt="">
+                                        </div>
+                                        <div class="properties__caption">
+                                            <span class="month">@package.Title</span>
+                                            <p class="mb-25">Free Package</p>
+                                            <div class="single-features">
+                                                <div class="features-caption">
+                                                    <p>@package.Description</p>
+                                                </div>
+                                            </div>
+
+                                            @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client))
+                                            {
+                                            <a asp-controller="CoachingAssignment" asp-action="FreePackDetails" asp-route-packageId="@package.Id" class="border-btn border-btn2">Join Now</a>
+                                            }
+                                            else if (!User.Identity!.IsAuthenticated)
+                                            {
+                                                <a href="~/Identity/Account/Register" class="border-btn border-btn2">Join Now</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center">No free packages available at the moment.</p>
+                    }
+                </div>
+            </div>
+        </section>
+
     <!--? Gallery Area Start -->
     <div class="gallery-area section-padding30 ">
         <div class="container-fluid ">
