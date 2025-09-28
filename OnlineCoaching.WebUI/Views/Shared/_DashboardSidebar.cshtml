@@ -2,33 +2,170 @@
 @using OnlineCoaching.Infrastructure.Persistence
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+}
 
-<div class="dashboard-sidebar collapse d-md-block" id="sidebarMenu">
-	<div class="d-flex flex-column p-3 sidebar-content">
-		<a href="/" class="d-flex align-items-center mb-3 text-decoration-none sidebar-logo-link">
-			<h5 class="logo-text fw-bold"> Dashboard</h5>
-			<h5 class="logo-text fw-bold"> Home</h5>
-		</a>
-		<hr class="sidebar-divider">
-		<ul class="nav nav-pills flex-column mb-auto">
-			<li class="nav-item"><a asp-controller="CoachingPackageRequests" asp-action="Index" class="nav-link link-dark"><i class="fas fa-inbox"></i> Requests of Coaching</a></li>
-			<li class="nav-item"><a asp-controller="Cooking" asp-action="Index" class="nav-link link-dark"><i class="fas fa-utensils"></i> Cooking</a></li>
-			<li class="nav-item"><a asp-controller="Gallery" asp-action="Index" class="nav-link link-dark"><i class="fas fa-images"></i> Images</a></li>
-			<li class="nav-item"><a asp-controller="Transformation" asp-action="Index" class="nav-link link-dark"><i class="fas fa-dumbbell"></i> Transformation</a></li>
-			<li class="nav-item"><a asp-controller="Clients" asp-action="Index" class="nav-link link-dark"><i class="fas fa-users"></i> User Table</a></li>
-			<li class="nav-item">
-				<a asp-controller="ExerciseAlternative" asp-action="Index" class="nav-link link-dark">
-					<i class="fas fa-exchange-alt"></i> Exercise Alternatives
-				</a>
-			</li>
+<link rel="stylesheet" href="~/css/Sidebar.css" />
 
-			<li class="nav-item"><a asp-controller="CoachingPackages" asp-action="Index" class="nav-link link-dark"><i class="fas fa-box"></i> Add Coaching Package</a></li>
-			<li class="nav-item"><a asp-controller="Exercises" asp-action="Index" class="nav-link link-dark"><i class="fas fa-running"></i> Add Exercises</a></li>
-			<li class="nav-item"><a asp-controller="Muscles" asp-action="Index" class="nav-link link-dark"><i class="fas fa-fire-alt"></i> Add Muscles</a></li>
-			<li class="nav-item"><a asp-controller="Food" asp-action="Index" class="nav-link link-dark"><i class="fas fa-carrot"></i> Add Food</a></li>
-			<li class="nav-item"><a asp-controller="Question" asp-action="Index" class="nav-link link-dark"><i class="fas fa-question-circle"></i> Add Question</a></li>
-			<li class="nav-item"><a asp-controller="User" asp-action="AdminRegister" class="nav-link link-dark"><i class="fas fa-user-plus"></i> Add Admin</a></li>
-		</ul>
+<div class="sidebar-container d-flex flex-column p-3">
 
-	</div>
+    <a asp-controller="Home" asp-action="Index" class="sidebar-logo-link text-decoration-none text-center mb-4">
+        <h4 class="logo-text fw-bolder mb-0">ADMIN</h4>
+        <small class="text-muted fw-light">DASHBOARD</small>
+    </a>
+
+    <hr class="sidebar-divider">
+
+    <nav class="sidebar-nav flex-grow-1">
+
+        <!-- Dashboard Home -->
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mb-2">
+                <a asp-controller="Home" asp-action="Index"
+                   class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")"
+                   data-controller="Home" data-action="Index">
+                    <i class="fas fa-tachometer-alt fa-fw me-2"></i> Dashboard Home
+                </a>
+            </li>
+        </ul>
+
+        <hr class="sidebar-divider my-3">
+
+        <!-- Operations -->
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-header">
+                <a href="#operations-collapse" data-bs-toggle="collapse"
+                   class="nav-link nav-toggle fw-bold d-flex justify-content-between align-items-center text-uppercase small"
+                   aria-expanded="false">
+                    Operations <i class="fas fa-chevron-down ms-2 collapse-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item-collapse">
+                <div class="collapse" id="operations-collapse" data-bs-parent=".sidebar-nav">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li class="nav-item">
+                            <a asp-controller="CoachingPackageRequests" asp-action="Index" class="nav-link" data-controller="CoachingPackageRequests">
+                                <i class="fas fa-inbox me-2"></i> Coaching Requests
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Clients" asp-action="Index" class="nav-link" data-controller="Clients">
+                                <i class="fas fa-users me-2"></i> User Accounts
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <hr class="sidebar-divider my-3">
+
+        <!-- Coaching & Content -->
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-header">
+                <a href="#content-collapse" data-bs-toggle="collapse"
+                   class="nav-link nav-toggle fw-bold d-flex justify-content-between align-items-center text-uppercase small"
+                   aria-expanded="false">
+                    Coaching & Content <i class="fas fa-chevron-down ms-2 collapse-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item-collapse">
+                <div class="collapse" id="content-collapse" data-bs-parent=".sidebar-nav">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li class="nav-item">
+                            <a asp-controller="CoachingPackages" asp-action="Index" class="nav-link" data-controller="CoachingPackages">
+                                <i class="fas fa-box me-2"></i> Manage Packages
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Exercises" asp-action="Index" class="nav-link" data-controller="Exercises">
+                                <i class="fas fa-running me-2"></i> Manage Exercises
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="ExerciseAlternative" asp-action="Index" class="nav-link" data-controller="ExerciseAlternative">
+                                <i class="fas fa-exchange-alt me-2"></i> Exercise Alternatives
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Muscles" asp-action="Index" class="nav-link" data-controller="Muscles">
+                                <i class="fas fa-fire-alt me-2"></i> Manage Muscles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Cooking" asp-action="Index" class="nav-link" data-controller="Cooking">
+                                <i class="fas fa-utensils me-2"></i> Cooking Recipes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Food" asp-action="Index" class="nav-link" data-controller="Food">
+                                <i class="fas fa-carrot me-2"></i> Food Database
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <hr class="sidebar-divider my-3">
+
+        <!-- Media & Reporting -->
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-header">
+                <a href="#media-collapse" data-bs-toggle="collapse"
+                   class="nav-link nav-toggle fw-bold d-flex justify-content-between align-items-center text-uppercase small"
+                   aria-expanded="false">
+                    Media & Reporting <i class="fas fa-chevron-down ms-2 collapse-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item-collapse">
+                <div class="collapse" id="media-collapse" data-bs-parent=".sidebar-nav">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li class="nav-item">
+                            <a asp-controller="Gallery" asp-action="Index" class="nav-link" data-controller="Gallery">
+                                <i class="fas fa-images me-2"></i> Image Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Transformation" asp-action="Index" class="nav-link" data-controller="Transformation">
+                                <i class="fas fa-dumbbell me-2"></i> Transformations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Question" asp-action="Index" class="nav-link" data-controller="Question">
+                                <i class="fas fa-question-circle me-2"></i> Client Questions
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <hr class="sidebar-divider my-3">
+
+        <!-- System -->
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-header">
+                <a href="#system-collapse" data-bs-toggle="collapse"
+                   class="nav-link nav-toggle fw-bold d-flex justify-content-between align-items-center text-uppercase small"
+                   aria-expanded="false">
+                    System <i class="fas fa-chevron-down ms-2 collapse-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item-collapse">
+                <div class="collapse" id="system-collapse" data-bs-parent=".sidebar-nav">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li class="nav-item">
+                            <a asp-controller="User" asp-action="AdminRegister" class="nav-link" data-controller="User">
+                                <i class="fas fa-user-plus me-2"></i> Add New Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
 </div>

@@ -28,14 +28,16 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var user = await _userManager.GetUserAsync(User);
+        var user = await _userManager.GetUserAsync(User)!;
         var freePack = _coachingPackage.GetPackageFree();
+        var packages = _coachingPackage.GetCoachingPackages();
+
         Client client = null;
 
         if (user != null)
         {
             // 1. Try to retrieve existing client data
-            client = await _clientService.GetClientAsync(user!.Id);
+             client = await _clientService.GetClientAsync(user.Id);
 
             if (client != null)
             {
@@ -60,8 +62,9 @@ public class HomeController : Controller
         //    or a new Client instance if no client was found or the user isn't logged in.
         var vm = new HomeIndexViewModel
         {
-            CoachingPackages = freePack,
-            Client = client ?? new Client()
+            FreeCoachingPackages = freePack,
+            coachingPackages = packages,
+            Client = client ?? new Client() 
         };
 
         // 5. Return the view with the fully initialized ViewModel, 

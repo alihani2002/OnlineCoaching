@@ -1,0 +1,179 @@
+﻿// Sidebar.scss
+
+$sidebar-width: 250px;
+$primary-color: #0d6efd;
+$dark-bg: #212529;
+$link-color: #f8f9fa;
+$link-hover-bg: rgba($primary-color, 0.1);
+$link-active-bg: $primary-color;
+$link-active-color: #fff;
+$header-color: #6c757d; // Muted gray for headers
+
+.sidebar-container {
+    // Basic Layout and Styling
+    width: $sidebar-width;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1030;
+    background-color: $dark-bg;
+    color: $link-color;
+    overflow-y: auto;
+    transition: width 0.3s ease;
+    // Branding
+    .sidebar-logo-link {
+        color: $primary-color;
+
+        .logo-text {
+            color: $primary-color;
+        }
+    }
+    // Divider
+    .sidebar-divider {
+        border-color: rgba($link-color, 0.1);
+    }
+    // Navigation Links
+    .nav-link {
+        color: $link-color;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        // Icon size and spacing
+        i.fas {
+            min-width: 20px;
+        }
+
+        &:hover:not(.active) {
+            background-color: $link-hover-bg;
+            color: $primary-color;
+        }
+        // Active link state
+        &.active {
+            background-color: $link-active-bg;
+            color: $link-active-color;
+            font-weight: 600;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+        }
+    }
+    // Collapsible Headers
+    .nav-header {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+
+        .nav-link {
+            color: $header-color;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            // Icon rotation for collapse state
+            .collapse-icon {
+                transition: transform 0.3s ease;
+            }
+            // Rotate icon when expanded
+            &[aria-expanded="true"] .collapse-icon {
+                transform: rotate(180deg);
+            }
+
+            &:hover {
+                color: $link-color;
+            }
+        }
+    }
+    // Sub-menu (Collapsed Content)
+    .btn-toggle-nav {
+        padding-left: 1.5rem;
+
+        .nav-item a.nav-link {
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: rgba($link-color, 0.7);
+
+            &.active {
+                background-color: rgba($primary-color, 0.2);
+                color: $primary-color;
+                font-weight: 500;
+            }
+        }
+    }
+    // User Profile Footer
+    .dropdown a {
+        background-color: rgba(255, 255, 255, 0.05);
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    }
+}
+
+// Global adjustment to push content away from the fixed sidebar
+body {
+    padding-left: $sidebar-width;
+}
+
+// Media Query for small screens (Collapsing the sidebar)
+@media (max-width: 992px) {
+    .sidebar-container {
+        width: 70px; // Collapsed state
+        // Hide text and only show icons/logo
+        .logo-text, .nav-header a span, .dropdown strong, .dropdown span {
+            display: none !important;
+        }
+        // Only show icon for nav-header
+        .nav-header .nav-link {
+            justify-content: center !important;
+            padding: 0.75rem 0.5rem;
+
+            .collapse-icon {
+                display: none !important;
+            }
+        }
+
+        .nav-link {
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+
+            i.fas {
+                margin: 0 !important;
+            }
+
+            &:not(.active) {
+                span {
+                    display: none;
+                }
+            }
+        }
+        // Hide sub-menus when collapsed
+        .btn-toggle-nav {
+            display: none;
+        }
+        // Adjust logo for collapse
+        .sidebar-logo-link {
+            .logo-text {
+                display: block !important;
+                font-size: 1.25rem;
+            }
+
+            small {
+                display: none !important;
+            }
+        }
+        // Adjust body padding
+        & + body {
+            padding-left: 70px;
+        }
+        // Adjust user profile for collapse
+        .dropdown a {
+            justify-content: center !important;
+            padding: 0.5rem !important;
+
+            i.fas.fa-2x {
+                margin: 0 !important;
+            }
+        }
+    }
+
+    body {
+        padding-left: 70px;
+    }
+}

@@ -1,0 +1,108 @@
+﻿// Client-Index.scss
+
+// --- Variables for easy Theming ---
+$primary-color: #0d6efd; // Standard Bootstrap Primary Blue
+$primary-text: white;
+$text-color: #333;
+$deleted-row-bg: #f8d7da; // Light red for deleted row
+$border-color: #e9ecef; // Light grey border
+$card-bg: white;
+$shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$breakpoint-mobile: 768px;
+
+
+// --- Desktop Table Styling ---
+#clientsTable {
+    color: $text-color;
+
+    thead.table-primary th {
+        background-color: $primary-color;
+        color: $primary-text;
+        font-weight: 600;
+        vertical-align: middle;
+        padding: 0.75rem 0.5rem;
+    }
+
+    tbody td {
+        vertical-align: middle;
+    }
+    // Styling for deleted rows
+    .table-row-deleted {
+        background-color: $deleted-row-bg;
+        opacity: 0.7; // Make deleted rows slightly faded
+        td {
+            color: darken($deleted-row-bg, 30%); // Darker text for contrast
+            text-decoration: line-through;
+        }
+        // Remove line-through for badges and actions
+        .badge, .btn {
+            text-decoration: none;
+            opacity: 1;
+        }
+    }
+    // Action button alignment
+    td:last-child {
+        min-width: 120px; // Ensure enough space for buttons on desktop
+    }
+}
+
+
+// --- Mobile Responsive Styling (Card View) ---
+@media (max-width: $breakpoint-mobile) {
+    #clientsTable {
+        // Hide the standard table header
+        thead {
+            display: none;
+        }
+
+        tbody tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid $border-color;
+            border-radius: 0.5rem;
+            padding: 10px;
+            background: $card-bg;
+            box-shadow: $shadow-sm;
+            transition: box-shadow 0.2s;
+
+            &.table-row-deleted {
+                background-color: $deleted-row-bg;
+            }
+        }
+
+        tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            border-top: 1px dashed $border-color;
+
+            &:first-child {
+                border-top: none;
+                font-weight: bold; // Emphasize the client name
+            }
+        }
+        // Style the generated data label
+        tbody td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: $primary-color;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        // Actions cell styling for mobile
+        td[data-label="Actions:"] {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            padding-top: 15px;
+            // Override flex justification for the inner div
+            .d-flex {
+                justify-content: flex-start !important;
+                width: 100%;
+                gap: 5px !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,140 @@
+﻿@using OnlineCoaching.Domain.Dtos
+@using OnlineCoaching.Domain.Enums
+@model IEnumerable<CoachingPackageDto>
+
+<div class="row justify-content-center">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var package in Model)
+        {
+            <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+                <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                    <div class="properties__card">
+
+                        <!-- Package Icon -->
+                        <div class="about-icon">
+                            @{
+                                var imageUrl = string.IsNullOrEmpty(package.ImageUrl)
+                                ? Url.Content("~/assets/img/icon/price.svg")
+                                : package.ImageUrl;
+                            }
+                            <img src="@imageUrl"
+                                 alt="@package.Title Package Icon"
+                                 class="package-icon"
+                                 onerror="this.onerror=null;this.src='@Url.Content("~/assets/img/icon/price.svg")';" />
+                        </div>
+
+                        <!-- Package Details -->
+                        <div class="properties__caption">
+                            <span class="month">@package.DurationInMonths month(s)</span>
+                            <p class="mb-25">
+                                @if (package.IsFreePlan)
+                                {
+                                    <span class="text-success fw-bold">Free Package</span>
+                                }
+                                else
+                                {
+                                    <span>$@package.Price/m</span>
+                                    <span>(@package.Title)</span>
+                                }
+                            </p>
+
+                            <!-- Features -->
+                            @if (!string.IsNullOrEmpty(package.Description))
+                            {
+                                var lines = package.Description
+                                .Split(new[] { '\n', '\r', '-' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Where(s => !string.IsNullOrWhiteSpace(s))
+                                .ToList();
+
+                                foreach (var line in lines)
+                                {
+                                    <div class="single-features">
+                                        <div class="features-icon">
+                                            <img src="~/assets/img/icon/check.svg" alt="check" />
+                                        </div>
+                                        <div class="features-caption">
+                                            <p>@line.Trim()</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted small fst-italic">No features listed.</p>
+                            }
+
+                            <!-- Actions -->
+                            @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client.ToString()))
+                            {
+                                <a asp-controller="CoachingAssignment"
+                                   asp-action="PackageDetails"
+                                   asp-route-packageId="@package.Id"
+                                   class="border-btn border-btn2">Join Now</a>
+                            }
+                            else if (!User.Identity!.IsAuthenticated)
+                            {
+                                <a href="~/Identity/Account/Register" class="border-btn border-btn2">Join Now</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info text-center mt-5" role="alert">
+                <i class="fas fa-info-circle me-2"></i> No coaching packages available at the moment.
+            </div>
+        </div>
+    }
+</div>
+
+                                <style>
+
+    /* Package Icon Styling */
+    .about-icon {
+        width: 120px; /* fixed circle size */
+        height: 120px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        background: #111; /* fallback background */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 3px solid #444;
+    }
+
+        .about-icon .package-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* keeps aspect ratio, no stretching */
+            transition: transform 0.4s ease;
+        }
+
+    .properties__card:hover .package-icon {
+        transform: scale(1.05); /* smooth zoom effect on hover */
+    }
+
+    /* Features text */
+    .single-features {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .features-icon {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+
+    .features-caption p {
+        margin: 0;
+        font-size: 14px;
+        color: #ddd;
+    }
+
+                                </style>

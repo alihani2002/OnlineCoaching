@@ -1,0 +1,99 @@
+﻿// Exercise-Index.scss
+
+// Define a variable for the mobile breakpoint for consistency
+$breakpoint-mobile: 768px;
+$primary-color: #0d6efd;
+$border-color: #dee2e6;
+
+// --- Desktop/Tablet Table Enhancements ---
+#exercisesTable {
+    // Ensuring the header colors match the primary theme (already handled by bg-primary)
+    thead {
+        th {
+            vertical-align: middle;
+        }
+    }
+    // Default table cell styling
+    tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+    // Adjust layout for small elements in desktop view
+    td[data-label="Links:"] {
+        // Center the links vertically on desktop
+        .d-flex {
+            justify-content: center;
+        }
+    }
+}
+
+// --- Mobile Responsive Table Styles (Card View) ---
+@media (max-width: $breakpoint-mobile) {
+    #exercisesTable {
+        // Hide the standard table header on small screens
+        thead {
+            display: none;
+        }
+        // Make each row a block element (card style)
+        tbody tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid $border-color;
+            border-radius: 0.75rem;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            transition: box-shadow 0.2s;
+        }
+        // Make each cell a flex item to display label and value side-by-side
+        tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            border-top: 1px dashed #f1f1f1;
+        }
+        // Remove border from the first cell
+        tbody tr td:first-child {
+            border-top: none;
+            font-weight: bold; // Highlight the name
+        }
+        // Style the generated label
+        tbody td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: $primary-color;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        // Specific alignment adjustments for image and complex cells on mobile
+        td[data-label="Image:"] {
+            // Align the image on the right
+            justify-content: flex-end;
+
+            &::before {
+                margin-right: auto; // Push label to the left
+            }
+        }
+
+        td[data-label="Links:"],
+        td[data-label="Actions:"] {
+            // Stack content vertically for action/link buttons
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 15px;
+            // Ensure the label is on its own line
+            &::before {
+                margin-bottom: 5px;
+            }
+            // Override flex justification for the inner div holding links/actions
+            .d-flex, .dropdown {
+                width: 100%;
+                // Ensure dropdown button takes full width when acting as a block
+                .btn {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

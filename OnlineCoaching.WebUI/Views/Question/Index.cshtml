@@ -6,83 +6,103 @@
 
 <link rel="stylesheet" href="~/css/Question-Index.css" />
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-primary fw-bold">Question Bank</h2>
-    <a asp-action="Create" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">
-        <i class="fas fa-plus me-2"></i> Add New Question
-    </a>
-</div>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">
+            <i class="fas fa-question-circle me-2"></i> Question Bank Management
+        </h2>
+        <a asp-action="Create" class="btn btn-primary btn-lg rounded-pill px-4 shadow">
+            <i class="fas fa-plus-circle me-2"></i> Add New Question
+        </a>
+    </div>
 
-<div class="card table-container-card">
-    <div class="card-body">
-        <table id="questionsTable" class="table table-hover table-striped" style="width:100%">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Text</th>
-                    <th>Type</th>
-                    <th class="text-center">Multiple Answers</th>
-                    <th class="text-center">Options Count</th>
-                    <th>Options</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var item in Model)
-                    {
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden table-container-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="questionsTable" class="display table table-hover align-middle w-100">
+                    <thead class="bg-primary text-white">
                         <tr>
-                            <td>@item.NumberOfQuestion</td>
-                            <td>@item.Text</td>
-                            <td>@item.Type</td>
-                            <td class="text-center">
-                                @(item.AllowMultipleAnswers ? "✅ Yes" : "❌ No")
-                            </td>
-                            <td class="text-center">@(item.Options?.Count ?? 0)</td>
-                            <td>
-                                @if (item.Options != null && item.Options.Any())
-                                {
-                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Join(", ", item.Options.Select(o => o.Text))">
-                                        <ul class="options-list">
-                                            @foreach (var option in item.Options.Take(3))
-                                            {
-                                                <li>@option.Text</li>
-                                            }
-                                            @if (item.Options.Count > 3)
-                                            {
-                                                <li>...</li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="text-muted fst-italic">No options</span>
-                                }
-                            </td>
-                            <td class="text-center action-icons-container">
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
+                            <th class="fw-semibold">#</th>
+                            <th class="fw-semibold">Question Text</th>
+                            <th class="fw-semibold">Type</th>
+                            <th class="text-center fw-semibold">Multiple Answers</th>
+                            <th class="text-center fw-semibold">Options Count</th>
+                            <th class="fw-semibold">Options Preview</th>
+                            <th class="text-center fw-semibold">Actions</th>
                         </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7" class="text-center text-muted">No questions found.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold" data-label="#:">@item.NumberOfQuestion</td>
+                                    <td data-label="Text:">
+                                        <span class="d-inline-block text-truncate" style="max-width: 300px;" data-bs-toggle="tooltip" title="@item.Text">
+                                            @item.Text
+                                        </span>
+                                    </td>
+                                    <td data-label="Type:">
+                                        <span class="badge bg-secondary px-3 py-1 rounded-pill">@item.Type</span>
+                                    </td>
+                                    <td class="text-center" data-label="Multiple Answers:">
+                                        @(item.AllowMultipleAnswers ? "✅ Yes" : "❌ No")
+                                    </td>
+                                    <td class="text-center" data-label="Options Count:">
+                                        <span class="badge bg-info text-dark">@(item.Options?.Count ?? 0)</span>
+                                    </td>
+                                    <td data-label="Options:">
+                                        @if (item.Options != null && item.Options.Any())
+                                        {
+                                            <div data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Join(", ", item.Options.Select(o => o.Text))">
+                                                <ul class="options-list list-unstyled small mb-0">
+                                                    @foreach (var option in item.Options.Take(2))
+                                                    {
+                                                        <li>@option.Text</li>
+                                                    }
+                                                    @if (item.Options.Count > 2)
+                                                    {
+                                                        <li class="fst-italic text-muted">... @(item.Options.Count - 2) more</li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted fst-italic">No options</span>
+                                        }
+                                    </td>
+                                    <td class="text-center" data-label="Actions:">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light dropdown-toggle border shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-cog"></i> Manage
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                                <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle me-2 text-info"></i>Details</a></li>
+                                                <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-pencil-alt me-2 text-warning"></i>Edit</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item text-danger"
+                                                       onclick="event.preventDefault(); confirmDelete('@item.Id', '@item.NumberOfQuestion')">
+                                                        <i class="fas fa-trash-alt me-2"></i>Delete
+                                                    </a>
+                                                    <form id="deleteForm-@item.Id" asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:none;">
+                                                        @Html.AntiForgeryToken()
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                       
+ 
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -91,21 +111,35 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#questionsTable').DataTable({
-                responsive: true,
-                pageLength: 10,
-                lengthMenu: [5, 10, 25, 50, 100],
-                order: [[0, 'asc']],
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search questions...",
-                },
-            });
-            // Initialize tooltips
+            // Initialize DataTables
+                  $('#questionsTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            order: [[0, 'asc']],
+            columnDefs: [
+                { orderable: false, targets: [5, 6] }
+            ],
+            language: {
+                emptyTable: "📂 No questions found in the bank. Click 'Add New Question' to start.",
+                search: "_INPUT_",
+                searchPlaceholder: "Search questions..."
+            },
+        });
+
+
+            // Initialize Bootstrap tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl)
             })
         });
+
+        // Custom delete confirmation function
+        function confirmDelete(id, number) {
+            if (confirm(`Are you sure you want to delete Question #${number}? This action cannot be undone.`)) {
+                document.getElementById('deleteForm-' + id).submit();
+            }
+        }
     </script>
 }

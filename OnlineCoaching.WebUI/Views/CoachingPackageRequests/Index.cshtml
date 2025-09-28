@@ -2,153 +2,127 @@
 @model IEnumerable<CoachingPackageRequestDto>
 
 @{
-    ViewData["Title"] = "Requests";
+    ViewData["Title"] = "Coaching Requests";
 }
-<style>
-    @@media (max-width: 768px) {
-        #requestsTable thead
 
-    {
-        display: none;
-    }
+<link rel="stylesheet" href="~/css/CoachingRequest-Index.css" />
 
-    #requestsTable tbody tr {
-        display: block;
-        margin-bottom: 1rem;
-        border: 1px solid #444;
-        border-radius: 10px;
-        padding: 10px;
-        background: #1a1a1a;
-        color: #fff;
-    }
-
-    #requestsTable tbody td {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px;
-        font-size: 0.9rem;
-        border: none;
-    }
-
-        #requestsTable tbody td::before {
-            content: attr(data-label);
-            font-weight: bold;
-            color: #ffc107;
-        }
-
-    }
-</style>
-
-<div class="container mt-4">
+<div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-gradient">
-            <i class="bi bi-list-check me-2"></i> All Requests
+        <h2 class="fw-bold text-dark">
+            <i class="fas fa-inbox me-2 text-primary"></i> Coaching Requests
         </h2>
-        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary btn-sm rounded-pill shadow-sm">
-            <i class="bi bi-house-door me-1"></i> Home
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary rounded-pill shadow-sm">
+            <i class="fas fa-home me-1"></i> Dashboard Home
         </a>
     </div>
 
-    <div class="container mt-4">
-
-
-        <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table id="requestsTable" class="display table table-bordered table-striped w-100">
-                        <thead class="bg-dark text-white">
+    <div class="card shadow-lg border-0  overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive m-5">
+                <table id="requestsTable" class="display table table-hover w-100">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th>📦 Package</th>
+                            <th>👤 Client</th>
+                            <th>📞 Phone</th>
+                            <th>📌 Status</th>
+                            <th>💲 Price</th>
+                            <th>📅 Start</th>
+                            <th>⏳ End</th>
+                            <th>⚙️ Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model)
+                        {
                             <tr>
-                                <th>📦 Package</th>
-                                <th>👤 Client</th>
-                                <th>📞 Phone</th>
-                                <th>📌 Status</th>
-                                <th>💲 Price</th>
-                                <th>📅 Start</th>
-                                <th>⏳ End</th>
-                                <th>⚙️ Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var r in Model)
-                            {
-                                <tr>
-                                    <td class="fw-semibold">@r.Titles</td>
-                                    <td>@r.ClientName</td>
-                                    <td>@r.PhoneNumber</td>
-                                    <td>
-                                        @if (r.Status == ClientStatus.Pending)
+                                <td class="fw-semibold" data-label="Package:">@r.Titles</td>
+                                <td data-label="Client:">@r.ClientName</td>
+                                <td data-label="Phone:">@r.PhoneNumber</td>
+                                <td data-label="Status:">
+                                    @{
+                                        string badgeClass = "";
+                                        string badgeText = "";
+
+                                        if (r.Status == ClientStatus.Pending)
                                         {
-                                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">Pending</span>
+                                            badgeClass = "bg-warning text-dark";
+                                            badgeText = "Pending";
                                         }
                                         else if (r.Status == ClientStatus.Active)
                                         {
-                                            <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">Approved</span>
+                                            badgeClass = "bg-success";
+                                            badgeText = "Approved";
                                         }
                                         else if (r.Status == ClientStatus.Suspended)
                                         {
-                                            <span class="badge bg-danger px-3 py-2 rounded-pill shadow-sm">Suspended</span>
+                                            badgeClass = "bg-danger";
+                                            badgeText = "Suspended";
                                         }
                                         else
                                         {
-                                            <span class="badge bg-secondary px-3 py-2 rounded-pill shadow-sm">@r.Status</span>
+                                            badgeClass = "bg-secondary";
+                                            badgeText = r.Status.ToString();
                                         }
-                                    </td>
-                                    <td class="text-success fw-bold">@r.Price</td>
-                                    <td>@r.StartDate?.ToShortDateString()</td>
-                                    <td>@r.EndDate?.ToShortDateString()</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm rounded-pill me-1 mb-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#statusModal"
-                                                data-id="@r.Id"
-                                                data-status="@r.Status">
-                                            Status
-                                        </button>
-                                        <a asp-action="Delete" asp-route-id="@r.Id"
-                                           class="btn btn-outline-danger btn-sm rounded-pill mb-1">
-                                            Remove
-                                        </a>
-                                        <a asp-controller="Clients" asp-action="ProfileDashboard" asp-route-id="@r.ClientId" class="btn btn-outline-info btn-sm rounded-pill me-1 mb-1">View Profile</a>
-
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                        <span class="badge @badgeClass px-3 py-2 rounded-pill shadow-sm">@badgeText</span>
+                                    }
+                                </td>
+                                <td class="text-success fw-bold" data-label="Price:">@r.Price</td>
+                                <td data-label="Start Date:">@r.StartDate?.ToShortDateString()</td>
+                                <td data-label="End Date:">@r.EndDate?.ToShortDateString()</td>
+                                <td data-label="Actions:">
+                                    <button class="btn btn-outline-primary btn-sm rounded-pill me-1 mb-1"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#statusModal"
+                                            data-id="@r.Id"
+                                            data-status="@r.Status">
+                                        <i class="fas fa-sync-alt"></i> Status
+                                    </button>
+                                    <a asp-action="Delete" asp-route-id="@r.Id"
+                                       class="btn btn-outline-danger btn-sm rounded-pill mb-1">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </a>
+                                    <a asp-controller="Clients" asp-action="ProfileDashboard" asp-route-id="@r.ClientId" class="btn btn-outline-info btn-sm rounded-pill me-1 mb-1">
+                                        <i class="fas fa-user-circle"></i> Profile
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow-lg border-0 rounded-3">
             <form method="post" asp-action="ChangeStatus">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="statusModalLabel">
-                        <i class="bi bi-pencil-square me-2"></i> Change Status
+                        <i class="fas fa-edit me-2"></i> Change Request Status
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="RequestId" name="id" />
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Select Status</label>
+                        <label for="StatusSelect" class="form-label fw-semibold">Select Status</label>
                         <select class="form-select shadow-sm rounded-pill" name="status" id="StatusSelect">
                             <option value="Pending">Pending</option>
-                            <option value="Active">Approved</option>
+                            <option value="Active">Approved (Active)</option>
                             <option value="Suspended">Suspended</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success rounded-pill">
-                        <i class="bi bi-check-circle me-1"></i> Save
-                    </button>
                     <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-1"></i> Cancel
+                        <i class="fas fa-times-circle me-1"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-success rounded-pill">
+                        <i class="fas fa-check-circle me-1"></i> Save Changes
                     </button>
                 </div>
             </form>
@@ -157,14 +131,18 @@
 </div>
 
 @section Scripts {
- 
     <script>
         $(document).ready(function () {
+            // Initialize DataTables
             $('#requestsTable').DataTable({
                 responsive: true,
                 pageLength: 10,
                 lengthMenu: [5, 10, 25, 50, 100],
-                order: [[0, 'asc']]
+                // Disable ordering on the Actions column
+                columnDefs: [
+                    { orderable: false, targets: [7] }
+                ],
+                order: [[5, 'desc']] // Order by Start Date descending by default
             });
         });
 

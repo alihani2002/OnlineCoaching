@@ -4,89 +4,103 @@
     ViewData["Title"] = "Clients Table";
 }
 
-<link rel="stylesheet" href="~/css/Client-Index.css" />
+<link rel="stylesheet" href="~/assets/scss/Client-Index.scss" />
 
-
-<div class="card shadow-sm mb-4">
-    <div class="card-header bg-white py-3">
-        <h4 class="mb-0 text-dark">Manage Clients</h4>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">
+            <i class="fas fa-users me-2 text-primary"></i> Manage Clients
+        </h2>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary rounded-pill shadow-sm">
+            <i class="fas fa-home me-1"></i> Dashboard Home
+        </a>
     </div>
-    <div class="card-body">
-        <table id="clientsTable" class="table table-hover table-striped" style="width:100%">
-            <thead class="table-light">
-                <tr>
-                    <th>Full Name</th>
-                    <th>Phone Number</th>
-                    <th>Status</th>
-                    <th>User</th>
-                    <th>Birth Date</th>
-                    <th>Created On</th>
-                    <th>Last Updated</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var client in Model)
-                {
-                    <tr class="@(client.IsDeleted ? "table-row-deleted" : "")">
-                        <td>@client.FullName</td>
-                        <td>@client.WhatsUpNumber</td>
-                        <td>
-                            @if (client.IsDeleted)
-                            {
-                                <span class="badge rounded-pill bg-danger py-2 px-3">Deleted</span>
-                            }
-                            else
-                            {
-                                <span class="badge rounded-pill bg-success py-2 px-3">Active</span>
-                            }
-                        </td>
-                        <td>@client.User?.UserName</td>
-                        <td>@client.BirthDate.ToString("yyyy-MM-dd")</td>
-                        <td>@client.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
-                        <td>@client.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm")</td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center align-items-center gap-2">
-                                <a asp-action="Details" asp-route-id="@client.Id" class="btn btn-primary btn-sm rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
 
-                                <form asp-action="ToggleDelete" asp-route-id="@client.Id" method="post" style="display:inline;"
-                                      onsubmit="return confirm('Are you sure you want to @(client.IsDeleted ? "restore" : "delete") this client?');">
-                                    <button type="submit" class="btn btn-sm rounded-circle @(client.IsDeleted ? "btn-success" : "btn-danger")" data-bs-toggle="tooltip" data-bs-placement="top" title="@(client.IsDeleted ? "Restore Client" : "Delete Client")">
-                                        @if (client.IsDeleted)
-                                        {
-                                            <i class="fas fa-redo-alt"></i>
-                                        }
-                                        else
-                                        {
-                                            <i class="fas fa-trash-alt"></i>
-                                        }
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="card shadow-lg border-0 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive m-5">
+                <table id="clientsTable" class="display table table-hover w-100">
+                    <thead class="table-primary text-white">
+                        <tr>
+                            <th>👤 Full Name</th>
+                            <th>📞 Phone Number</th>
+                            <th>📌 Status</th>
+                            <th>🔑 User</th>
+                            <th>🎂 Birth Date</th>
+                            <th>🗓️ Created On</th>
+                            <th>🔄 Last Updated</th>
+                            <th class="text-center">⚙️ Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var client in Model)
+                        {
+                            <tr class="@(client.IsDeleted ? "table-row-deleted" : "")">
+                                <td data-label="Full Name:">@client.FullName</td>
+                                <td data-label="Phone:">@client.WhatsUpNumber</td>
+                                <td data-label="Status:">
+                                    @if (client.IsDeleted)
+                                    {
+                                        <span class="badge rounded-pill bg-danger py-2 px-3">Deleted</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill bg-success py-2 px-3">Active</span>
+                                    }
+                                </td>
+                                <td data-label="User:">@client.User?.UserName</td>
+                                <td data-label="Birth Date:">@client.BirthDate.ToString("yyyy-MM-dd")</td>
+                                <td data-label="Created On:">@client.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td data-label="Last Updated:">@client.LastUpdatedOn?.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td data-label="Actions:" class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@client.Id" class="btn btn-info btn-sm rounded-circle shadow-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <form asp-action="ToggleDelete" asp-route-id="@client.Id" method="post" style="display:inline;"
+                                              onsubmit="return confirm('Are you sure you want to @(client.IsDeleted ? "restore" : "delete") this client?');">
+                                            <button type="submit" class="btn btn-sm rounded-circle shadow-sm @(client.IsDeleted ? "btn-success" : "btn-danger")" data-bs-toggle="tooltip" data-bs-placement="top" title="@(client.IsDeleted ? "Restore Client" : "Delete Client")">
+                                                @if (client.IsDeleted)
+                                                {
+                                                    <i class="fas fa-redo-alt"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fas fa-trash-alt"></i>
+                                                }
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
-
     <script>
         $(document).ready(function () {
+            // DataTables Initialization
             $('#clientsTable').DataTable({
                 responsive: true,
                 pageLength: 10,
                 lengthMenu: [5, 10, 25, 50, 100],
-                order: [[0, 'asc']],
+                // Disable ordering on the Actions column (column 7 - 0 indexed)
+                columnDefs: [
+                    { orderable: false, targets: [7] }
+                ],
+                order: [[5, 'desc']], // Order by Created On descending by default
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Search clients..."
                 }
             });
+
             // Initialize Bootstrap tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
