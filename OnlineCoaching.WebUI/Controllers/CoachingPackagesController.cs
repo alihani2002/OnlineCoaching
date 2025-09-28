@@ -101,11 +101,11 @@ namespace OnlineCoaching.WebUI.Controllers
                     dto.ImageUrl = await _imageService.UploadImageAsync(ImageUrl, "CoachPackage") ?? string.Empty;
                 
 
-                else
-                {
-                    ModelState.AddModelError("", "Image is required.");
-                    return View(dto);
-                }
+                //else
+                //{
+                //    ModelState.AddModelError("", "Image is required.");
+                //    return View(dto);
+                //}
                 dto.CreatedById = User.GetUserId();
                 await _packageService.AddCoachingPackageAsync(dto);
                 if (dto.IsFreePlan)
