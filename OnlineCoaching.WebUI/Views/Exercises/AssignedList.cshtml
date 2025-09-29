@@ -29,7 +29,7 @@
                     <table class="table table-striped align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Day</th>
+                                <th>Days</th>
                                 <th>Exercise</th>
                                 <th>Sets</th>
                                 <th>Reps</th>
@@ -41,7 +41,19 @@
                             @foreach (var exercise in Model.AssignedExercises)
                             {
                                 <tr>
-                                    <td><span class="badge bg-secondary">@exercise.DayOfWeek</span></td>
+                                    <td>
+                                        @if (exercise.SelectedDays != null && exercise.SelectedDays.Any())
+                                        {
+                                            foreach (var day in exercise.SelectedDays)
+                                            {
+                                                <span class="badge bg-secondary me-1">@day</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">No days</span>
+                                        }
+                                    </td>
                                     <td>@exercise.Exercise?.Name</td>
                                     <td>@exercise.Sets</td>
                                     <td>@exercise.Reps</td>
@@ -75,10 +87,11 @@
                     <table class="table table-striped align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Day</th>
+                                <th>Days</th>
                                 <th>Food</th>
                                 <th>Quantity</th>
                                 <th>Notes</th>
+                                <th>MealNum</th>
                                 <th>Assigned On</th>
                             </tr>
                         </thead>
@@ -86,10 +99,23 @@
                             @foreach (var food in Model.AssignedFoods)
                             {
                                 <tr>
-                                    <td><span class="badge bg-secondary">@food.DayOfWeek</span></td>
+                                    <td>
+                                        @if (food.SelectedDays != null && food.SelectedDays.Any())
+                                        {
+                                            foreach (var day in food.SelectedDays)
+                                            {
+                                                <span class="badge bg-secondary me-1">@day</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">No days</span>
+                                        }
+                                    </td>
                                     <td>@food.Food?.Name</td>
                                     <td>@food.Quantity</td>
                                     <td class="text-muted">@food.Notes</td>
+                                    <td>@food.MealNumber</td>
                                     <td>@food.AssignedOn.ToString("dd MMM yyyy")</td>
                                 </tr>
                             }

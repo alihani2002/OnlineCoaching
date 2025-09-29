@@ -7,8 +7,7 @@ namespace OnlineCoaching.WebUI.HangfireJobs
     {
         public static void RegisterJobs()
         {
-            // Suspend expired subscriptions daily
-            RecurringJob.AddOrUpdate<CoachingPackageRequestService>(
+            RecurringJob.AddOrUpdate<ICoachingPackageRequestService>(
                 recurringJobId: "CheckExpiredSubscriptions",
                 methodCall: service => service.CheckExpiredSubscriptions(),
                 cronExpression: Cron.Daily,
@@ -18,12 +17,13 @@ namespace OnlineCoaching.WebUI.HangfireJobs
                     QueueName = "default"
                 });
 
-            // Example: Another recurring job
-            // RecurringJob.AddOrUpdate<SomeService>(
-            //     "AnotherJob",
-            //     service => service.SomeMethod(),
-            //     Cron.Hourly,
-            //     new RecurringJobOptions { TimeZone = TimeZoneInfo.Local });
+            
         }
     }
 }
+// Example: Another recurring job
+// RecurringJob.AddOrUpdate<SomeService>(
+//     "AnotherJob",
+//     service => service.SomeMethod(),
+//     Cron.Hourly,
+//     new RecurringJobOptions { TimeZone = TimeZoneInfo.Local });

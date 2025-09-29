@@ -9,31 +9,57 @@
     <div class="container py-5">
         @if (Model != null)
         {
-            <div class="custom-card">
-                <h3 class="text-center text-danger mb-4">👤 Your Profile</h3>
-                <table class="table-custom">
-                    <tr><th>Full Name</th><td>@Model.Client.FullName</td></tr>
-                    <tr><th>Birth Date</th><td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td></tr>
-                    <tr><th>Phone Number</th><td>@Model.Client.WhatsUpNumber</td></tr>
-                    <tr><th>Address</th><td>@Model.Client.Address</td></tr>
-                    <tr><th>NationalId</th><td>@Model.Client.NationalId</td></tr>
+            <div class="profile-card shadow-lg">
+                <div class="profile-header text-center">
+                    <img src="~/assets/img/logo/unknown.png" alt="Profile Picture" class="profile-avatar" />
+                    <h3 class="mt-3">@Model.Client.FullName</h3>
+                    <p class="text-white">👤 Client Profile</p>
+                </div>
 
-                </table>
-
-                @if (User.IsInRole("Admin") || User.IsInRole("Coach"))
-                {
-                    <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-3">
-                        <a asp-controller="Exercises" asp-action="Assign" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-warning">
-                            ➕ Assign Foods / Exercises
-                        </a>
-                        <a asp-controller="Exercises" asp-action="AssignedList" asp-route-clientId="@Model.Client.Id" class="btn-custom btn-success">
-                            📋 View Assigned Items
-                        </a>
-                    </div>
-                }
+                <div class="profile-details mt-4">
+                    <table class="table-profile">
+                        <tr>
+                            <th><i class="fas fa-user"></i> Full Name</th>
+                            <td>@Model.Client.FullName</td>
+                        </tr>
+                        <tr>
+                            <th><i class="fas fa-birthday-cake"></i> Birth Date</th>
+                            <td>@Model.Client.BirthDate.ToString("yyyy-MM-dd")</td>
+                        </tr>
+                        <tr>
+                            <th><i class="fas fa-phone"></i> Phone</th>
+                            <td>@Model.Client.WhatsUpNumber</td>
+                        </tr>
+                        <tr>
+                            <th><i class="fas fa-map-marker-alt"></i> Address</th>
+                            <td>@Model.Client.Address</td>
+                        </tr>
+                        <tr>
+                            <th><i class="fas fa-id-card"></i> National ID</th>
+                            <td>@Model.Client.NationalId</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="text-center mt-4">
+                    <a asp-controller="Clients" asp-action="Edit" asp-route-id="@Model!.Client.Id"
+                       class="btn btn-lg btn-danger shadow edit-profile-btn">
+                        ✏️ Edit Profile
+                    </a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Coach"))
+                    {
+                        <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-3">
+                            <a asp-controller="Exercises" asp-action="Assign" asp-route-clientId="@Model.Client.Id" class="btn btn-lg btn-danger shadow edit-profile-btn">
+                                ➕ Assign Foods / Exercises
+                            </a>
+                            <a asp-controller="Exercises" asp-action="AssignedList" asp-route-clientId="@Model.Client.Id" class="btn btn-lg btn-danger shadow edit-profile-btn">
+                                📋 View Assigned Items
+                            </a>
+                        </div>
+                    }
+                </div>
             </div>
         }
-        else if (User.IsInRole("Admin"))
+        else if (User.IsInRole(AppRoles.Admin))
         {
             <div class="custom-card text-center">
                 <h3 class="text-danger">⚡ Welcome to Admin Dashboard</h3>

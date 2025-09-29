@@ -132,13 +132,29 @@ namespace OnlineCoaching.WebUI.Controllers
                 return View(model);
 
             if (model.Exercises != null && model.Exercises.Any())
+            {
+                foreach (var ex in model.Exercises)
+                {
+                    // if user didn’t select anything, keep it empty
+                    ex.SelectedDays = ex.SelectedDays ?? new List<int>();
+                }
+
                 await _assignmentService.AssignExercisesAsync(model.ClientId, model.Exercises);
+            }
 
             if (model.Foods != null && model.Foods.Any())
+            {
+                foreach (var food in model.Foods)
+                {
+                    food.SelectedDays = food.SelectedDays ?? new List<int>();
+                }
+
                 await _assignmentService.AssignFoodsAsync(model.ClientId, model.Foods);
+            }
 
             return RedirectToAction("AssignedList", new { clientId = model.ClientId, requestId = model.RequestId });
         }
+
 
 
         [HttpGet]
@@ -174,115 +190,103 @@ namespace OnlineCoaching.WebUI.Controllers
                 AvailableExercises = _unitOfWork.Exercises.GetQueryable().ToList(),
                 AvailableFoods = _unitOfWork.Foods.GetQueryable().ToList()
             };
+            if (!model.AssignedExercises.Any())
+                model.AssignedExercises.Add(new AssignExercise());
+
+            if (!model.AssignedFoods.Any())
+                model.AssignedFoods.Add(new AssignFood());
 
             return View(model);
         }
 
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditAssigned(AssignedListViewModel model)
+        public async Task<IActionResult> EditAssigned(AssignedListViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid input data.";
                 return View(model);
+            }
 
             // --- Exercises ---
-            var dbExercises = _unitOfWork.AssignExercises.GetQueryable().Where(a => a.ClientId == model.ClientId).ToList();
-            if (model.AssignedExercises == null || !model.AssignedExercises.Any())
-            {
-                foreach (var dbEx in dbExercises) _unitOfWork.AssignExercises.Remove(dbEx);
-            }
-            else
-            {
-                foreach (var dbEx in dbExercises)
-                {
-                    var updatedEx = model.AssignedExercises.FirstOrDefault(x => x.Id == dbEx.Id);
-                    if (updatedEx != null)
-                    {
-                        dbEx.ExerciseId = updatedEx.ExerciseId;
-                        dbEx.Sets = updatedEx.Sets;
-                        dbEx.Reps = updatedEx.Reps;
-                        dbEx.Notes = updatedEx.Notes;
-                        dbEx.DayOfWeek = updatedEx.DayOfWeek;
-                        _unitOfWork.AssignExercises.Update(dbEx);
-                    }
-                    else _unitOfWork.AssignExercises.Remove(dbEx);
-                }
+            var dbExercises = _unitOfWork.AssignExercises
+                .GetQueryable()
+                .Where(a => a.ClientId == model.ClientId && a.CoachingPackageRequestId == model.RequestId)
+                .ToList();
 
-                var newExercises = model.AssignedExercises.Where(x => x.Id == 0).ToList();
-                foreach (var ex in newExercises)
+            var updatedExercises = model.AssignedExercises ?? new List<AssignExercise>();
+
+            // Remove deleted exercises
+            foreach (var dbEx in dbExercises)
+            {
+                if (!updatedExercises.Any(x => x.Id == dbEx.Id))
+                    _unitOfWork.AssignExercises.Remove(dbEx);
+            }
+
+            // Update existing exercises
+            foreach (var updatedEx in updatedExercises.Where(x => x.Id != 0))
+            {
+                var dbEx = dbExercises.FirstOrDefault(x => x.Id == updatedEx.Id);
+                if (dbEx != null)
                 {
-                    ex.ClientId = model.ClientId;
-                    ex.CoachingPackageRequestId = model.RequestId;
-                    ex.AssignedOn = DateTime.UtcNow;
-                    _unitOfWork.AssignExercises.Add(ex);
+                    dbEx.ExerciseId = updatedEx.ExerciseId;
+                    dbEx.Sets = updatedEx.Sets;
+                    dbEx.Reps = updatedEx.Reps;
+                    dbEx.Notes = updatedEx.Notes;
+                    dbEx.DayOfWeek = updatedEx.DayOfWeek;
+                    dbEx.SelectedDays = updatedEx.SelectedDays ?? new List<int> { (int)updatedEx.DayOfWeek };
+                    _unitOfWork.AssignExercises.Update(dbEx);
                 }
+            }
+
+            // Add new exercises
+            foreach (var newEx in updatedExercises.Where(x => x.Id == 0))
+            {
+                newEx.ClientId = model.ClientId;
+                newEx.CoachingPackageRequestId = model.RequestId;
+                newEx.AssignedOn = DateTime.UtcNow;
+                newEx.SelectedDays = newEx.SelectedDays ?? new List<int> { (int)newEx.DayOfWeek };
+                _unitOfWork.AssignExercises.Add(newEx);
             }
 
             // --- Foods ---
             var dbFoods = _unitOfWork.AssignFoods
                 .GetQueryable()
-                .Include(f => f.Meal)
-                .Where(f => f.ClientId == model.ClientId)
+                .Where(f => f.ClientId == model.ClientId && f.CoachingPackageRequestId == model.RequestId)
                 .ToList();
 
-            if (model.AssignedFoods == null || !model.AssignedFoods.Any())
+            var updatedFoods = model.AssignedFoods ?? new List<AssignFood>();
+
+            // Remove deleted foods
+            foreach (var dbFood in dbFoods)
             {
-                foreach (var dbFood in dbFoods)
+                if (!updatedFoods.Any(x => x.Id == dbFood.Id))
                     _unitOfWork.AssignFoods.Remove(dbFood);
             }
-            else
+
+            // Update existing foods
+            foreach (var updatedFood in updatedFoods.Where(x => x.Id != 0))
             {
-                foreach (var dbFood in dbFoods)
+                var dbFood = dbFoods.FirstOrDefault(x => x.Id == updatedFood.Id);
+                if (dbFood != null)
                 {
-                    var updatedFood = model.AssignedFoods.FirstOrDefault(x => x.Id == dbFood.Id);
-                    if (updatedFood != null)
-                    {
-                        dbFood.FoodId = updatedFood.FoodId;
-                        dbFood.Quantity = updatedFood.Quantity;
-                        dbFood.Notes = updatedFood.Notes;
-                        dbFood.DayOfWeek = updatedFood.DayOfWeek;
-                        dbFood.MealNumber = updatedFood.MealNumber;
-                        dbFood.NumberOfServings = updatedFood.NumberOfServings;
+                    dbFood.FoodId = updatedFood.FoodId;
+                    dbFood.Quantity = updatedFood.Quantity;
+                    dbFood.NumberOfServings = updatedFood.NumberOfServings;
+                    dbFood.MealNumber = updatedFood.MealNumber;
+                    dbFood.Notes = updatedFood.Notes;
+                    dbFood.DayOfWeek = updatedFood.DayOfWeek;
+                    dbFood.SelectedDays = updatedFood.SelectedDays ?? new List<int> { (int)updatedFood.DayOfWeek };
 
-                        // ensure correct Meal is linked
-                        var meal = _unitOfWork.Meals.GetQueryable()
-                            .FirstOrDefault(m =>
-                                m.ClientId == model.ClientId &&
-                                m.CoachingPackageRequestId == model.RequestId &&
-                                m.DayOfWeek == updatedFood.DayOfWeek &&
-                                m.MealNumber == updatedFood.MealNumber);
-
-                        if (meal == null)
-                        {
-                            meal = new Meal
-                            {
-                                ClientId = model.ClientId,
-                                CoachingPackageRequestId = model.RequestId,
-                                DayOfWeek = updatedFood.DayOfWeek,
-                                MealNumber = updatedFood.MealNumber,
-                                CreatedOn = DateTime.UtcNow
-                            };
-                            _unitOfWork.Meals.Add(meal);
-                            _unitOfWork.Complete();
-                        }
-
-                        dbFood.MealId = meal.Id;
-                        _unitOfWork.AssignFoods.Update(dbFood);
-                    }
-                    else _unitOfWork.AssignFoods.Remove(dbFood);
-                }
-
-                var newFoods = model.AssignedFoods.Where(x => x.Id == 0).ToList();
-                foreach (var f in newFoods)
-                {
+                    // Meal logic
                     var meal = _unitOfWork.Meals.GetQueryable()
                         .FirstOrDefault(m =>
                             m.ClientId == model.ClientId &&
                             m.CoachingPackageRequestId == model.RequestId &&
-                            m.DayOfWeek == f.DayOfWeek &&
-                            m.MealNumber == f.MealNumber);
+                            m.DayOfWeek == updatedFood.DayOfWeek &&
+                            m.MealNumber == updatedFood.MealNumber);
 
                     if (meal == null)
                     {
@@ -290,30 +294,59 @@ namespace OnlineCoaching.WebUI.Controllers
                         {
                             ClientId = model.ClientId,
                             CoachingPackageRequestId = model.RequestId,
-                            DayOfWeek = f.DayOfWeek,
-                            MealNumber = f.MealNumber,
-                            CreatedOn = DateTime.UtcNow 
+                            DayOfWeek = updatedFood.DayOfWeek,
+                            MealNumber = updatedFood.MealNumber,
+                            CreatedOn = DateTime.UtcNow
                         };
                         _unitOfWork.Meals.Add(meal);
                         _unitOfWork.Complete();
                     }
 
-                    var newFood = new AssignFood
+                    dbFood.MealId = meal.Id;
+                    _unitOfWork.AssignFoods.Update(dbFood);
+                }
+            }
+
+            // Add new foods
+            foreach (var newFood in updatedFoods.Where(x => x.Id == 0))
+            {
+                var meal = _unitOfWork.Meals.GetQueryable()
+                    .FirstOrDefault(m =>
+                        m.ClientId == model.ClientId &&
+                        m.CoachingPackageRequestId == model.RequestId &&
+                        m.DayOfWeek == newFood.DayOfWeek &&
+                        m.MealNumber == newFood.MealNumber);
+
+                if (meal == null)
+                {
+                    meal = new Meal
                     {
                         ClientId = model.ClientId,
                         CoachingPackageRequestId = model.RequestId,
-                        FoodId = f.FoodId,
-                        Quantity = f.Quantity,
-                        Notes = f.Notes,
-                        DayOfWeek = f.DayOfWeek,
-                        MealNumber = f.MealNumber,
-                        MealId = meal.Id,
-                        AssignedOn = DateTime.UtcNow,
+                        DayOfWeek = newFood.DayOfWeek,
+                        MealNumber = newFood.MealNumber,
                         CreatedOn = DateTime.UtcNow
                     };
-
-                    _unitOfWork.AssignFoods.Add(newFood);
+                    _unitOfWork.Meals.Add(meal);
+                    _unitOfWork.Complete();
                 }
+
+                var assignFood = new AssignFood
+                {
+                    ClientId = model.ClientId,
+                    CoachingPackageRequestId = model.RequestId,
+                    FoodId = newFood.FoodId,
+                    Quantity = newFood.Quantity,
+                    Notes = newFood.Notes,
+                    DayOfWeek = newFood.DayOfWeek,
+                    MealNumber = newFood.MealNumber,
+                    MealId = meal.Id,
+                    AssignedOn = DateTime.UtcNow,
+                    CreatedOn = DateTime.UtcNow,
+                    SelectedDays = newFood.SelectedDays ?? new List<int> { (int)newFood.DayOfWeek }
+                };
+
+                _unitOfWork.AssignFoods.Add(assignFood);
             }
 
             _unitOfWork.Complete();
@@ -321,7 +354,6 @@ namespace OnlineCoaching.WebUI.Controllers
             TempData["Success"] = "Assignments updated successfully.";
             return RedirectToAction("AssignedList", new { clientId = model.ClientId, requestId = model.RequestId });
         }
-
 
         [HttpPost]
         public async Task<IActionResult> DeleteAssignedExercise(int id, int clientId)

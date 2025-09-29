@@ -9,11 +9,5 @@
         FifthDay = 5,
         SixthDay = 6,
         SeventhDay = 7,
-        Weekly = 8 ,
-        FirstSecondThird = 9,
-        FourthFifthSixSeven = 10,
-        OneTwoFive = 11,
-        TwoFour = 12,
-
     }
 }

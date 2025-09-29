@@ -6,7 +6,10 @@
         public int Sets { get; set; }
         public int Reps { get; set; }
         public string? Notes { get; set; }
+        public List<int>? SelectedDays { get; set; } = new List<int>();
+
         public DayOfWeekEnum DayOfWeek { get; set; }
+
 
         public int? ClientId { get; set; }
         public Client? Client { get; set; }

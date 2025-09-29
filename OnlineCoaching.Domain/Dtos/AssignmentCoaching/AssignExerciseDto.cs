@@ -23,8 +23,10 @@
             public string? Notes { get; set; }
 
             public DayOfWeekEnum DayOfWeek { get; set; }
+             public List<int>? SelectedDays { get; set; } = new List<int>();
 
-            [StringLength(100, ErrorMessage = "Muscle name cannot exceed 100 characters.")]
+
+        [StringLength(100, ErrorMessage = "Muscle name cannot exceed 100 characters.")]
             public string? MuscleName { get; set; }
 
             public int? ClientId { get; set; }

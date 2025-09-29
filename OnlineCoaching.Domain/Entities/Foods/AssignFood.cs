@@ -1,6 +1,4 @@
-﻿using OnlineCoaching.Domain.Enums;
-
-namespace OnlineCoaching.Domain.Entities
+﻿namespace OnlineCoaching.Domain.Entities
 {
     public class AssignFood : BaseEntity
     {
@@ -10,6 +8,7 @@ namespace OnlineCoaching.Domain.Entities
         public int NumberOfServings { get; set; } = 0;
         public DayOfWeekEnum DayOfWeek { get; set; }
         public MealsNum MealNumber { get; set; }
+        public List<int>? SelectedDays { get; set; } = new List<int>();
 
         public int? ClientId { get; set; }
         public Client? Client { get; set; }

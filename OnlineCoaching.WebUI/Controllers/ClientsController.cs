@@ -81,13 +81,13 @@ namespace OnlineCoaching.WebUI.Controllers
             // Fetch assigned exercises and foods
             var assignedExercises = _unitOfWork.AssignExercises
                 .GetQueryable().Include(a => a.Exercise).ThenInclude(m=>m!.Muscle)
-                .Where(a => a.ClientId == client.Id)
+                .Where(a => a.ClientId == client.Id && !a.IsDeleted)
                 .ToList();
 
             var assignedFoods = _unitOfWork.AssignFoods
                 .GetQueryable().Include(f => f.Food)
                 .Include(f => f.Meal)
-                .Where(f => f.ClientId == client.Id)
+                .Where(a => a.ClientId == client.Id && !a.IsDeleted)
                 .ToList();
 
             var vm = new ClientDashboardViewModel
@@ -104,9 +104,10 @@ namespace OnlineCoaching.WebUI.Controllers
                     Sets = a.Sets,
                     Reps = a.Reps,
                     Notes = a.Notes,
-                    DayOfWeek = a.DayOfWeek ,
-                    MuscleName = a.Exercise?.Muscle?.Name ,
-                    ImageUrl = a.Exercise?.ImageUrl 
+                    DayOfWeek = a.DayOfWeek,
+                    MuscleName = a.Exercise?.Muscle?.Name,
+                    ImageUrl = a.Exercise?.ImageUrl,
+                    SelectedDays = a.SelectedDays ?? new List<int>()
                 }).ToList(),
 
                 AssignedFoods = assignedFoods.Select(f => new AssignFoodDto
@@ -120,10 +121,12 @@ namespace OnlineCoaching.WebUI.Controllers
                     DayOfWeek = f.Meal?.DayOfWeek ?? f.DayOfWeek,
                     MealNumber = f.Meal?.MealNumber ?? f.MealNumber,
 
-                    DayOfWeekName = (f.Meal?.DayOfWeek ?? f.DayOfWeek).ToString(),
-                    MealNumberName = (f.Meal?.MealNumber ?? f.MealNumber).ToString(),
+                    // return numbers instead of enum names
+                    DayOfWeekName = ((int)(f.Meal?.DayOfWeek ?? f.DayOfWeek)).ToString(),
+                    MealNumberName = ((int)(f.Meal?.MealNumber ?? f.MealNumber)).ToString(),
+                    SelectedDays = f.SelectedDays ?? new List<int>()
+
                 }).ToList(),
-              
 
             };
 
@@ -147,7 +150,6 @@ namespace OnlineCoaching.WebUI.Controllers
                 client = await _clientService.GetClientAsync(userId);
             }
 
-            // Check if client has an active approved request
             var activeRequest = _requestService.GetActiveOrPendingRequest(client!.Id);
             bool showQuestions = activeRequest != null && activeRequest.Status == ClientStatus.Active;
 
@@ -157,15 +159,14 @@ namespace OnlineCoaching.WebUI.Controllers
             // Fetch assigned exercises and foods
             var assignedExercises = _unitOfWork.AssignExercises
                 .GetQueryable().Include(a => a.Exercise).ThenInclude(m => m!.Muscle)
-                .Where(a => a.ClientId == client.Id)
+                .Where(a => a.ClientId == client.Id && !a.IsDeleted)
                 .ToList();
 
             var assignedFoods = _unitOfWork.AssignFoods
                 .GetQueryable().Include(f => f.Food)
                 .Include(f => f.Meal)
-                .Where(f => f.ClientId == client.Id)
+                .Where(a => a.ClientId == client.Id && !a.IsDeleted)
                 .ToList();
-
 
             var vm = new ClientDashboardViewModel
             {
@@ -177,12 +178,14 @@ namespace OnlineCoaching.WebUI.Controllers
                     Id = a.Id,
                     ExerciseId = a.ExerciseId,
                     NameOfExercise = a.Exercise?.Name,
+                    VideoUrl = a.Exercise?.VideoUrl,
                     Sets = a.Sets,
                     Reps = a.Reps,
                     Notes = a.Notes,
                     DayOfWeek = a.DayOfWeek,
                     MuscleName = a.Exercise?.Muscle?.Name,
-                    ImageUrl = a.Exercise?.ImageUrl
+                    ImageUrl = a.Exercise?.ImageUrl,
+                    SelectedDays = a.SelectedDays ?? new List<int>()
                 }).ToList(),
 
                 AssignedFoods = assignedFoods.Select(f => new AssignFoodDto
@@ -196,10 +199,12 @@ namespace OnlineCoaching.WebUI.Controllers
                     DayOfWeek = f.Meal?.DayOfWeek ?? f.DayOfWeek,
                     MealNumber = f.Meal?.MealNumber ?? f.MealNumber,
 
-                    DayOfWeekName = (f.Meal?.DayOfWeek ?? f.DayOfWeek).ToString(),
-                    MealNumberName = (f.Meal?.MealNumber ?? f.MealNumber).ToString(),
-                }).ToList(),
+                    // return numbers instead of enum names
+                    DayOfWeekName = ((int)(f.Meal?.DayOfWeek ?? f.DayOfWeek)).ToString(),
+                    MealNumberName = ((int)(f.Meal?.MealNumber ?? f.MealNumber)).ToString(),
+                    SelectedDays = f.SelectedDays ?? new List<int>()
 
+                }).ToList(),
 
             };
 

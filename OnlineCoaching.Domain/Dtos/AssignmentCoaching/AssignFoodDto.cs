@@ -17,6 +17,7 @@
         public string? Notes { get; set; }
 
         public DayOfWeekEnum DayOfWeek { get; set; }
+        public List<int>? SelectedDays { get; set; } = new List<int>();
 
         public MealsNum MealNumber { get; set; }
 

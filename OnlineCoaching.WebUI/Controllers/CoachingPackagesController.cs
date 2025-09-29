@@ -58,7 +58,7 @@ namespace OnlineCoaching.WebUI.Controllers
             if (existingRequest != null)
             {
                 if (existingRequest.IsAnswerQuestion == false && existingRequest.Status == ClientStatus.Active)
-                    return RedirectToAction("CompleteQuestion", "Questions", new { id = existingRequest.Id });
+                    return RedirectToAction("CompleteQuestion", "Question", new { id = existingRequest.Id });
                 else
                     return View("ClientRequest", existingRequest);
             }

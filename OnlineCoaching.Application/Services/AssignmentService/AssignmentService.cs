@@ -43,8 +43,8 @@ namespace OnlineCoaching.Application.Services
         {
             var entity = _unitOfWork.CoachingPackageRequests
                .GetQueryable()
-               .Include(r => r.AssignExercises).ThenInclude(a => a.Exercise).ThenInclude(e => e!.Muscle)
-               .Include(r => r.AssignFoods).ThenInclude(a => a.Food)
+               .Include(r => r.AssignExercises!).ThenInclude(a => a.Exercise).ThenInclude(e => e!.Muscle)
+               .Include(r => r.AssignFoods!).ThenInclude(a => a.Food)
                .Include(e => e.Package)
                .FirstOrDefault(r => r.PackageId == packageId && r.ClientId == null); // <--- Key filter
             return entity!;
@@ -68,7 +68,8 @@ namespace OnlineCoaching.Application.Services
                     Notes = ex.Notes,
                     AssignedOn = DateTime.UtcNow,
                     CreatedOn = DateTime.UtcNow,
-                    DayOfWeek = ex.DayOfWeek
+                    DayOfWeek = ex.DayOfWeek ,
+                    SelectedDays = ex.SelectedDays ?? new List<int>(),
                 };
 
                 await _unitOfWork.AssignExercises.AddAsync(assignment);
@@ -153,6 +154,7 @@ namespace OnlineCoaching.Application.Services
                     MealId = meal.Id,
                     MealNumber = food.MealNumber,
                     NumberOfServings = food.NumberOfServings,
+                    SelectedDays = food.SelectedDays ?? new List<int>(),
 
                 };
 
@@ -229,6 +231,16 @@ namespace OnlineCoaching.Application.Services
                 .Where(a => a.ClientId == clientId && !a.IsDeleted)
                 .ToListAsync();
 
+
+            foreach (var e in entities)
+            {
+                // ensure SelectedDays is populated from DB
+                if (e.SelectedDays == null || !e.SelectedDays.Any())
+                {
+                    e.SelectedDays = new List<int> { (int)e.DayOfWeek };
+                }
+            }
+
             return _mapper.Map<List<AssignExercise>>(entities);
         }
 
@@ -241,6 +253,14 @@ namespace OnlineCoaching.Application.Services
                 .Where(f => f.ClientId == clientId && !f.IsDeleted)
                 .ToListAsync();
 
+            foreach (var e in entities)
+            {
+                // ensure SelectedDays is populated from DB
+                if (e.SelectedDays == null || !e.SelectedDays.Any())
+                {
+                    e.SelectedDays = new List<int> { (int)e.DayOfWeek };
+                }
+            }
             return _mapper.Map<List<AssignFood>>(entities);
         }
 

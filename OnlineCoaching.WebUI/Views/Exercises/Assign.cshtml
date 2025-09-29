@@ -18,6 +18,9 @@
         <div id="exercise-container">
             @for (int i = 0; i < Model.Exercises!.Count; i++)
             {
+                var ex = Model.Exercises[i];
+                ex.SelectedDays = ex.SelectedDays ?? new List<int>();
+
                 <div class="exercise-item mb-3 p-3 border rounded bg-white">
                     <div class="row g-2 align-items-center">
                         <div class="col-md-3">
@@ -34,13 +37,17 @@
                             <label asp-for="Exercises[i].Reps" class="form-label">Reps</label>
                             <input asp-for="Exercises[i].Reps" class="form-control" />
                         </div>
-                        <div class="col-md-2">
-                            <label asp-for="Exercises[i].DayOfWeek" class="form-label">Day</label>
-                            <select asp-for="Exercises[i].DayOfWeek"
-                                    asp-items="Html.GetEnumSelectList<DayOfWeekEnum>()"
-                                    class="form-select">
-                                <option value="">-- Select Day --</option>
+                        <div class="col-md-3">
+                            <label class="form-label">Days</label>
+                            <select name="Exercises[@i].SelectedDays" multiple class="form-select">
+                                @foreach (DayOfWeekEnum d in Enum.GetValues(typeof(DayOfWeekEnum)))
+                                {
+                                    var value = (int)d;
+                                    var isSelected = ex.SelectedDays.Contains(value) ? "selected" : null;
+                                    <option value="@value" selected="@isSelected">@d</option>
+                                }
                             </select>
+                            <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple</small>
                         </div>
                         <div class="col-md-2">
                             <label asp-for="Exercises[i].Notes" class="form-label">Notes</label>
@@ -62,6 +69,9 @@
         <div id="food-container">
             @for (int i = 0; i < Model.Foods!.Count; i++)
             {
+                var food = Model.Foods[i];
+                food.SelectedDays = food.SelectedDays ?? new List<int>();
+
                 <div class="food-item mb-3 p-3 border rounded bg-white">
                     <div class="row g-2 align-items-center">
                         <div class="col-md-3">
@@ -79,12 +89,16 @@
                             <input asp-for="Foods[i].NumberOfServings" class="form-control" type="number" min="1" />
                         </div>
                         <div class="col-md-2">
-                            <label asp-for="Foods[i].DayOfWeek" class="form-label">Day</label>
-                            <select asp-for="Foods[i].DayOfWeek"
-                                    asp-items="Html.GetEnumSelectList<DayOfWeekEnum>()"
-                                    class="form-select">
-                                <option value="">-- Select Day --</option>
+                            <label class="form-label">Days</label>
+                            <select name="Foods[@i].SelectedDays" multiple class="form-select">
+                                @foreach (DayOfWeekEnum d in Enum.GetValues(typeof(DayOfWeekEnum)))
+                                {
+                                    var value = (int)d;
+                                    var isSelected = food.SelectedDays.Contains(value) ? "selected" : null;
+                                    <option value="@value" selected="@isSelected">@d</option>
+                                }
                             </select>
+                            <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple</small>
                         </div>
                         <div class="col-md-1">
                             <label asp-for="Foods[i].MealNumber" class="form-label">Meal #</label>
@@ -127,11 +141,13 @@
                         </div>
                         <div class="col-md-2"><input name="Exercises[${index}].Sets" class="form-control" placeholder="Sets" /></div>
                         <div class="col-md-2"><input name="Exercises[${index}].Reps" class="form-control" placeholder="Reps" /></div>
-                        <div class="col-md-2">
-                            <select name="Exercises[${index}].DayOfWeek" class="form-select">
-                                @foreach (var d in Enum.GetValues(typeof(DayOfWeekEnum)))
+                        <div class="col-md-3">
+                            <label>Days</label>
+                            <select name="Exercises[${index}].SelectedDays" multiple class="form-select">
+                                @foreach (DayOfWeekEnum d in Enum.GetValues(typeof(DayOfWeekEnum)))
                                 {
-                                        <option value="@((int)d)">@d</option>
+                                        var value = (int)d;
+                                        <option value="@value">@d</option>
                                 }
                             </select>
                         </div>
@@ -160,10 +176,12 @@
                         <div class="col-md-2"><input name="Foods[${index}].Quantity" class="form-control" placeholder="Qty" /></div>
                         <div class="col-md-2"><input name="Foods[${index}].NumberOfServings" class="form-control" type="number" min="1" placeholder="Servings" /></div>
                         <div class="col-md-2">
-                            <select name="Foods[${index}].DayOfWeek" class="form-select">
-                                @foreach (var d in Enum.GetValues(typeof(DayOfWeekEnum)))
+                            <label>Days</label>
+                            <select name="Foods[${index}].SelectedDays" multiple class="form-select">
+                                @foreach (DayOfWeekEnum d in Enum.GetValues(typeof(DayOfWeekEnum)))
                                 {
-                                        <option value="@((int)d)">@d</option>
+                                        var value = (int)d;
+                                        <option value="@value">@d</option>
                                 }
                             </select>
                         </div>
