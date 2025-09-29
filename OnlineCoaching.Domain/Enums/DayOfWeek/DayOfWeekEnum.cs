@@ -2,12 +2,12 @@
 {
     public enum DayOfWeekEnum
     {
-        FirstDay = 1,
-        SecondDay = 2,
-        ThirdDay = 3,
-        FourthDay = 4,
-        FifthDay = 5,
-        SixthDay = 6,
-        SeventhDay = 7,
+        Sat = 1,
+        Sun = 2,
+        Mon = 3,
+        Tue = 4,
+        Wed = 5,
+        Thu = 6,
+        Fri = 7,
     }
 }

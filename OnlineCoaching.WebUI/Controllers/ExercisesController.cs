@@ -202,7 +202,7 @@ namespace OnlineCoaching.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAssigned(AssignedListViewModel model)
+        public IActionResult EditAssigned(AssignedListViewModel model)
         {
             if (!ModelState.IsValid)
             {
