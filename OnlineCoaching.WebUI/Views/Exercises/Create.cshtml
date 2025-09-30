@@ -14,7 +14,7 @@
 
                 <div class="mb-4">
                     <label asp-for="Name" class="form-label fw-bold"></label>
-                    <input asp-for="Name" class="form-control form-control-lg" placeholder="e.g., Bench Press" />
+                    <input asp-for="Name" class="form-control form-control-lg" placeholder="e.g., Bench Press"  required/>
                     <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
 
@@ -41,7 +41,7 @@
 
                 <div class="mb-4">
                     <label for="ImageUrl" class="form-label fw-bold">Exercise Image</label>
-                    <input type="file" name="ImageUrl" class="form-control form-control-lg" accept="image/*" />
+                    <input type="file" name="ImageUrl" class="form-control form-control-lg" accept="image/*" required />
                     <div class="form-text text-muted">Upload an image for the exercise (optional).</div>
                 </div>
 

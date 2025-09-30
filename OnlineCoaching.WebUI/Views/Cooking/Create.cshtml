@@ -15,14 +15,14 @@
 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input asp-for="Name" class="form-control" placeholder="Recipe Name" />
+                        <input asp-for="Name" class="form-control" placeholder="Recipe Name" required />
                         <label asp-for="Name"></label>
                         <span asp-validation-for="Name" class="text-danger small"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input asp-for="Title" class="form-control" placeholder="Recipe Title" />
+                        <input asp-for="Title" class="form-control" placeholder="Recipe Title" required />
                         <label asp-for="Title"></label>
                         <span asp-validation-for="Title" class="text-danger small"></span>
                     </div>
@@ -38,13 +38,13 @@
 
                 <div class="col-12">
                     <label for="imageFile" class="form-label d-block mb-2">Upload Image</label>
-                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" required />
                     <span asp-validation-for="ImageUrl" class="text-danger small"></span>
                 </div>
 
                 <div class="col-12">
                     <div class="form-floating">
-                        <input asp-for="VideoUrl" class="form-control" placeholder="Video URL" />
+                        <input asp-for="VideoUrl" class="form-control" placeholder="Video URL" required />
                         <label asp-for="VideoUrl"></label>
                         <span asp-validation-for="VideoUrl" class="text-danger small"></span>
                     </div>

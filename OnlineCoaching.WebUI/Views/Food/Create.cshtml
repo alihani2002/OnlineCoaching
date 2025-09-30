@@ -14,7 +14,7 @@
 
                 <div class="mb-4">
                     <label asp-for="Name" class="form-label fw-bold"></label>
-                    <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter food name" />
+                    <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter food name" required />
                     <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
 
@@ -22,7 +22,7 @@
                     <div class="col-md-4 mb-3">
                         <label asp-for="Calories" class="form-label fw-bold"></label>
                         <div class="input-group input-group-lg">
-                            <input asp-for="Calories" class="form-control" placeholder="0" />
+                            <input asp-for="Calories" class="form-control" placeholder="0" required />
                             <span class="input-group-text">kcal</span>
                         </div>
                         <span asp-validation-for="Calories" class="text-danger small"></span>
@@ -30,7 +30,7 @@
                     <div class="col-md-4 mb-3">
                         <label asp-for="Gram" class="form-label fw-bold"></label>
                         <div class="input-group input-group-lg">
-                            <input asp-for="Gram" class="form-control" placeholder="0" />
+                            <input asp-for="Gram" class="form-control" placeholder="0" required />
                             <span class="input-group-text">g</span>
                         </div>
                         <span asp-validation-for="Gram" class="text-danger small"></span>
@@ -38,7 +38,7 @@
                     <div class="col-md-4 mb-3">
                         <label asp-for="Protein" class="form-label fw-bold"></label>
                         <div class="input-group input-group-lg">
-                            <input asp-for="Protein" class="form-control" placeholder="0" />
+                            <input asp-for="Protein" class="form-control" placeholder="0" required />
                             <span class="input-group-text">g</span>
                         </div>
                         <span asp-validation-for="Protein" class="text-danger small"></span>
@@ -46,7 +46,7 @@
                     <div class="col-md-4 mb-3">
                         <label asp-for="Carbs" class="form-label fw-bold"></label>
                         <div class="input-group input-group-lg">
-                            <input asp-for="Carbs" class="form-control" placeholder="0" />
+                            <input asp-for="Carbs" class="form-control" placeholder="0" required />
                             <span class="input-group-text">g</span>
                         </div>
                         <span asp-validation-for="Carbs" class="text-danger small"></span>
@@ -54,7 +54,7 @@
                     <div class="col-md-4 mb-3">
                         <label asp-for="Fats" class="form-label fw-bold"></label>
                         <div class="input-group input-group-lg">
-                            <input asp-for="Fats" class="form-control" placeholder="0" />
+                            <input asp-for="Fats" class="form-control" placeholder="0" required />
                             <span class="input-group-text">g</span>
                         </div>
                         <span asp-validation-for="Fats" class="text-danger small"></span>

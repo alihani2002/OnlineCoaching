@@ -15,7 +15,7 @@
 
                 <div class="mb-4">
                     <label asp-for="Name" class="form-label fw-bold"></label>
-                    <input asp-for="Name" class="form-control form-control-lg" />
+                    <input asp-for="Name" class="form-control form-control-lg" required />
                     <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
 
@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-md-6">
                         <label asp-for="VideoUrl" class="form-label fw-bold">Video URL</label>
-                        <input asp-for="VideoUrl" class="form-control form-control-lg" />
+                        <input asp-for="VideoUrl" class="form-control form-control-lg"  />
                         <span asp-validation-for="VideoUrl" class="text-danger small"></span>
                     </div>
                 </div>

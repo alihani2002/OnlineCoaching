@@ -45,15 +45,15 @@
                     <div class="row g-3 align-items-end">
                         <div class="col-md-3">
                             <label asp-for="Exercises[i].ExerciseId" class="form-label fw-bold">Exercise</label>
-                            <select asp-for="Exercises[i].ExerciseId" asp-items="@(new SelectList(Model.AvailableExercises, "Id", "Name"))" class="form-select"></select>
+                            <select asp-for="Exercises[i].ExerciseId" asp-items="@(new SelectList(Model.AvailableExercises, "Id", "Name"))" class="form-select" required></select>
                         </div>
                         <div class="col-md-1 col-6">
                             <label asp-for="Exercises[i].Sets" class="form-label fw-bold">Sets</label>
-                            <input asp-for="Exercises[i].Sets" class="form-control" placeholder="e.g., 3" />
+                            <input asp-for="Exercises[i].Sets" class="form-control" placeholder="e.g., 3" required />
                         </div>
                         <div class="col-md-1 col-6">
                             <label asp-for="Exercises[i].Reps" class="form-label fw-bold">Reps</label>
-                            <input asp-for="Exercises[i].Reps" class="form-control" placeholder="e.g., 12" />
+                            <input asp-for="Exercises[i].Reps" class="form-control" placeholder="e.g., 12" required />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold">Days</label>
@@ -62,7 +62,7 @@
                                 {
                                     var value = (int)d;
                                     var dayId = $"ex-day-{i}-{value}";
-                                    <input type="checkbox" class="btn-check" id="@dayId" name="Exercises[@i].SelectedDays" value="@value" checked="@(ex.SelectedDays.Contains(value) ? "checked" : null)">
+                                    <input type="checkbox" class="btn-check" id="@dayId" name="Exercises[@i].SelectedDays" value="@value" checked="@(ex.SelectedDays.Contains(value) ? "checked" : null)" >
                                     <label class="btn btn-outline-primary" for="@dayId">@d.ToString().Substring(0, 3)</label>
                                 }
                             </div>
