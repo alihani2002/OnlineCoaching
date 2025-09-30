@@ -207,8 +207,9 @@
         </div>
     </section>
     <!-- Services End -->
-   
-        <!--? Transformations Gallery Start -->
+        @if (Model.transformations.Any())
+        {
+                <!--? Transformations Gallery Start -->
         <div class="bbb_viewed section-padding30">
             <div class="container">
                 <div class="row">
@@ -244,7 +245,8 @@
             </div>
         </div>
         <!-- Transformations Gallery End -->
-
+        }
+    
     <!--? Gallery Area Start -->
     <div class="gallery-area section-padding30 ">
         <div class="container-fluid ">
