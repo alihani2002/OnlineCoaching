@@ -13,10 +13,14 @@ public class HomeController : Controller
     private readonly ICoachingPackageRequestService _coachingPackageRequestService;
     private readonly IClientService _clientService;
     private readonly ICoachingPackageServices _coachingPackage;
+    private readonly ITransformationService _transformationService;
     public HomeController(ILogger<HomeController> logger,
         UserManager<ApplicationUser> userManager,
         ICoachingPackageRequestService coachingPackageRequestService 
-        , IQuestionServices questionServices, IClientService clientService, ICoachingPackageServices coachingPackage)
+        ,IQuestionServices questionServices,
+        IClientService clientService,
+        ICoachingPackageServices coachingPackage ,
+        ITransformationService transformationService)
     {
         _logger = logger;
         _userManager = userManager;
@@ -24,6 +28,7 @@ public class HomeController : Controller
         _questionServices = questionServices;
         _clientService = clientService;
         _coachingPackage = coachingPackage;
+        _transformationService = transformationService;
     }
 
     public async Task<IActionResult> Index()
@@ -31,6 +36,7 @@ public class HomeController : Controller
         var user = await _userManager.GetUserAsync(User)!;
         var freePack = _coachingPackage.GetPackageFree();
         var packages = _coachingPackage.GetCoachingPackages();
+        var transformation = _transformationService.GetAll();
 
         Client client = null;
 
@@ -64,7 +70,8 @@ public class HomeController : Controller
         {
             FreeCoachingPackages = freePack,
             coachingPackages = packages,
-            Client = client ?? new Client() 
+            Client = client ?? new Client() ,
+            transformations = transformation
         };
 
         // 5. Return the view with the fully initialized ViewModel, 

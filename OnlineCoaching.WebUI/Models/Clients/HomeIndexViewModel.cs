@@ -7,5 +7,6 @@ namespace OnlineCoaching.WebUI.Models
         public IEnumerable<CoachingPackage> FreeCoachingPackages { get; set; } = new List<CoachingPackage>();
         public IEnumerable<CoachingPackageDto> coachingPackages { get; set; } = new List<CoachingPackageDto>();
         public Client Client { get; set; } = new Client();
+        public IEnumerable<Transformation> transformations { get; set; } = new List<Transformation>();
     }
 }
