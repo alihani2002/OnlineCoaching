@@ -67,10 +67,8 @@
                             <!-- Actions -->
                             @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client.ToString()))
                             {
-                                <a asp-controller="CoachingAssignment"
-                                   asp-action="PackageDetails"
-                                   asp-route-packageId="@package.Id"
-                                   class="border-btn border-btn2">Join Now</a>
+                                <a asp-controller="CoachingPackageRequests" asp-action="ConfirmRequestView" asp-route-id="@package.Id" class="border-btn border-btn2"> Join Now </a>
+
                             }
                             else if (!User.Identity!.IsAuthenticated)
                             {
