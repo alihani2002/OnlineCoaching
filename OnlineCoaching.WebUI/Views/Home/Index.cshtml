@@ -56,9 +56,25 @@
             @await Html.PartialAsync("_CompleteProfilePv", Model.Client)
         }
     
-    
+         <!-- Courses area start -->
+        <section class="pricing-area section-padding40 fix">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
+                            <h2> Online Coach Pricing</h2>
+                        </div>
+                    </div>
+                </div>
+
+                @await Html.PartialAsync("_PackageOfTrainning", Model.coachingPackages)
+            </div>
+        </section>
+        <!-- Courses area End -->
+
+
     <!-- Traning categories Start -->
-    <section class="traning-categories black-bg">
+   @*  <section class="traning-categories black-bg">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-6 col-lg-6">
@@ -91,9 +107,59 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> *@
     <!-- Traning categories End-->
     <!--? Team -->
+        @if (Model.FreeCoachingPackages != null && Model.FreeCoachingPackages!.Any())
+        {
+            <section class="pricing-area section-padding40 fix">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
+                                <h2>Free Packages</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        @foreach (var package in Model.FreeCoachingPackages!)
+                        {
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                    <div class="properties__card">
+                                        <div class="about-icon">
+                                            <img src="assets/img/icon/price.svg" alt="">
+                                        </div>
+                                        <div class="properties__caption">
+                                            <span class="month">@package.Title</span>
+                                            <p class="mb-25">Free Package</p>
+                                            <div class="single-features">
+                                                <div class="features-caption">
+                                                    <p>@package.Description</p>
+                                                </div>
+                                            </div>
+
+                                            @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client))
+                                            {
+                                                <a asp-controller="CoachingAssignment" asp-action="FreePackDetails" asp-route-packageId="@package.Id" class="border-btn border-btn2">Join Now</a>
+                                            }
+                                            else if (!User.Identity!.IsAuthenticated)
+                                            {
+                                                <a href="~/Identity/Account/Register" class="border-btn border-btn2">Join Now</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+            </section>
+        }
+
     <section class="team-area fix">
         <div class="container">
             <div class="row">
@@ -141,57 +207,43 @@
         </div>
     </section>
     <!-- Services End -->
-
-        <section class="pricing-area section-padding40 fix">
+   
+        <!--? Transformations Gallery Start -->
+        <div class="bbb_viewed section-padding30">
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-12">
-                        <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
-                            <h2>Free Packages</h2>
+                    <div class="col">
+                        <div class="bbb_main_container shadow-sm">
+                            <div class="bbb_viewed_title_container d-flex align-items-center justify-content-between">
+                                <h3 class="bbb_viewed_title">Our Transformations</h3>
+                                <div class="bbb_viewed_nav_container">
+                                    <div class="bbb_viewed_nav bbb_viewed_prev"><i class="fas fa-chevron-left"></i></div>
+                                    <div class="bbb_viewed_nav bbb_viewed_next"><i class="fas fa-chevron-right"></i></div>
+                                </div>
+                            </div>
+                            <div class="bbb_viewed_slider_container">
+                                <div class="owl-carousel owl-theme bbb_viewed_slider">
+                                    @foreach (var t in Model.transformations)
+                                    {
+                                        <div class="bbb_viewed_item d-flex flex-column align-items-center justify-content-center text-center">
+                                            <div class="bbb_viewed_image">
+                                                <img src="@t.ImageUrl" alt="Transformation" />
+                                            </div>
+                                            <div class="bbb_viewed_content text-center">
+                                                <div class="bbb_viewed_name">
+                                                    <span>@t.Titles</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    @if (Model.FreeCoachingPackages != null && Model.FreeCoachingPackages!.Any())
-                    {
-                        foreach (var package in Model.FreeCoachingPackages!)
-                        {
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
-                                    <div class="properties__card">
-                                        <div class="about-icon">
-                                            <img src="assets/img/icon/price.svg" alt="">
-                                        </div>
-                                        <div class="properties__caption">
-                                            <span class="month">@package.Title</span>
-                                            <p class="mb-25">Free Package</p>
-                                            <div class="single-features">
-                                                <div class="features-caption">
-                                                    <p>@package.Description</p>
-                                                </div>
-                                            </div>
-
-                                            @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Client))
-                                            {
-                                            <a asp-controller="CoachingAssignment" asp-action="FreePackDetails" asp-route-packageId="@package.Id" class="border-btn border-btn2">Join Now</a>
-                                            }
-                                            else if (!User.Identity!.IsAuthenticated)
-                                            {
-                                                <a href="~/Identity/Account/Register" class="border-btn border-btn2">Join Now</a>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <p class="text-center">No free packages available at the moment.</p>
-                    }
-                </div>
             </div>
-        </section>
+        </div>
+        <!-- Transformations Gallery End -->
 
     <!--? Gallery Area Start -->
     <div class="gallery-area section-padding30 ">
@@ -238,21 +290,7 @@
     </div>
     <!-- Gallery Area End -->
 
-        <!-- Courses area start -->
-        <section class="pricing-area section-padding40 fix">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
-                            <h2>Pricing</h2>
-                        </div>
-                    </div>
-                </div>
-
-                @await Html.PartialAsync("_PackageOfTrainning", Model.coachingPackages)
-            </div>
-        </section>
-        <!-- Courses area End -->
+   
 
         <!--? About Area-2 Start -->
     <section class="about-area2 fix pb-padding pt-50 pb-80">
@@ -285,49 +323,7 @@
     </section>
     <!-- About Area End -->
     <!--? Blog Area Start -->
-        <!--? Transformations Gallery Start -->
-        <div class="bbb_viewed section-padding30">
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="bbb_main_container shadow-sm">
-                            <div class="bbb_viewed_title_container d-flex align-items-center justify-content-between">
-                                <h3 class="bbb_viewed_title">Our Transformations</h3>
-                                <div class="bbb_viewed_nav_container">
-                                    <div class="bbb_viewed_nav bbb_viewed_prev"><i class="fas fa-chevron-left"></i></div>
-                                    <div class="bbb_viewed_nav bbb_viewed_next"><i class="fas fa-chevron-right"></i></div>
-                                </div>
-                            </div>
-                            <div class="bbb_viewed_slider_container">
-                                <div class="owl-carousel owl-theme bbb_viewed_slider">
-                                    @foreach (var t in Model.transformations)
-                                    {
-                                        <div class="bbb_viewed_item d-flex flex-column align-items-center justify-content-center text-center">
-                                            <div class="bbb_viewed_image">
-                                                <img src="@t.ImageUrl" alt="Transformation" />
-                                            </div>
-                                            <div class="bbb_viewed_content text-center">
-                                                <div class="bbb_viewed_name">
-                                                    <span>@t.Titles</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-
-                        @if (User.IsInRole(AppRoles.Admin))
-                        {
-                            <a href="@Url.Action("Create", "Transformation")" class="fab-add-transformation shadow-lg">
-                                <i class="fas fa-plus"></i>
-                            </a>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Transformations Gallery End -->
+    
         <!-- Blog Area End -->
     <!--? video_start -->
     <div class="video-area section-bg2 d-flex align-items-center" data-background="assets/img/gallery/video-bg.png">

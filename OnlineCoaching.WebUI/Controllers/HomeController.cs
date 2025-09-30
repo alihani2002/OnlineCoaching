@@ -43,7 +43,7 @@ public class HomeController : Controller
         if (user != null)
         {
             // 1. Try to retrieve existing client data
-             client = await _clientService.GetClientAsync(user.Id);
+             client = await _clientService.GetClientAsync(user!.Id);
 
             if (client != null)
             {
