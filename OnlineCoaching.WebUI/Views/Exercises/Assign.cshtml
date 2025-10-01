@@ -36,12 +36,13 @@
     <div class="mb-5 p-4 border rounded shadow-sm bg-light">
         <h4 class="mb-3"><i class="fas fa-dumbbell"></i> Assign Exercises</h4>
         <div id="exercise-container">
-            @for (int i = 0; i < Model.Exercises!.Count; i++)
+            @* 
+           @for (int i = 0; i < Model.Exercises!.Count; i++)
             {
                 var ex = Model.Exercises[i];
                 ex.SelectedDays ??= new List<int>();
 
-                <div class="form-row-item exercise-item">
+                 <div class="form-row-item exercise-item">
                     <div class="row g-3 align-items-end">
                         <div class="col-md-3">
                             <label asp-for="Exercises[i].ExerciseId" class="form-label fw-bold">Exercise</label>
@@ -75,16 +76,16 @@
                             <button type="button" class="btn btn-danger remove-item" data-item-type="exercise"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
-                </div>
-            }
+                </div> 
+            }*@
         </div>
         <button type="button" id="add-exercise" class="btn btn-success mt-3"><i class="fas fa-plus"></i> Add Exercise</button>
     </div>
 
     <div class="mb-5 p-4 border rounded shadow-sm bg-light">
         <h4 class="mb-3"><i class="fas fa-utensils"></i> Assign Foods</h4>
-        <div id="food-container">
-            @for (int i = 0; i < Model.Foods!.Count; i++)
+      <div id="food-container">
+            @*        @for (int i = 0; i < Model.Foods!.Count; i++)
             {
                 var food = Model.Foods[i];
                 food.SelectedDays ??= new List<int>();
@@ -124,8 +125,8 @@
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            }*@
+        </div> 
         <button type="button" id="add-food" class="btn btn-success mt-3"><i class="fas fa-plus"></i> Add Food</button>
     </div>
 
