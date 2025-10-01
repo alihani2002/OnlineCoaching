@@ -3,8 +3,8 @@
     public class BookRequest : BaseEntity
     {
         public string? BookName { get; set; }
-        public int QuantityNumber { get; set; }
-        public int TotalPrice { get; set; } = 0 ;
+        //public int QuantityNumber { get; set; }
+        //public int TotalPrice { get; set; } = 0 ;
         public ClientStatus Status { get; set; } = ClientStatus.Pending;
         public bool IsApproved { get; set; } = false;
 

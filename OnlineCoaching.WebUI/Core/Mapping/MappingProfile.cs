@@ -123,6 +123,21 @@ namespace OnlineCoaching.Web.Core.Mapping
                 .ForMember(dest => dest.AssignedExercises, opt => opt.MapFrom(src => src.AssignExercises))
                 .ForMember(dest => dest.AssignedFoods, opt => opt.MapFrom(src => src.AssignFoods));
             #endregion
+
+            #region Book
+            // Book mappings
+            CreateMap<Book, BookDto>().ReverseMap();
+            CreateMap<CreateBookDto, Book>();
+
+            // BookRequest mappings
+            CreateMap<BookRequest, BookRequestDto>()
+                .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.FullName : string.Empty))
+                .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book != null ? src.Book.Title : string.Empty));
+
+            CreateMap<CreateBookRequestDto, BookRequest>();
+
+
+            #endregion
         }
     }
 }

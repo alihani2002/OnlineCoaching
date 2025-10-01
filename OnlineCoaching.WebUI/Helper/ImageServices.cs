@@ -41,5 +41,30 @@ namespace OnlineCoaching.WebUI.Helper
 
             return await UploadImageAsync(newFile, folder);
         }
+        public async Task<string?> UploadPdfAsync(IFormFile file, string folder = "onlinecoaching/books")
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            if (file.Length > 20 * 1024 * 1024) // 20 MB
+                throw new InvalidOperationException("File size cannot exceed 20 MB.");
+
+            await using var stream = file.OpenReadStream();
+
+            var uploadParams = new RawUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Folder = folder,
+                UseFilename = true,
+                UniqueFilename = true
+            };
+
+
+            var result = await _cloudinary.UploadAsync(uploadParams);
+
+            return result?.SecureUrl?.ToString();
+        }
+
     }
 }
+

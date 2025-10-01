@@ -107,8 +107,8 @@ namespace OnlineCoaching.WebUI.Controllers
         #region -------------- Assign Exercises and Foods to Client ------------------
         public IActionResult Assign(int clientId)
         {
-            var exercises = _unitOfWork.Exercises.GetQueryable();
-            var foods = _unitOfWork.Foods.GetQueryable();
+            var exercises = _unitOfWork.Exercises.GetQueryable().Where(e=>!e.IsDeleted);
+            var foods = _unitOfWork.Foods.GetQueryable().Where(e => !e.IsDeleted);
             var request = _requestService.GetUserRequest(clientId).Result;
 
             var model = new AssignViewModel
@@ -187,8 +187,8 @@ namespace OnlineCoaching.WebUI.Controllers
                 RequestId = request.Id,
                 AssignedExercises = _assignmentService.GetAssignedExercise(clientId, request.Id),
                 AssignedFoods = _assignmentService.GetAssignedFood(clientId, request.Id),
-                AvailableExercises = _unitOfWork.Exercises.GetQueryable().ToList(),
-                AvailableFoods = _unitOfWork.Foods.GetQueryable().ToList()
+                AvailableExercises = _unitOfWork.Exercises.GetQueryable().Where(e => !e.IsDeleted).ToList(),
+                AvailableFoods = _unitOfWork.Foods.GetQueryable().Where(e => !e.IsDeleted).ToList()
             };
             if (!model.AssignedExercises.Any())
                 model.AssignedExercises.Add(new AssignExercise());

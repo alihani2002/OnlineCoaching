@@ -1,0 +1,115 @@
+﻿@model IEnumerable<OnlineCoaching.Domain.Dtos.BookDto>
+
+@{
+    ViewData["Title"] = "Books";
+    var currentFilter = ViewData["CurrentFilter"] as string;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">📚 Books</h2>
+    <a asp-action="Create" class="btn btn-primary shadow-sm">➕ Add New Book</a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="d-flex gap-2 w-100">
+            <input type="text" id="searchInput" name="searchString"
+                   class="form-control"
+                   placeholder="Search by title or author..."
+                   value="@currentFilter" autocomplete="off" />
+
+            <button type="submit" class="btn btn-info">🔍 Search</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+        </form>
+        <small class="text-muted">Tip: typing here will filter instantly, pressing Search will reload from server.</small>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center p-5 border rounded bg-light">
+        @if (!string.IsNullOrEmpty(currentFilter))
+        {
+            <h4>No books found matching "@currentFilter"</h4>
+            <p class="text-muted">Try a different search term or clear the filter to see all books.</p>
+        }
+        else
+        {
+            <h4>No books available yet.</h4>
+            <p class="text-muted">Why not add the first one?</p>
+        }
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>📖 Title</th>
+                    <th>✍️ Author</th>
+                    <th>🎯 Demo</th>
+                    <th style="width: 200px;">⚙️ Actions</th>
+                </tr>
+            </thead>
+            <tbody id="booksTable">
+                @foreach (var book in Model)
+                {
+                    <tr class="book-row">
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>
+                            @if (book.HasDemo)
+                            {
+                                <span class="badge bg-success">✅ Has Demo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">❌ No Demo</span>
+                            }
+
+                            @if (!string.IsNullOrEmpty(book.DemoUrl))
+                            {
+                                <a href="@book.DemoUrl" target="_blank" class="btn btn-sm btn-warning ms-2">
+                                    👁 Preview
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-outline-primary">👁 Preview</a>
+                                <form asp-action="Delete" asp-route-id="@book.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete this book?');">
+                                        🗑
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Client-side live filtering for table rows
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            var searchValue = this.value.toLowerCase();
+            var rows = document.querySelectorAll("#booksTable .book-row");
+
+            rows.forEach(function (row) {
+                var title = row.cells[0].textContent.toLowerCase();
+                var author = row.cells[1].textContent.toLowerCase();
+
+                if (title.includes(searchValue) || author.includes(searchValue)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    </script>
+}

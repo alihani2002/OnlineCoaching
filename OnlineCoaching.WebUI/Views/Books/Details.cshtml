@@ -1,0 +1,122 @@
+﻿@model OnlineCoaching.Domain.Dtos.BookDto
+
+@{
+    ViewData["Title"] = Model.Title;
+    var userEmailForWatermark = "Badr Reda";
+    var watermarkText = $"{userEmailForWatermark} - {DateTime.UtcNow:yyyy-MM-dd}";
+}
+
+<div class="container-fluid p-0" style="height:100vh; overflow:hidden;">
+    <!-- Page Title -->
+    <div class="bg-dark text-white text-center py-3 shadow-sm">
+        <h2 class="mb-0">@Model.Title</h2>
+        <small class="text-light">by @Model.Author</small>
+        <div class="container-fluid py-3 text-center bg-white border-top">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary me-2">Edit</a>
+            <a asp-action="Index" class="btn btn-dark">Back to List</a>
+        </div>
+    </div>
+
+    <!-- Secure PDF Viewer -->
+    <div id="viewerContainer" class="flex-grow-1 bg-dark"
+         style="height:90vh; width:100%; overflow:auto; user-select:none; -webkit-user-select:none; -ms-user-select:none;">
+        @if (string.IsNullOrEmpty(Model.FileUrl))
+        {
+            <div class="alert alert-warning mt-3 w-75 mx-auto text-center">
+                No book file available.
+            </div>
+        }
+    </div>
+
+    <!-- Loader -->
+    <div id="pdfLoader" style="
+        position:absolute;
+        top:50%; left:50%;
+        transform:translate(-50%,-50%);
+        z-index:2000;
+        color:white;
+        font-size:1.5rem;
+        text-align:center;">
+        <div class="spinner-border text-light mb-2" role="status"></div>
+        <div>Loading PDF...</div>
+    </div>
+</div>
+
+<!-- pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script>
+    const url = "@Model.FileUrl"; // PDF from Cloudinary
+    const watermarkText = "@watermarkText";
+    const loader = document.getElementById("pdfLoader");
+
+    if (url) {
+        const loadingTask = pdfjsLib.getDocument(url);
+        loadingTask.promise.then(function (pdf) {
+            let renderedPages = 0;
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(function (page) {
+                    const viewport = page.getViewport({ scale: 1.3 });
+                    const canvas = document.createElement("canvas");
+                    const context = canvas.getContext("2d");
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    document.getElementById("viewerContainer").appendChild(canvas);
+
+                    // Render page
+                    page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+                        applyWatermark(canvas);
+                        renderedPages++;
+
+                        // Hide loader once all pages are rendered
+                        if (renderedPages === pdf.numPages) {
+                            loader.style.display = "none";
+                        }
+                    });
+                });
+            }
+        }).catch(err => {
+            loader.innerText = "❌ Failed to load PDF.";
+            console.error("PDF load error:", err);
+        });
+    } else {
+        loader.innerText = "❌ No PDF available.";
+    }
+
+    // --- WATERMARK ---
+    function applyWatermark(canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.save();
+
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "rgba(255,255,255,0.15)";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        ctx.translate(centerX, centerY);
+        ctx.rotate(-Math.PI / 4);
+        ctx.translate(-centerX, -centerY);
+
+        for (let y = -canvas.height; y < canvas.height * 2; y += 150) {
+            for (let x = -canvas.width; x < canvas.width * 2; x += 300) {
+                ctx.fillText(watermarkText, x, y);
+            }
+        }
+
+        ctx.restore();
+    }
+
+    // 🔒 Security controls
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    document.addEventListener("keydown", function (e) {
+        if ((e.ctrlKey || e.metaKey) && ["s", "p", "u", "c"].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+        }
+    });
+
+    document.getElementById("viewerContainer").addEventListener("selectstart", e => e.preventDefault());
+</script>
