@@ -1,7 +1,6 @@
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Mvc;
-using OnlineCoaching.Application.Services;
 using OnlineCoaching.WebUI.HangfireJobs;
 
 var builder = WebApplication.CreateBuilder(args);

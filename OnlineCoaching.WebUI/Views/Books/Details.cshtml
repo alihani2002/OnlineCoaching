@@ -8,13 +8,13 @@
 
 <div class="container-fluid p-0" style="height:100vh; overflow:hidden;">
     <!-- Page Title -->
-    <div class="bg-dark text-white text-center py-3 shadow-sm">
-        <h2 class="mb-0">@Model.Title</h2>
-        <small class="text-light">by @Model.Author</small>
-        <div class="container-fluid py-3 text-center bg-white border-top">
+         <div class="container-fluid py-3 text-center bg-white border-top">
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary me-2">Edit</a>
             <a asp-action="Index" class="btn btn-dark">Back to List</a>
         </div>
+    <div class="bg-dark text-white text-center py-3 shadow-sm">
+        <h2 class="mb-0">@Model.Title</h2>
+        <small class="text-light">by @Model.Author</small>
     </div>
 
     <!-- Secure PDF Viewer -->
@@ -27,6 +27,11 @@
             </div>
         }
     </div>
+
+        <div class="container-fluid py-3 text-center bg-white border-top">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary me-2">Edit</a>
+            <a asp-action="Index" class="btn btn-dark">Back to List</a>
+        </div>
 
     <!-- Loader -->
     <div id="pdfLoader" style="
