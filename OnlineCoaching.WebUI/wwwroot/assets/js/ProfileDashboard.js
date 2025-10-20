@@ -30,26 +30,30 @@ function renderExercises() {
 
     if (assignedExercises.length === 0) return;
 
-    // Group by Muscle first
-    const exercisesByMuscle = groupBy(assignedExercises, e => e.MuscleName ?? "Other");
+    // 🟢 Group all exercises by days first
+    const exercisesByDays = groupBy(assignedExercises, e => {
+        const days = getDays(e).sort((a, b) => a - b);
+        return days.length ? days.join(", ") : "N/A";
+    });
 
-    for (const [muscle, muscleExercises] of Object.entries(exercisesByMuscle)) {
-
-        // Now group by Days inside each muscle group
-        const exercisesByDays = groupBy(muscleExercises, e => {
-            const days = getDays(e).sort((a, b) => a - b);
-            return days.length ? days.join(", ") : "N/A";
-        });
-
-        for (const [days, dayExercises] of Object.entries(exercisesByDays)) {
-            let muscleBlock = `<div class="custom-card mb-4">
+    // 🟢 Loop through each day group
+    for (const [days, dayExercises] of Object.entries(exercisesByDays)) {
+        let dayBlock = `
+            <div class="custom-card mb-4">
                 <div class="day-header">
-                    <span>💪 ${muscle}</span>
-                    <span>Days: ${days}</span>
+                    <span>📅 Days: ${days}</span>
                 </div>`;
 
-            dayExercises.forEach(e => {
-                muscleBlock += `
+        // Optional: group by muscle within each day
+        const exercisesByMuscle = groupBy(dayExercises, e => e.MuscleName ?? "Other");
+
+        for (const [muscle, muscleExercises] of Object.entries(exercisesByMuscle)) {
+            dayBlock += `
+                <div class="muscle-section mt-3">
+                    <h5 class="text-warning mb-2">💪 ${muscle}</h5>`;
+
+            muscleExercises.forEach(e => {
+                dayBlock += `
                     <div class="exercise-card">
                         <div class="exercise-image">
                             ${e.ImageUrl
@@ -73,9 +77,11 @@ function renderExercises() {
                     </div>`;
             });
 
-            muscleBlock += `</div>`;
-            exerciseContainer.innerHTML += muscleBlock;
+            dayBlock += `</div>`; // close muscle-section
         }
+
+        dayBlock += `</div>`; // close day-card
+        exerciseContainer.innerHTML += dayBlock;
     }
 }
 
