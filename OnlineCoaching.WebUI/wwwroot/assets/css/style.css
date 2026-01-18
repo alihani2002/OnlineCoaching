@@ -3397,12 +3397,12 @@ hr {
 
 /* line 37, C:/Users/HP/Desktop/July-HTML/292 Health coach/assets/scss/_h1-hero.scss */
 .slider-area {
-  margin-top: -1px;
-  background-image: url(../img/logo/banner.jpeg);
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: cover;
-  background-attachment: fixed;
+    margin-top: -1px;
+    background-image: url(../img/logo/pexels-anush-1229356.jpg);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 /* line 44, C:/Users/HP/Desktop/July-HTML/292 Health coach/assets/scss/_h1-hero.scss */
